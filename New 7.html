@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Player</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        #video-container {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-top: 56.25%; /* 16:9 aspect ratio */
+            overflow: hidden;
+        }
+        #video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        #controls {
+            text-align: center;
+            margin-top: 10px;
+        }
+        #play-button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #play-button:hover {
+            background-color: #0056b3;
+        }
+        #link-input {
+            display: block;
+            width: 100%;
+            margin-top: 10px;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+        #link-list {
+            margin-top: 20px;
+            padding: 0;
+            list-style: none;
+            max-height: 300px; /* Maksimum yükseklik belirleyerek liste ekranının boyutunu sınırlıyoruz */
+            overflow-y: auto; /* Dikey kaydırma çubuğu eklenir */
+        }
+        .link-item {
+            margin-bottom: 10px;
+            background-color: #b3d9ff; /* Arka plan rengi burada ayarlanıyor */
+            padding: 10px;
+            border: 2px solid #ff0000; /* Orta kırmızı kenarlık rengi */
+            border-radius: 5px;
+        }
+        .link-item input[type="text"] {
+            width: calc(100% - 140px); /* Düğmelerin genişliği çıkarılarak input alanının genişliği ayarlanır */
+            padding: 5px;
+            background-color: #66b3ff; /* Orta mavi arka plan rengi */
+        }
+        .link-item button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-left: 10px;
+        }
+        .link-item button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div id="video-container">
+        <video id="video" controls>
+            <source src="video.mp4" type="video/mp4">
+            <source src="video.webm" type="video/webm">
+            <!-- Farklı video formatları için gerekli source etiketlerini buraya ekleyin -->
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <div id="controls">
+        <input type="text" id="link-input" placeholder="Video URL">
+        <button id="play-button">Oynat</button>
+        <button id="clear-button">Listeyi Temizle</button>
+    </div>
+
+    <ul id="link-list"></ul>
+
+    <script>
+        var video = document.getElementById('video');
+        var playButton = document.getElementById('play-button');
+        var clearButton = document.getElementById('clear-button');
+        var linkInput = document.getElementById('link-input');
+        var linkList = document.getElementById('link-list');
+
+        // Çerezlerden bağlantıları yükle
+        window.addEventListener('load', function() {
+            var savedLinks = JSON.parse(localStorage.getItem('linksWithNames'));
+            if (savedLinks) {
+                savedLinks.forEach(function(link) {
+                    addLinkToList(link.name, link.link);
+                });
+            }
+        });
+
+        playButton.addEventListener('click', function() {
+            var link = linkInput.value;
+            if (link) {
+                var linkName = prompt("Bağlantı Adı:");
+                addLinkToList(linkName, link); // İsim verilen bağlantıları listeye ekle
+                video.src = link;
+                video.play();
+                // Bağlantıyı çerezlere kaydet
+                saveLinksToLocalStorage();
+            } else {
+                if (video.paused) {
+                    video.play();
+                    playButton.textContent = 'Duraklat';
+                } else {
+                    video.pause();
+                    playButton.textContent = 'Oynat';
+                }
+            }
+        });
+
+        clearButton.addEventListener('click', function() {
+            linkList.innerHTML = '';
+            // Bağlantıları ve isimleri çerezlerden kaldır
+            localStorage.removeItem('linksWithNames');
+        });
+
+        function addLinkToList(name, link) {
+            var listItem = document.createElement('li');
+            listItem.className = 'link-item';
+            var linkNameInput = document.createElement('input');
+            linkNameInput.type = 'text';
+            linkNameInput.placeholder = 'Bağlantı Adı';
+            linkNameInput.value = name;
+            var linkInput = document.createElement('input');
+            linkInput.type = 'text';
+            linkInput.value = link;
+            linkInput.readOnly = true;
+            var playLinkButton = document.createElement('button');
+            playLinkButton.textContent = 'Oynat';
+            playLinkButton.addEventListener('click', function() {
+                video.src = link;
+                video.play();
+            });
+            var removeLinkButton = document.createElement('button');
+            removeLinkButton.textContent = 'Sil';
+            removeLinkButton.addEventListener('click', function() {
+                listItem.remove();
+                // Bağlantıyı ve ismi çerezlerden kaldır
+                saveLinksToLocalStorage();
+            });
+            listItem.appendChild(linkNameInput);
+            listItem.appendChild(linkInput);
+            listItem.appendChild(playLinkButton);
+            listItem.appendChild(removeLinkButton);
+            linkList.appendChild(listItem);
+        }
+
+        function saveLinksToLocalStorage() {
+            var linksWithNames = [];
+            var linkItems = document.querySelectorAll('.link-item');
+            linkItems.forEach(function(linkItem) {
+                var linkNameInput = linkItem.querySelector('input[type="text"][placeholder="Bağlantı Adı"]');
+                var linkInput = linkItem.querySelector('input[type="text"][readonly]');
+                var linkWithName = {
+                    name: linkNameInput.value,
+                    link: linkInput.value
+                };
+                linksWithNames.push(linkWithName);
+            });
+            localStorage.setItem('linksWithNames', JSON.stringify(linksWithNames));
+        }
+    </script>
+</body>
+</html>
