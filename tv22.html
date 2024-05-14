@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proje Taslağı</title>
+    <style>
+        /* CSS kodları buraya gelecek */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 200px auto;
+            grid-gap: 20px;
+            padding-top: 30vh; /* Forum alanını yüzde 30 aşağı çek */
+        }
+        .kategori-ekle {
+            grid-column: 1 / span 2;
+            margin-bottom: 20px;
+        }
+        .kategori-ekle button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .kategori-ekle button:hover {
+            background-color: #0056b3;
+        }
+        .kategori-listesi {
+            overflow-y: auto;
+            height: calc(70vh - 180px); /* Yeni boyutlandırma */
+        }
+        .kategori-listesi::-webkit-scrollbar { /* Kaydırma çubuklarını gizle */
+            display: none;
+        }
+        .kategori {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #f0f0f0;
+            color: #333;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .kategori:hover {
+            background-color: #e0e0e0;
+        }
+        .icerik-listesi {
+            overflow-y: auto;
+            height: calc(70vh - 180px); /* Yeni boyutlandırma */
+        }
+        .icerik-listesi::-webkit-scrollbar { /* Kaydırma çubuklarını gizle */
+            display: none;
+        }
+        .icerik {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .icerik:hover {
+            transform: scale(1.05);
+        }
+        .icerik img {
+            width: 100%;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        #video-player {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 30vh; /* Yeni boyutlandırma */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: black;
+            z-index: 9999;
+        }
+        #video-player video {
+            width: 100%;
+            height: auto;
+        }
+        #close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #fff;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .alt-dugmeler {
+            margin-top: 20px;
+        }
+        .alt-dugmeler button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-right: 10px;
+        }
+        .alt-dugmeler button:hover {
+            background-color: #c82333;
+        }
+        .duzenle-dugme {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-right: 10px;
+        }
+        .duzenle-dugme:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="kategori-ekle">
+            <button id="kategori-ekle-btn">Kategori Ekle</button>
+            <button id="icerik-ekle-btn">İçerik Ekle</button>
+            <button id="sifirla-btn">Sıfırla</button>
+        </div>
+        <div class="kategoriler">
+            <div class="kategori-listesi">
+                <!-- Kategoriler burada listelenecek -->
+            </div>
+        </div>
+        <div class="icerikler">
+            <div class="icerik-listesi">
+                <!-- İçerikler burada listelenecek -->
+            </div>
+        </div>
+    </div>
+
+    <div id="video-player">
+        <video controls autoplay id="video-element">
+            <!-- Video player içeriği burada gösterilecek -->
+        </video>
+        <button id="close-btn">X</button>
+    </div>
+
+    <div class="alt-dugmeler">
+        <button id="kategori-sil-btn">Kategori Sil</button>
+        <button id="icerik-sil-btn">İçerik Sil</button>
+        <button id="duzenle-btn" class="duzenle-dugme">Düzenle</button>
+    </div>
+
+    <script>
+        // JavaScript kodları buraya gelecek
+        const kategoriEkleBtn = document.getElementById("kategori-ekle-btn");
+        const icerikEkleBtn = document.getElementById("icerik-ekle-btn");
+        const sifirlaBtn = document.getElementById("sifirla-btn");
+        const kategoriSilBtn = document.getElementById("kategori-sil-btn");
+        const 
+icerikSilBtn = document.getElementById("icerik-sil-btn");
+const duzenleBtn = document.getElementById("duzenle-btn");
+const kategoriListesi = document.querySelector(".kategori-listesi");
+const iceriklerDiv = document.querySelector(".icerikler");
+const videoPlayer = document.getElementById("video-player");
+const videoElement = document.getElementById("video-element");
+const closeBtn = document.getElementById("close-btn");
+let kategoriler = [];
+    // Sayfa yüklendiğinde varsa kayıtlı kategorileri al
+    window.onload = () => {
+        kategoriler = JSON.parse(localStorage.getItem('kategoriler')) || [];
+        renderKategoriler();
+    };
+
+    function kategoriEkle() {
+        const kategoriAdi = prompt("Yeni kategori adını girin:");
+        if (kategoriAdi) {
+            // Yeni eklenecek kategori isminin mevcut kategoriler arasında olup olmadığını kontrol et
+            const kategoriVarMi = kategoriler.some(kategori => kategori.ad === kategoriAdi);
+            if (kategoriVarMi) {
+                alert("Bu isimde bir kategori zaten mevcut. Lütfen başka bir isim girin.");
+            } else {
+                kategoriler.push({ ad: kategoriAdi, icerikler: [] });
+                renderKategoriler();
+            }
+        }
+    }
+
+    function icerikEkle() {
+        const secilenKategori = prompt("İçerik eklemek istediğiniz kategoriyi seçin:\n" + kategoriler.map(kategori => kategori.ad).join(", "));
+        const kategori = kategoriler.find(kat => kat.ad === secilenKategori);
+        if (kategori) {
+            const icerikAdi = prompt("İçerik adını girin:");
+            const akisBaglantisi = prompt("İçeriğe ilişkin akış bağlantısını girin:");
+            const kapakResmi = prompt("İçeriğe ilişkin kapak resmi bağlantısını girin:");
+            if (icerikAdi && akisBaglantisi && kapakResmi) {
+                const yeniIcerik = { ad: icerikAdi, akisBaglantisi: akisBaglantisi, kapakResmi: kapakResmi };
+                kategori.icerikler.push(yeniIcerik);
+                renderIcerikler(kategori);
+            }
+        } else {
+            alert("Geçersiz kategori seçildi!");
+        }
+    }
+
+    function kategoriSil() {
+        const secilenKategori = prompt("Silmek istediğiniz kategoriyi seçin:\n" + kategoriler.map(kategori => kategori.ad).join(", "));
+        const index = kategoriler.findIndex(kat => kat.ad === secilenKategori);
+        if (index !== -1) {
+            kategoriler.splice(index, 1);
+            renderKategoriler();
+        } else {
+            alert("Geçersiz kategori seçildi!");
+        }
+    }
+
+    function icerikSil() {
+        const secilenKategori = prompt("İçerik silmek istediğiniz kategoriyi seçin:\n" + kategoriler.map(kategori => kategori.ad).join(", "));
+        const kategori = kategoriler.find(kat => kat.ad === secilenKategori);
+        if (kategori) {
+            const secilenIcerik = prompt("Silmek istediğiniz içeriği seçin:\n" + kategori.icerikler.map(icerik => icerik.ad).join(", "));
+            const index = kategori.icerikler.findIndex(icerik => icerik.ad === secilenIcerik);
+            if (index !== -1) {
+                kategori.icerikler.splice(index, 1);
+                renderIcerikler(kategori);
+            } else {
+                alert("Geçersiz içerik seçildi!");
+            }
+        } else {
+            alert("Geçersiz kategori seçildi!");
+        }
+    }
+
+    function icerikleriGoster(kategori) {
+        const iceriklerListesi = document.querySelector(".icerik-listesi");
+        iceriklerListesi.innerHTML = "";
+        kategori.icerikler.forEach(icerik => {
+            const yeniIcerik = document.createElement("div");
+            yeniIcerik.classList.add("icerik");
+            yeniIcerik.innerHTML = `
+                <img src="${icerik.kapakResmi}" alt="${icerik.ad}">
+                <h3>${icerik.ad}</h3>
+            `;
+            yeniIcerik.addEventListener("click", () => {
+                videoOynat
+=icerik.akisBaglantisi);
+});
+iceriklerListesi.appendChild(yeniIcerik);
+});
+}
+    function videoOynat(videoURL) {
+        videoPlayer.style.display = "flex";
+        videoElement.src = videoURL;
+    }
+
+    function videoKapat() {
+        videoPlayer.style.display = "none";
+        videoElement.pause();
+    }
+
+    function renderKategoriler() {
+        kategoriListesi.innerHTML = "";
+        kategoriler.forEach(kategori => {
+            const yeniKategori = document.createElement("div");
+            yeniKategori.classList.add("kategori");
+            yeniKategori.textContent = kategori.ad;
+            yeniKategori.addEventListener("click", () => {
+                renderIcerikler(kategori);
+            });
+            kategoriListesi.appendChild(yeniKategori);
+        });
+        localStorage.setItem('kategoriler', JSON.stringify(kategoriler)); // Kategorileri yerel depolamada sakla
+    }
+
+    function renderIcerikler(kategori) {
+        iceriklerDiv.style.display = "block";
+        icerikleriGoster(kategori);
+    }
+
+    function sifirla() {
+        localStorage.removeItem('kategoriler'); // Kategorileri yerel depolamadan kaldır
+        kategoriler = [];
+        kategoriListesi.innerHTML = "";
+        iceriklerDiv.style.display = "none";
+    }
+
+    // Butonlara tıklama olaylarını ekle
+    kategoriEkleBtn.addEventListener("click", kategoriEkle);
+    icerikEkleBtn.addEventListener("click", icerikEkle);
+    sifirlaBtn.addEventListener("click", sifirla);
+    kategoriSilBtn.addEventListener("click", kategoriSil);
+    icerikSilBtn.addEventListener("click", icerikSil);
+    duzenleBtn.addEventListener("click", () => {
+        const secilenKategori = prompt("Düzenlemek istediğiniz kategoriyi seçin:\n" + kategoriler.map(kategori => kategori.ad).join(", "));
+        const secilenIcerik = prompt("Düzenlemek istediğiniz içeriği seçin:");
+        if (secilenKategori && secilenIcerik) {
+            const kategori = kategoriler.find(kat => kat.ad === secilenKategori);
+            if (kategori) {
+                const icerik = kategori.icerikler.find(ice => ice.ad === secilenIcerik);
+                if (icerik) {
+                    const yeniAd = prompt("Yeni içerik adını girin:", icerik.ad);
+                    const yeniAkisBaglantisi = prompt("Yeni akış bağlantısını girin:", icerik.akisBaglantisi);
+                    const yeniKapakResmi = prompt("Yeni kapak resmi bağlantısını girin:", icerik.kapakResmi);
+                    if (yeniAd && yeniAkisBaglantisi && yeniKapakResmi) {
+                        icerik.ad = yeniAd;
+                        icerik.akisBaglantisi = yeniAkisBaglantisi;
+                        icerik.kapakResmi = yeniKapakResmi;
+                        renderIcerikler(kategori);
+                    }
+                } else {
+                    alert("Geçersiz içerik seçildi!");
+                }
+            } else {
+                alert("Geçersiz kategori seçildi!");
+            }
+        } else {
+            alert("Geçersiz seçim yapıldı!");
+        }
+    });
+    closeBtn.addEventListener("click", videoKapat);
+</script>
+</body>
+</html>
