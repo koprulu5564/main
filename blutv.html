@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BluTV Kanal Listesi</title>
+    <link href="https://vjs.zencdn.net/7.14.3/video-js.css" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            position: relative;
+        }
+        #player {
+            width: 100%;
+            height: 30%;
+        }
+        #channelList {
+            width: 80%;
+            max-width: 600px;
+            margin: auto; /* Listeyi ortala */
+            padding: 10px;
+            overflow-y: auto;
+            max-height: 50%; /* Maksimum yükseklik */
+            background-color: black; /* İçerik listesi arka plan rengi */
+        }
+        .channelItem {
+            margin-bottom: 10px;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            color: #1e90ff; /* Orta mavi renk */
+            background-color: #f0f0f0; /* Arka plan rengi */
+            border-radius: 5px; /* Kenar yuvarlaklığı */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Gölge efekti */
+            transition: background-color 0.3s ease; /* Geçiş efekti */
+            position: relative;
+        }
+        .channelItem:hover {
+            background-color: #e0e0e0; /* Hafif gri arka plan rengi */
+        }
+        .controls {
+            display: none;
