@@ -1,290 +1,318 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>YouTube Canlı Yayın Çevirici</title>
-<link rel="stylesheet" href="https://cdn.plyr.io/3.6.8/plyr.css" />
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f8f9fa;
-  }
-
-  .container {
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-
-  input[type="text"] {
-    width: calc(100% - 140px);
-    padding: 10px;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-    margin-right: 10px;
-  }
-
-  button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    background-color: #007bff; /* Dönüştür düğmesi rengi */
-    color: #fff;
-    cursor: pointer;
-  }
-
-  button:hover {
-    background-color: #0056b3; /* Dönüştür düğmesi hover rengi */
-  }
-
-  #convertedLinks {
-    max-height: 300px;
-    overflow-y: auto;
-    margin-top: 10px;
-  }
-
-  #convertedLinks div {
-    margin-bottom: 10px;
-    word-wrap: break-word;
-  }
-
-  #convertedLinks div a {
-    color: #009900;
-    text-decoration: none;
-    font-size: 18px;
-  }
-
-  #convertedLinks div button.remove-button {
-    margin-left: 10px;
-    background-color: #ff0000; /* Sil düğmesi rengi kırmızı */
-    color: #fff;
-  }
-
-  #resetButton {
-    margin-top: 10px;
-    background-color: #ff0000; /* Sıfırla düğmesi rengi */
-  }
-
-  #exportButton {
-    margin-top: 10px;
-    background-color: #008000; /* Dışa Aktar düğmesi rengi */
-  }
-
-  .button-group {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end; /* Düğmeleri sağa hizala */
-    overflow-x: auto; /* Yatay kaydırma */
-    margin-top: 10px;
-  }
-
-  .button-group button {
-    height: 38px; /* Yükseklik eklendi */
-  }
-
-  #selectAllButton {
-    margin-right: 10px; /* Tümünü Seç düğmesi sağa yaslandı */
-  }
-
-  #exportButton {
-    margin-right: 10px; /* Dışa Aktar düğmesi sağa yaslandı */
-  }
-
-  #resetButton {
-    margin-right: 10px; /* Sıfırla düğmesi sağa yaslandı */
-  }
-
-  #convertButton {
-    margin-right: 10px; /* Dönüştür düğmesi sağa yaslandı */
-    background-color: #007bff; /* ID seçimi yapılan düğme rengi */
-    color: #fff;
-  }
-
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BluTV Kanal Listesi</title>
+    <link href="https://vjs.zencdn.net/7.14.3/video-js.css" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            position: relative;
+        }
+        #player {
+            width: 100%;
+            height: 30%;
+        }
+        #channelList {
+            width: 80%;
+            max-width: 600px;
+            margin: auto; /* Listeyi ortala */
+            padding: 10px;
+            overflow-y: auto;
+            max-height: 50%; /* Maksimum yükseklik */
+            background-color: black; /* İçerik listesi arka plan rengi */
+        }
+        .channelItem {
+            margin-bottom: 10px;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            color: #1e90ff; /* Orta mavi renk */
+            background-color: #f0f0f0; /* Arka plan rengi */
+            border-radius: 5px; /* Kenar yuvarlaklığı */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Gölge efekti */
+            transition: background-color 0.3s ease; /* Geçiş efekti */
+            position: relative;
+        }
+        .channelItem:hover {
+            background-color: #e0e0e0; /* Hafif gri arka plan rengi */
+        }
+        .controls {
+            display: none;
+        }
+        .channelItem:hover .controls {
+            display: inline;
+        }
+        .controls button {
+            padding: 5px 10px;
+            margin-right: 5px;
+            border: none;
+            border-radius: 3px;
+            background-color: #1e90ff; /* Orta mavi renk */
+            color: #fff; /* Beyaz renk */
+            cursor: pointer;
+            transition: background-color 0.3s ease; /* Geçiş efekti */
+        }
+        .controls button:hover {
+            background-color: #007bff; /* Daha koyu mavi renk */
+        }
+        .exportSection {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+        }
+        #exportButton {
+            background-color: green; /* Dışa Aktar düğmesinin rengi */
+            color: white; /* Dışa Aktar düğmesinin yazı rengi */
+        }
+        #exportButton:hover {
+            cursor: pointer;
+            opacity: 0.8;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            overflow-y: auto;
+        }
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+        }
+        .aboutButton {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background-color: #f0f0f0;
+            text-align: center;
+            padding: 10px;
+            cursor: pointer;
+            z-index: 10;
+        }
+        .aboutText {
+            display: none;
+            text-align: center;
+            font-size: 48px;
+            color: #fff;
+            background-color: #1e90ff;
+            padding: 20px;
+            animation: rotateBanner 5s infinite alternate;
+            z-index: 9;
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 10px;
+        }
+        @keyframes rotateBanner {
+            0% {
+                transform: translateX(-50%) rotate(0deg);
+            }
+            100% {
+                transform: translateX(-50%) rotate(360deg);
+            }
+        }
+        .renameButton {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: #1e90ff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            padding: 5px 10px;
+            cursor: pointer;
+            z-index: 1;
+        }
+        .renameButton:hover {
+            background-color: #007bff;
+        }
+    </style>
 </head>
 <body>
-  <div class="player-container" id="playerContainer">
-    <video id="plyrPlayer" controls crossorigin></video>
-  </div>
-
-  <div class="container">
-    <div>
-      <input type="text" id="youtubeLink" placeholder="YouTube Canlı Bağlantı">
-      <button id="convertButton" onclick="toggleConvertType()">Kanal ID ile Dönüştür</button> <!-- Geçiş yapabilen düğme -->
-      <button id="doConvertButton" onclick="convert()">Dönüştür</button> <!-- Yeni dönüştürme düğmesi -->
+    <video id="player" class="video-js vjs-default-skin" controls playsinline></video>
+    <div class="exportSection">
+        <h2>BluTV Kanalları</h2>
+        <button id="exportButton">Dışa Aktar</button>
     </div>
-    <div id="convertedLinks"></div>
-    <div class="button-group">
-      <button id="selectAllButton" onclick="toggleSelectAll()">Tümünü Seç</button>
-      <button id="exportButton" onclick="exportLinks()">Dışa Aktar</button>
-      <button id="resetButton" onclick="reset()">Sıfırla</button>
+    <div id="channelList"></div>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>İçerikleri Seçin</h3>
+            <div id="checkboxContainer"></div>
+            <button id="selectAllButton">Tümünü Seç</button>
+            <button id="cancelButton">İptal</button>
+            <button id="copyButton">Panoya Kopyala</button>
+        </div>
     </div>
-  </div>
 
-  <script src="https://cdn.plyr.io/3.6.8/plyr.js"></script>
-  <script>
-    const plyrPlayer = new Plyr('#plyrPlayer');
-    var convertedLinks = JSON.parse(localStorage.getItem("convertedLinks")) || [];
-    var convertType = "channel";
+    <div class="aboutButton" onclick="toggleAbout()">Hakkında</div>
+    <div class="aboutText" id="aboutText">KÖPRÜLÜ,den sevgilerle</div>
 
-    function toggleConvertType() {
-      var convertButton = document.getElementById("convertButton");
-      if (convertType === "channel") {
-        convertType = "video";
-        convertButton.textContent = "Video ID ile Dönüştür";
-      } else {
-        convertType = "channel";
-        convertButton.textContent = "Kanal ID ile Dönüştür";
-      }
-    }
+    <script src="https://vjs.zencdn.net/7.14.3/video.min.js"></script>
+    <script>
+        const player = videojs('player');
+        const channelList = document.getElementById('channelList');
+        const exportButton = document.getElementById('exportButton');
+        const modal = document.getElementById('myModal');
+        const closeButton = document.getElementsByClassName('close')[0];
+        const selectAllButton = document.getElementById('selectAllButton');
+        const cancelButton = document.getElementById('cancelButton');
+        const copyButton = document.getElementById('copyButton');
+        const checkboxContainer = document.getElementById('checkboxContainer');
+        const aboutText = document.getElementById('aboutText');
 
-    function convert() {
-      var youtubeLink = document.getElementById("youtubeLink").value;
-      var convertedLink = "https://api.codetabs.com/v1/proxy/?quest=" + youtubeLink;
-      getM3u8Link(convertedLink);
-      document.getElementById("youtubeLink").value = "";
-    }
+        let channels = [];
 
-    function getM3u8Link(link) {
-      fetch(link)
-        .then(response => response.text())
-        .then(data => {
-          var id;
-          if (convertType === 'channel') {
-            id = data.match(/"channelId":"([^"]+)"/)[1];
-          } else {
-            id = data.match(/"videoId":"([^"]+)"/)[1];
-          }
-          var m3u8Link = "https://ythls-v2.onrender.com/" + convertType + "/" + id + ".m3u8";
-          var title = data.match(/"title":"([^"]+)"/)[1];
-          convertedLinks.push({ link: m3u8Link, name: title, checked: false });
-          displayConvertedLinks();
-          saveToLocalStorage();
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-    }
-
-    function displayConvertedLinks() {
-      var html = "";
-      for (var i = 0; i < convertedLinks.length; i++) {
-        var checked = convertedLinks[i].checked ? 'checked' : '';
-        html += '<div class="button-group"><button onclick="nameLink(' + i + ')">İsim Ver</button><button onclick="copyLink(' + i + ')">Kopyala</button><button onclick="openPlayer(\'' + convertedLinks[i].link + '\')">Test Et</button><button class="remove-button" onclick="removeLink(' + i + ')">Sil</button></div><div><input type="checkbox" onchange="toggleChecked(' + i + ')" ' + checked + '> <strong>' + (convertedLinks[i].name ? convertedLinks[i].name + ':' : 'İsim Yok:') + '</strong> <a href="' + convertedLinks[i].link + '" target="_blank">' + convertedLinks[i].link + '</a></div>';
-      }
-      document.getElementById("convertedLinks").innerHTML = html;
-    }
-
-    function nameLink(index) {
-      var linkName = prompt("Bağlantı için bir isim girin:");
-      if (linkName !== null) {
-        convertedLinks[index].name = linkName;
-        displayConvertedLinks();
-        saveToLocalStorage();
-      }
-    }
-
-    function copyLink(index) {
-      var copyText = convertedLinks[index].link;
-      var tempInput = document.createElement("input");
-      tempInput.value = copyText;
-      document.body.appendChild(tempInput);
-      tempInput.select();
-      document.execCommand("copy");
-      document.body.removeChild(tempInput);
-      alert("Bağlantı panoya kopyalandı!");
-    }
-
-    function toggleChecked(index) {
-      convertedLinks[index].checked = !convertedLinks[index].checked;
-    }
-
-    function removeLink(index) {
-      if (confirm("Bağlantıyı silmek istediğinizden emin misiniz?")) {
-        convertedLinks.splice(index, 1);
-        displayConvertedLinks();
-        saveToLocalStorage();
-      }
-    }
-
-    function reset() {
-      if (confirm("Tüm dönüştürülen bağlantıları sıfırlamak istediğinize emin misiniz?")) {
-        convertedLinks = [];
-        displayConvertedLinks();
-        localStorage.removeItem("convertedLinks");
-      }
-    }
-
-    function exportLinks() {
-      var selectedLinks = [];
-      for (var i = 0; i < convertedLinks.length; i++) {
-        if (convertedLinks[i].checked) {
-          selectedLinks.push(convertedLinks[i]);
+        async function fetchChannels() {
+            try {
+                const response = await fetch('https://www.blutv.com/canli-yayin/');
+                const html = await response.text();
+                const regex = /"url":"(https:\/\/.*?\.m3u8)"/g;
+                let match;
+                while ((match = regex.exec(html)) !== null) {
+                    const channelName = match[1].split('/')[3].split('_')[1];
+                    const channelLink = match[1];
+                    const dvr = channelLink.includes('dvr') ? ' DVR' : '';
+                    channels.push({name: channelName + dvr, link: channelLink});
+                }
+                renderChannels();
+            } catch (error) {
+                console.error('Kanal listesi alınırken bir hata oluştu: ', error);
+            }
         }
-      }
-      if (selectedLinks.length === 0) {
-        alert("En az bir içerik seçmelisiniz!");
-      } else {
-        var m3uContent = "#EXTM3U\n";
-        for (var j = 0; j < selectedLinks.length; j++) {
-          m3uContent += "#EXTINF:-1 tvg-id=\"" + (j + 1) + "\" tvg-name=\"" + selectedLinks[j].name + "\" tvg-logo=\"https://www.beceriksizler.net/images/OzBeceriksizlerNetV2/logo.png\", " + selectedLinks[j].name + "\n" + selectedLinks[j].link + "\n";
+
+        function renderChannels() {
+            channelList.innerHTML = '';
+            channels.forEach((channel, index) => {
+                const channelDiv = document.createElement('div');
+                channelDiv.className = 'channelItem';
+                channelDiv.innerHTML = `
+                    <span>${channel.name}</span>
+                    <div class="controls">
+                        <button onclick="playChannel('${channel.link}')">Oynat</button>
+                        <button onclick="copyLink('${channel.link}')">Kopyala</button>
+                        <button onclick="renameChannel(${index})" class="renameButton">Düzelt</button>
+                    </div>`;
+                channelList.appendChild(channelDiv);
+            });
         }
-        navigator.clipboard.writeText(m3uContent).then(function() {
-          alert("Seçili içerikler m3u formatında panoya kopyalandı!");
-        }, function(err) {
-          console.error('Panoya kopyalama işlemi başarısız:', err);
-        });
-      }
-    }
 
-    function saveToLocalStorage() {
-      localStorage.setItem("convertedLinks", JSON.stringify(convertedLinks));
-    }
+        function playChannel(channelLink) {
+            player.src({
+                src: channelLink,
+                type: 'application/x-mpegURL'
+            });
+            player.play();
+        }
 
-    window.onload = function() {
-      displayConvertedLinks();
-    };
+        function copyLink(channelLink) {
+            navigator.clipboard.writeText(channelLink)
+                .then(() => alert('Bağlantı panoya kopyalandı.'))
+                .catch(err => console.error('Bağlantıyı kopyalarken bir hata oluştu: ', err));
+        }
 
-    function openPlayer(link) {
-      plyrPlayer.source = {
-        type: 'video',
-        sources: [
-          {
-            src: link,
-            type: 'video/mp4',
-          },
-        ],
-      };
-    }
+        function renameChannel(index) {
+            const newName = prompt('Yeni ismi girin:');
+            if (newName) {
+                channels[index].name = newName;
+                renderChannels();
+            }
+        }
 
-    function toggleSelectAll() {
-      var checkboxes = document.querySelectorAll('#convertedLinks input[type="checkbox"]');
-      var selectAllButton = document.getElementById("selectAllButton");
-      var selectAllButtonText = selectAllButton.textContent;
-      if (selectAllButtonText === "Tümünü Seç") {
-        checkboxes.forEach(function(checkbox) {
-          checkbox.checked = true;
-        });
-        convertedLinks.forEach(function(link) {
-          link.checked = true;
-        });
-        selectAllButton.textContent = "Seçimi Tersine Çevir";
-      } else {
-        checkboxes.forEach(function(checkbox) {
-          checkbox.checked = false;
-        });
-        convertedLinks.forEach(function(link) {
-          link.checked = false;
-        });
-        selectAllButton.textContent = "Tümünü Seç";
-      }
-    }
-  </script>
+        exportButton.onclick = function() {
+            modal.style.display = "block";
+            renderCheckboxItems();
+        }
+
+        closeButton.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        cancelButton.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        selectAllButton.onclick = function() {
+            const checkboxes = document.querySelectorAll('.checkboxItem input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = true;
+            });
+        }
+
+        copyButton.onclick = function() {
+            const selectedChannels = [];
+            const checkboxes = document.querySelectorAll('.checkboxItem input[type="checkbox"]');
+            checkboxes.forEach((checkbox, index) => {
+                if (checkbox.checked) {
+                    selectedChannels.push(channels[index]);
+                }
+            });
+            copyChannelsToClipboard(selectedChannels);
+            modal.style.display = "none";
+        }
+
+        function renderCheckboxItems() {
+            checkboxContainer.innerHTML = '';
+            channels.forEach(channel => {
+                const checkboxItem = document.createElement('div');
+                checkboxItem.className = 'checkboxItem';
+                checkboxItem.innerHTML = `
+                    <input type="checkbox" id="${channel.name}" name="${channel.name}" value="${channel.link}">
+                    <label for="${channel.name}">${channel.name}</label><br>`;
+                checkboxContainer.appendChild(checkboxItem);
+            });
+        }
+
+        function copyChannelsToClipboard(channels) {
+            let m3uContent = '#EXTM3U\n';
+            channels.forEach(channel => {
+                m3uContent += `#EXTINF:-1 tvg-id="" tvg-name="${channel.name}" tvg-logo="" group-title="BluTV Kanalları",${channel.name}\n${channel.link}\n`;
+            });
+            navigator.clipboard.writeText(m3uContent)
+                .then(() => alert('Kanallar panoya kopyalandı.'))
+                .catch(err => console.error('Kanalları kopyalarken bir hata oluştu: ', err));
+        }
+
+        function toggleAbout() {
+            if (aboutText.style.display === "none") {
+                aboutText.style.display = "block";
+            } else {
+                aboutText.style.display = "none";
+            }
+        }
+
+        fetchChannels();
+    </script>
 </body>
 </html>
