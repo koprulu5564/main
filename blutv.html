@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BluTV Kanal Listesi</title>
+    <link href="https://vjs.zencdn.net/7.14.3/video-js.css" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            position: relative;
+        }
+        #player {
+            width: 100%;
+            height: 30%;
+        }
+        #channelList {
+            width: 80%;
+            max-width: 600px;
+            margin: auto; /* Listeyi ortala */
+            padding: 10px;
+            overflow-y: auto;
+            max-height: 50%; /* Maksimum yükseklik */
+            background-color: black; /* İçerik listesi arka plan rengi */
+        }
+        .channelItem {
+            margin-bottom: 10px;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            color: #1e90ff; /* Orta mavi renk */
+            background-color: #f0f0f0; /* Arka plan rengi */
+            border-radius: 5px; /* Kenar yuvarlaklığı */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Gölge efekti */
+            transition: background-color 0.3s ease; /* Geçiş efekti */
+            position: relative;
+        }
+        .channelItem:hover {
+            background-color: #e0e0e0; /* Hafif gri arka plan rengi */
+        }
+        .controls {
+            display: none;
+        }
+        .channelItem:hover .controls {
+            display: inline;
+        }
+        .controls button {
+            padding: 5px 10px;
+            margin-right: 5px;
+            border: none;
+            border-radius: 3px;
+            background-color: #1e90ff; /* Orta mavi renk */
+            color: #fff; /* Beyaz renk */
+            cursor: pointer;
+            transition: background-color 0.3s ease; /* Geçiş efekti */
+        }
+        .controls button:hover {
+            background-color: #007bff; /* Daha koyu mavi renk */
+        }
+        .exportSection {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+        }
+        #exportButton {
+            background-color: green; /* Dışa Aktar düğmesinin rengi */
+            color: white; /* Dışa Aktar düğmesinin yazı rengi */
+        }
+        #exportButton:hover {
+            cursor: pointer;
+            opacity: 0.8;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            overflow-y: auto;
+        }
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+        }
+        .aboutButton {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background-color: #f0f0f0;
+            text-align: center;
+            padding: 10px;
+            cursor: pointer;
+            z-index: 10;
+        }
+        .aboutText {
+            display: none;
+            text-align: center;
+            font-size: 48px;
+            color: #fff;
+            background-color: #1e90ff;
+            padding: 20px;
+            animation: rotateBanner 5s infinite alternate;
+            z-index: 9;
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 10px;
+        }
+        @keyframes rotateBanner {
+            0% {
+                transform: translateX(-50%) rotate(0deg);
+            }
+            100% {
+                transform: translateX(-50%) rotate(360deg);
+            }
+        }
+        .renameButton {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: #1e90ff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            padding: 5px 10px;
+            cursor: pointer;
+            z-index: 1;
+        }
+        .renameButton:hover {
+            background-color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <video id="player" class="video-js vjs-default-skin" controls playsinline></video>
+    <div class="exportSection">
+        <h2>BluTV Kanalları</h2>
+        <button id="exportButton">Dışa Aktar</button>
+    </div>
+    <div id="channelList"></div>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>İçerikleri Seçin</h3>
+            <div id="checkboxContainer"></div>
+            <button id="selectAllButton">Tümünü Seç</button>
+            <button id="cancelButton">İptal</button>
+            <button id="copyButton">Panoya Kopyala</button>
+        </div>
+    </div>
+
+    <div class="aboutButton" onclick="toggleAbout()">Hakkında</div>
+    <div class="aboutText" id="aboutText">KÖPRÜLÜ,den sevgilerle</div>
+
+    <script src="https://vjs.zencdn.net/7.14.3/video.min.js"></script>
+    <script>
+        const player = videojs('player');
+        const channelList = document.getElementById('channelList');
+        const exportButton = document.getElementById('exportButton');
+        const modal = document.getElementById('myModal');
+        const closeButton = document.getElementsByClassName('close')[0];
+        const selectAllButton = document.getElementById('selectAllButton');
+        const cancelButton = document.getElementById('cancelButton');
+        const copyButton = document.getElementById('copyButton');
+        const checkboxContainer = document.getElementById('checkboxContainer');
+        const aboutText = document.getElementById('aboutText');
+
+        let channels = [];
+
+        async function fetchChannels() {
+            try {
+                const response = await fetch('https://www.blutv.com/canli-yayin/');
+                const html = await response.text();
+                const regex = /"url":"(https:\/\/.*?\.m3u8)"/g;
+                let match;
+                while ((match = regex.exec(html)) !== null) {
+                    const channelName = match[1].split('/')[3].split('_')[1];
+                    const channelLink = match[1];
+                    const dvr = channelLink.includes('dvr') ? ' DVR' : '';
+                    channels.push({name: channelName + dvr, link: channelLink});
+                }
+                renderChannels();
+            } catch (error) {
+                console.error('Kanal listesi alınırken bir hata oluştu: ', error);
+            }
+        }
+
+        function renderChannels() {
+            channelList.innerHTML = '';
+            channels.forEach((channel, index) => {
+                const channelDiv = document.createElement('div');
+                channelDiv.className = 'channelItem';
+                channelDiv.innerHTML = `
+                    <span>${channel.name}</span>
+                    <div class="controls">
+                        <button onclick="playChannel('${channel.link}')">Oynat</button>
+                        <button onclick="copyLink('${channel.link}')">Kopyala</button>
+                        <button onclick="renameChannel(${index})" class="renameButton">Düzelt</button>
+                    </div>`;
+                channelList.appendChild(channelDiv);
+            });
+        }
+
+        function playChannel(channelLink) {
+            player.src({
+                src: channelLink,
+                type: 'application/x-mpegURL'
+            });
+            player.play();
+        }
+
+        function copyLink(channelLink) {
+            navigator.clipboard.writeText(channelLink)
+                .then(() => alert('Bağlantı panoya kopyalandı.'))
+                .catch(err => console.error('Bağlantıyı kopyalarken bir hata oluştu: ', err));
+        }
+
+        function renameChannel(index) {
+            const newName = prompt('Yeni ismi girin:');
+            if (newName) {
+                channels[index].name = newName;
+                renderChannels();
+            }
+        }
+
+        exportButton.onclick = function() {
+            modal.style.display = "block";
+            renderCheckboxItems();
+        }
+
+        closeButton.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        cancelButton.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        selectAllButton.onclick = function() {
+            const checkboxes = document.querySelectorAll('.checkboxItem input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = true;
+            });
+        }
+
+        copyButton.onclick = function() {
+            const selectedChannels = [];
+            const checkboxes = document.querySelectorAll('.checkboxItem input[type="checkbox"]');
+            checkboxes.forEach((checkbox, index) => {
+                if (checkbox.checked) {
+                    selectedChannels.push(channels[index]);
+                }
+            });
+            copyChannelsToClipboard(selectedChannels);
+            modal.style.display = "none";
+        }
+
+        function renderCheckboxItems() {
+            checkboxContainer.innerHTML = '';
+            channels.forEach(channel => {
+                const checkboxItem = document.createElement('div');
+                checkboxItem.className = 'checkboxItem';
+                checkboxItem.innerHTML = `
+                    <input type="checkbox" id="${channel.name}" name="${channel.name}" value="${channel.link}">
+                    <label for="${channel.name}">${channel.name}</label><br>`;
+                checkboxContainer.appendChild(checkboxItem);
+            });
+        }
+
+        function copyChannelsToClipboard(channels) {
+            let m3uContent = '#EXTM3U\n';
+            channels.forEach(channel => {
+                m3uContent += `#EXTINF:-1 tvg-id="" tvg-name="${channel.name}" tvg-logo="" group-title="BluTV Kanalları",${channel.name}\n${channel.link}\n`;
+            });
+            navigator.clipboard.writeText(m3uContent)
+                .then(() => alert('Kanallar panoya kopyalandı.'))
+                .catch(err => console.error('Kanalları kopyalarken bir hata oluştu: ', err));
+        }
+
+        function toggleAbout() {
+            if (aboutText.style.display === "none") {
+                aboutText.style.display = "block";
+            } else {
+                aboutText.style.display = "none";
+            }
+        }
+
+        fetchChannels();
+    </script>
+</body>
+</html>
