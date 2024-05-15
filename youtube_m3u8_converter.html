@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YouTube Canlı Yayın Çevirici</title>
+<link rel="stylesheet" href="https://cdn.plyr.io/3.6.8/plyr.css" />
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+  }
+
+  .container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  input[type="text"] {
+    width: calc(100% - 140px);
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    margin-right: 10px;
+  }
+
+  button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff; /* Dönüştür düğmesi rengi */
+    color: #fff;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #0056b3; /* Dönüştür düğmesi hover rengi */
+  }
+
+  #convertedLinks {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-top: 10px;
+  }
+
+  #convertedLinks div {
+    margin-bottom: 10px;
+    word-wrap: break-word;
+  }
+
+  #convertedLinks div a {
+    color: #009900;
+    text-decoration: none;
+    font-size: 18px;
+  }
+
+  #convertedLinks div button.remove-button {
+    margin-left: 10px;
+    background-color: #ff0000; /* Sil düğmesi rengi kırmızı */
+    color: #fff;
+  }
+
+  #resetButton {
+    margin-top: 10px;
+    background-color: #ff0000; /* Sıfırla düğmesi rengi */
+  }
+
+  #exportButton {
+    margin-top: 10px;
+    background-color: #008000; /* Dışa Aktar düğmesi rengi */
+  }
+
+  .button-group {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Düğmeleri sağa hizala */
+    overflow-x: auto; /* Yatay kaydırma */
+    margin-top: 10px;
+  }
+
+  .button-group button {
+    height: 38px; /* Yükseklik eklendi */
+  }
+
+  #selectAllButton {
+    margin-right: 10px; /* Tümünü Seç düğmesi sağa yaslandı */
+  }
+
+  #exportButton {
+    margin-right: 10px; /* Dışa Aktar düğmesi sağa yaslandı */
+  }
+
+  #resetButton {
+    margin-right: 10px; /* Sıfırla düğmesi sağa yaslandı */
+  }
+
+  #convertButton {
+    margin-right: 10px; /* Dönüştür düğmesi sağa yaslandı */
+    background-color: #007bff; /* ID seçimi yapılan düğme rengi */
+    color: #fff;
+  }
+
+</style>
+</head>
+<body>
+  <div class="player-container" id="playerContainer">
+    <video id="plyrPlayer" controls crossorigin></video>
+  </div>
+
+  <div class="container">
+    <div>
+      <input type="text" id="youtubeLink" placeholder="YouTube Canlı Bağlantı">
+      <button id="convertButton" onclick="toggleConvertType()">Kanal ID ile Dönüştür</button> <!-- Geçiş yapabilen düğme -->
+      <button id="doConvertButton" onclick="convert()">Dönüştür</button> <!-- Yeni dönüştürme düğmesi -->
+    </div>
+    <div id="convertedLinks"></div>
+    <div class="button-group">
+      <button id="selectAllButton" onclick="toggleSelectAll()">Tümünü Seç</button>
+      <button id="exportButton" onclick="exportLinks()">Dışa Aktar</button>
+      <button id="resetButton" onclick="reset()">Sıfırla</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.plyr.io/3.6.8/plyr.js"></script>
+  <script>
+    const plyrPlayer = new Plyr('#plyrPlayer');
+    var convertedLinks = JSON.parse(localStorage.getItem("convertedLinks")) || [];
+    var convertType = "channel";
+
+    function toggleConvertType() {
+      var convertButton = document.getElementById("convertButton");
+      if (convertType === "channel") {
+        convertType = "video";
+        convertButton.textContent = "Video ID ile Dönüştür";
+      } else {
+        convertType = "channel";
+        convertButton.textContent = "Kanal ID ile Dönüştür";
+      }
+    }
+
+    function convert() {
+      var youtubeLink = document.getElementById("youtubeLink").value;
+      var convertedLink = "https://api.codetabs.com/v1/proxy/?quest=" + youtubeLink;
+      getM3u8Link(convertedLink);
+      document.getElementById("youtubeLink").value = "";
+    }
+
+    function getM3u8Link(link) {
+      fetch(link)
+        .then(response => response.text())
+        .then(data => {
+          var id;
+          if (convertType === 'channel') {
+            id = data.match(/"channelId":"([^"]+)"/)[1];
+          } else {
+            id = data.match(/"videoId":"([^"]+)"/)[1];
+          }
+          var m3u8Link = "https://ythls-v2.onrender.com/" + convertType + "/" + id + ".m3u8";
+          var title = data.match(/"title":"([^"]+)"/)[1];
+          convertedLinks.push({ link: m3u8Link, name: title, checked: false });
+          displayConvertedLinks();
+          saveToLocalStorage();
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
+
+    function displayConvertedLinks() {
+      var html = "";
+      for (var i = 0; i < convertedLinks.length; i++) {
+        var checked = convertedLinks[i].checked ? 'checked' : '';
+        html += '<div class="button-group"><button onclick="nameLink(' + i + ')">İsim Ver</button><button onclick="copyLink(' + i + ')">Kopyala</button><button onclick="openPlayer(\'' + convertedLinks[i].link + '\')">Test Et</button><button class="remove-button" onclick="removeLink(' + i + ')">Sil</button></div><div><input type="checkbox" onchange="toggleChecked(' + i + ')" ' + checked + '> <strong>' + (convertedLinks[i].name ? convertedLinks[i].name + ':' : 'İsim Yok:') + '</strong> <a href="' + convertedLinks[i].link + '" target="_blank">' + convertedLinks[i].link + '</a></div>';
+      }
+      document.getElementById("convertedLinks").innerHTML = html;
+    }
+
+    function nameLink(index) {
+      var linkName = prompt("Bağlantı için bir isim girin:");
+      if (linkName !== null) {
+        convertedLinks[index].name = linkName;
+        displayConvertedLinks();
+        saveToLocalStorage();
+      }
+    }
+
+    function copyLink(index) {
+      var copyText = convertedLinks[index].link;
+      var tempInput = document.createElement("input");
+      tempInput.value = copyText;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempInput);
+      alert("Bağlantı panoya kopyalandı!");
+    }
+
+    function toggleChecked(index) {
+      convertedLinks[index].checked = !convertedLinks[index].checked;
+    }
+
+    function removeLink(index) {
+      if (confirm("Bağlantıyı silmek istediğinizden emin misiniz?")) {
+        convertedLinks.splice(index, 1);
+        displayConvertedLinks();
+        saveToLocalStorage();
+      }
+    }
+
+    function reset() {
+      if (confirm("Tüm dönüştürülen bağlantıları sıfırlamak istediğinize emin misiniz?")) {
+        convertedLinks = [];
+        displayConvertedLinks();
+        localStorage.removeItem("convertedLinks");
+      }
+    }
+
+    function exportLinks() {
+      var selectedLinks = [];
+      for (var i = 0; i < convertedLinks.length; i++) {
+        if (convertedLinks[i].checked) {
+          selectedLinks.push(convertedLinks[i]);
+        }
+      }
+      if (selectedLinks.length === 0) {
+        alert("En az bir içerik seçmelisiniz!");
+      } else {
+        var m3uContent = "#EXTM3U\n";
+        for (var j = 0; j < selectedLinks.length; j++) {
+          m3uContent += "#EXTINF:-1 tvg-id=\"" + (j + 1) + "\" tvg-name=\"" + selectedLinks[j].name + "\" tvg-logo=\"https://www.beceriksizler.net/images/OzBeceriksizlerNetV2/logo.png\", " + selectedLinks[j].name + "\n" + selectedLinks[j].link + "\n";
+        }
+        navigator.clipboard.writeText(m3uContent).then(function() {
+          alert("Seçili içerikler m3u formatında panoya kopyalandı!");
+        }, function(err) {
+          console.error('Panoya kopyalama işlemi başarısız:', err);
+        });
+      }
+    }
+
+    function saveToLocalStorage() {
+      localStorage.setItem("convertedLinks", JSON.stringify(convertedLinks));
+    }
+
+    window.onload = function() {
+      displayConvertedLinks();
+    };
+
+    function openPlayer(link) {
+      plyrPlayer.source = {
+        type: 'video',
+        sources: [
+          {
+            src: link,
+            type: 'video/mp4',
+          },
+        ],
+      };
+    }
+
+    function toggleSelectAll() {
+      var checkboxes = document.querySelectorAll('#convertedLinks input[type="checkbox"]');
+      var selectAllButton = document.getElementById("selectAllButton");
+      var selectAllButtonText = selectAllButton.textContent;
+      if (selectAllButtonText === "Tümünü Seç") {
+        checkboxes.forEach(function(checkbox) {
+          checkbox.checked = true;
+        });
+        convertedLinks.forEach(function(link) {
+          link.checked = true;
+        });
+        selectAllButton.textContent = "Seçimi Tersine Çevir";
+      } else {
+        checkboxes.forEach(function(checkbox) {
+          checkbox.checked = false;
+        });
+        convertedLinks.forEach(function(link) {
+          link.checked = false;
+        });
+        selectAllButton.textContent = "Tümünü Seç";
+      }
+    }
+  </script>
+</body>
+</html>
