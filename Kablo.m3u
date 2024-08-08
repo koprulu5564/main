@@ -1,0 +1,133 @@
+#EXTM3U
+#EXTINF:0,TARİH TV HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live5sr.kablowebtv.com/Live/HLS/4243/4243.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,BBC FIRST HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live3sr.kablowebtv.com/Live/HLS/4237/4237.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,TRT EBA HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live5sr.kablowebtv.com/Live/HLS/4218/4218.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,SİNEMA YERLİ HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live1sr.kablowebtv.com/Live/HLS/4203/4203.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,TRT ÇOCUK HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live6sr.kablowebtv.com/Live/HLS/4080/4080.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,ID HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live4sr.kablowebtv.com/Live/HLS/4120/4120.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,DISCOVERY CHANNEL HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live4sr.kablowebtv.com/Live/HLS/4079/4079.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,SİNEMA TV HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live1sr.kablowebtv.com/Live/HLS/4060/4060.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,SİNEMA 1001 HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live1sr.kablowebtv.com/Live/HLS/4099/4099.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,SİNEMA KOMEDİ HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live1sr.kablowebtv.com/Live/HLS/4003/4003.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,SİNEMA AKSİYON HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live1sr.kablowebtv.com/Live/HLS/4004/4004.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,TRT BELGESEL HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live3sr.kablowebtv.com/Live/HLS/4124/4124.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,TRT SPOR HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live5sr.kablowebtv.com/Live/HLS/4123/4123.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,TLC HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live5sr.kablowebtv.com/Live/HLS/4041/4041.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,KANAL D HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live3sr.kablowebtv.com/Live/HLS/4130/4130.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,CNN TÜRK HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live2sr.kablowebtv.com/Live/HLS/4116/4116.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,NTV HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live2sr.kablowebtv.com/Live/HLS/4115/4115.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,NOW HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live3sr.kablowebtv.com/Live/HLS/4081/4081.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,STAR TV HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live3sr.kablowebtv.com/Live/HLS/4135/4135.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,FX HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live6sr.kablowebtv.com/Live/HLS/4068/4068.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,SHOW TV HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live3sr.kablowebtv.com/Live/HLS/4129/4129.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,TRT HABER HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live3sr.kablowebtv.com/Live/HLS/4082/4082.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,ATV HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live3sr.kablowebtv.com/Live/HLS/4089/4089.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,NATIONAL GEOGRAPHIC WILD HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live4sr.kablowebtv.com/Live/HLS/4073/4073.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,NATIONAL GEOGRAPHIC HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live2sr.kablowebtv.com/Live/HLS/4050/4050.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,VIASAT EXPLORE HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live4sr.kablowebtv.com/Live/HLS/1024/1024.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,VIASAT HISTORY HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live4sr.kablowebtv.com/Live/HLS/1023/1023.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,ÜLKE TV HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live2sr.kablowebtv.com/Live/HLS/2027/2027.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,TVNET HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live2sr.kablowebtv.com/Live/HLS/2026/2026.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,TV 8 HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live3sr.kablowebtv.com/Live/HLS/2031/2031.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,TRACE SPORTS STARS HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live5sr.kablowebtv.com/Live/HLS/2030/2030.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,KABLO INFO HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live1sr.kablowebtv.com/Live/HLS/1022/1022.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,TRT 2 HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live6sr.kablowebtv.com/Live/HLS/2022/2022.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,DUCK TV
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live6sr.kablowebtv.com/Live/HLS/2013/2013.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,TRT MÜZİK HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live4sr.kablowebtv.com/Live/HLS/1013/1013.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,DA VINCI HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live6sr.kablowebtv.com/Live/HLS/2006/2006.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,ENGLISH CLUB TV HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live6sr.kablowebtv.com/Live/HLS/2012/2012.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,TRACE URBAN HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live6sr.kablowebtv.com/Live/HLS/1001/1001.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,A HABER HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live2sr.kablowebtv.com/Live/HLS/1000/1000.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,A SPOR HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live5sr.kablowebtv.com/Live/HLS/1009/1009.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,TRT 1 HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live1sr.kablowebtv.com/Live/HLS/1002/1002.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,TGRT HABER HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live2sr.kablowebtv.com/Live/HLS/2007/2007.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,SİNEMA AİLE HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live1sr.kablowebtv.com/Live/HLS/2004/2004.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
+#EXTINF:0,KANAL 7 HD
+#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
+http://live3sr.kablowebtv.com/Live/HLS/2008/2008.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
