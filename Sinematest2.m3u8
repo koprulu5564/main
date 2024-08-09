@@ -1,0 +1,9 @@
+#EXTM3U
+#EXTINF:-1,CUSTOM HLS Stream
+#EXTVLCOPT:http-user-agent=ExoPlayerLib/2.19.0 (Linux; Android 11) ExoPlayerLib/2.19.0
+#EXTVLCOPT:http-header=Accept:*/*
+#EXTVLCOPT:http-header=Connection:close
+#EXTVLCOPT:http-header=Host:live1pop01.kablowebtv.com
+#EXTVLCOPT:http-header=Icy-MetaData:1
+#EXTVLCOPT:http-cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim; emwId=51093b0c-e1a6-4684-81dc-16af380240e1; eSessionId=35012045
+http://live1pop01.kablowebtv.com/Live/HLS/4060/2500.m3u8
