@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stream Player</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+        #streamList {
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            margin: 20px auto;
+            width: 80%;
+            text-align: center;
+        }
+        #streamList li {
+            list-style: none;
+            margin: 10px 0;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: background-color 0.3s;
+        }
+        #streamList li:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        h2 {
+            text-align: center;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <h2>Available Streams</h2>
+    <ul id="streamList"></ul>
+
+    <script>
+        var baseurl = "https://m3u8.hacikasaroglu.workers.dev/";
+        var kanalurl = {
+            1: "yayinzirve.m3u8",
+            2: "yayin1.m3u8",
+            3: "yayinstar.m3u8",
+            4: "yayinb2.m3u8",
+            5: "yayinb3.m3u8",
+            6: "yayinb4.m3u8",
+            7: "yayinb5.m3u8",
+            8: "yayinbm1.m3u8",
+            9: "yayinbm2.m3u8",
+            10: "yayinss.m3u8",
+            11: "yayinss2.m3u8",
+            12: "yayinssp2.m3u8",
+            13: "yayint1.m3u8",
+            14: "yayint2.m3u8",
+            15: "yayint3.m3u8",
+            16: "yayinsmarts.m3u8",
+            17: "yayinsms2.m3u8",
+            18: "yayintrtspor.m3u8",
+            19: "yayintrtspor2.m3u8",
+            20: "yayintrt1.m3u8",
+            21: "yayinas.m3u8",
+            22: "yayinatv.m3u8",
+            23: "yayintv8.m3u8",
+            24: "yayintv85.m3u8",
+            25: "yayinf1.m3u8",
+            26: "yayinnbatv.m3u8",
+            27: "yayineu1.m3u8",
+            28: "yayineu2.m3u8",
+            29: "yayinex1.m3u8",
+            30: "yayinex2.m3u8",
+            31: "yayinex3.m3u8",
+            32: "yayinex4.m3u8",
+            33: "yayinex5.m3u8",
+            34: "yayinex6.m3u8",
+            35: "yayinex7.m3u8",
+            36: "yayinex8.m3u8"
+        };
+
+        var refererOriginPattern = /https:\/\/trgoals(\d+)\.xyz/g;  // Referer ve Origin'deki rakamları yakalar
+        var domainPattern = /https:\/\/([^.]+)\.([^.]+)\.([^.]+)\.([^.]+)\/(.*?\.m3u8)/;  // URL'deki domain ve yol kısmını yakalar
+
+        var refererOrigin = "https://trgoals892.xyz";  // Dinamik olarak yakalayacağınız veya güncelleyeceğiniz değer
+
+        // Mevcut domain bilgilerini güncelleyebilirsiniz
+        var currentDomain = "https://m3u8.hacikasaroglu.workers.dev/";
+
+        // Güncel 892 rakamını ve domaini alacak bir yapı kurabilirsiniz
+        function getUpdatedRefererOrigin() {
+            var match = refererOrigin.match(refererOriginPattern);
+            if (match) {
+                return refererOrigin.replace(/\d+/, "892");  // 892 rakamını güncelleyebilirsiniz
+            }
+            return refererOrigin;
+        }
+
+        function getUpdatedDomain(streamUrl) {
+            var match = streamUrl.match(domainPattern);
+            if (match) {
+                // match[0] full URL, match[1] - [4] domain parçaları, match[5] yol kısmı
+                return `https://${match[1]}.${match[2]}.${match[3]}.${match[4]}/${match[5]}`;
+            }
+            return streamUrl;
+        }
+
+        var updatedRefererOrigin = getUpdatedRefererOrigin();
+
+        function createStreamUrl(key) {
+            var streamPath = kanalurl[key];
+            var updatedUrl = getUpdatedDomain(baseurl + streamPath);
+            return `${updatedUrl}|referer=${updatedRefererOrigin}|origin=${updatedRefererOrigin}`;
+        }
+
+        // Stream listesi oluştur
+        var streamListElement = document.getElementById('streamList');
+        for (var key in kanalurl) {
+            var streamName = kanalurl[key].replace('.m3u8', '');  // .m3u8 kısmını kaldır
+            var streamUrl = createStreamUrl(key);
+
+            // Liste elemanını oluştur
+            var listItem = document.createElement('li');
+            listItem.textContent = streamName;
+
+            // Tıklama olayı ekle
+            listItem.onclick = (function (url) {
+                return function () {
+                    window.location.href = `intent:${url}#Intent;package=co.wuffy.player;type=video/*;end;`;
+                };
+            })(streamUrl);
+
+            // Listeye ekle
+            streamListElement.appendChild(listItem);
+        }
+    </script>
+</body>
+</html>
