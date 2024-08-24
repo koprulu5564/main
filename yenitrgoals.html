@@ -38,14 +38,56 @@
             text-align: center;
             color: #fff;
         }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #333;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 300px;
+            text-align: center;
+        }
+        .modal-content button {
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #444;
+            color: #fff;
+        }
+        .modal-content button:hover {
+            background-color: #555;
+        }
     </style>
 </head>
 <body>
-    <h2>TRGOALS KANALLARI</h2>
+    <h2>Available Streams</h2>
     <ul id="streamList"></ul>
 
+    <!-- Modal -->
+    <div id="actionModal" class="modal">
+        <div class="modal-content">
+            <p>Ne yapmak istersiniz?</p>
+            <button id="playButton">Oynat</button>
+            <button id="copyButton">Kopyala</button>
+        </div>
+    </div>
+
     <script>
-        var baseurl = "https://m3u8.hacikasaroglu.workers.dev/";
+        var baseurl = "https://m3u8.a02314675.workers.dev/";
         var kanalurl = {
             1: "yayinzirve.m3u8",
             2: "yayin1.m3u8",
@@ -85,39 +127,48 @@
             36: "yayinex8.m3u8"
         };
 
-        var refererOriginPattern = /https:\/\/trgoals(\d+)\.xyz/g;  // Referer ve Origin'deki rakamları yakalar
-        var domainPattern = /https:\/\/([^.]+)\.([^.]+)\.([^.]+)\.([^.]+)\/(.*?\.m3u8)/;  // URL'deki domain ve yol kısmını yakalar
+        // Regex ve Dinamik Alanlar
+        var domainPattern = /https:\/\/[\w.-]+\.[\w.-]+\.[\w.-]+\.[\w.-]+\//;
+        var refererPattern = /https:\/\/trgoals\d+\.xyz/;
 
-        var refererOrigin = "https://trgoals892.xyz";  // Dinamik olarak yakalayacağınız veya güncelleyeceğiniz değer
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = "block";
+        }
 
-        // Mevcut domain bilgilerini güncelleyebilirsiniz
-        var currentDomain = "https://m3u8.hacikasaroglu.workers.dev/";
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+        }
 
-        // Güncel 892 rakamını ve domaini alacak bir yapı kurabilirsiniz
         function getUpdatedRefererOrigin() {
-            var match = refererOrigin.match(refererOriginPattern);
-            if (match) {
-                return refererOrigin.replace(/\d+/, "892");  // 892 rakamını güncelleyebilirsiniz
+            var refererMatch = refererPattern.exec(baseurl);
+            if (refererMatch) {
+                var updatedReferer = baseurl.replace(refererMatch[0], "https://trgoals892.xyz");
+                return {
+                    referer: updatedReferer,
+                    origin: updatedReferer
+                };
             }
-            return refererOrigin;
+            return {
+                referer: baseurl,
+                origin: baseurl
+            };
         }
 
         function getUpdatedDomain(streamUrl) {
             var match = streamUrl.match(domainPattern);
             if (match) {
-                // match[0] full URL, match[1] - [4] domain parçaları, match[5] yol kısmı
-                return `https://${match[1]}.${match[2]}.${match[3]}.${match[4]}/${match[5]}`;
+                return streamUrl.replace(domainPattern, match[0]);
             }
             return streamUrl;
         }
 
-        var updatedRefererOrigin = getUpdatedRefererOrigin();
-
         function createStreamUrl(key) {
             var streamPath = kanalurl[key];
-            var updatedUrl = getUpdatedDomain(baseurl + streamPath);
-            return `${updatedUrl}|referer=${updatedRefererOrigin}|origin=${updatedRefererOrigin}`;
+            var updatedDomain = getUpdatedDomain(baseurl + streamPath);
+            return `${updatedDomain}|referer=https://trgoals892.xyz|origin=https://trgoals892.xyz`;
         }
+
+        var selectedStreamUrl = '';
 
         // Stream listesi oluştur
         var streamListElement = document.getElementById('streamList');
@@ -132,13 +183,45 @@
             // Tıklama olayı ekle
             listItem.onclick = (function (url) {
                 return function () {
-                    window.location.href = `intent:${url}#Intent;package=co.wuffy.player;type=video/*;end;`;
+                    selectedStreamUrl = url;
+                    openModal('actionModal');
                 };
             })(streamUrl);
 
             // Listeye ekle
             streamListElement.appendChild(listItem);
         }
+
+        // Oynat düğmesine tıklanınca Wuffy Player ile oynat
+        document.getElementById('playButton').onclick = function() {
+            closeModal('actionModal');
+            var fullUrl = selectedStreamUrl;
+            window.location.href = `intent:${fullUrl}#Intent;package=co.wuffy.player;type=video/*;end;`;
+        };
+
+        // Kopyala düğmesine tıklanınca akış URL'sini kopyala
+        document.getElementById('copyButton').onclick = function() {
+            closeModal('actionModal');
+            var cleanUrl = selectedStreamUrl.split('|')[0];
+
+            // Modern Clipboard API kullanımı
+            navigator.clipboard.writeText(cleanUrl).then(function() {
+                alert('Bağlantı kopyalandı: ' + cleanUrl);
+            }).catch(function(err) {
+                // Eski yöntemle kopyalama
+                var textArea = document.createElement('textarea');
+                textArea.value = cleanUrl;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    alert('Bağlantı kopyalandı: ' + cleanUrl);
+                } catch (err) {
+                    alert('Kopyalama başarısız: ', err);
+                }
+                document.body.removeChild(textArea);
+            });
+        };
     </script>
 </body>
 </html>
