@@ -74,7 +74,7 @@
     </style>
 </head>
 <body>
-    <h2>Available Streams</h2>
+    <h2>(KÖPRÜLÜ) TRGOALS KANALLARI</h2>
     <ul id="streamList"></ul>
 
     <!-- Modal -->
@@ -87,8 +87,7 @@
     </div>
 
     <script>
-        var baseurl = "https://m3u8.a02314675.workers.dev/";
-        var kanalurl = {
+        const kanalurl = {
             1: "yayinzirve.m3u8",
             2: "yayin1.m3u8",
             3: "yayinstar.m3u8",
@@ -127,89 +126,81 @@
             36: "yayinex8.m3u8"
         };
 
-        // Regex ve Dinamik Alanlar
-        var domainPattern = /https:\/\/[\w.-]+\.[\w.-]+\.[\w.-]+\.[\w.-]+\//;
-        var refererPattern = /https:\/\/trgoals\d+\.xyz/;
-
-        function openModal(modalId) {
-            document.getElementById(modalId).style.display = "block";
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = "none";
-        }
-
-        function getUpdatedRefererOrigin() {
-            var refererMatch = refererPattern.exec(baseurl);
-            if (refererMatch) {
-                var updatedReferer = baseurl.replace(refererMatch[0], "https://trgoals892.xyz");
-                return {
-                    referer: updatedReferer,
-                    origin: updatedReferer
-                };
+        async function getRefererAndOrigin() {
+            try {
+                const response = await fetch("https://api.codetabs.com/v1/proxy/?quest=https://eniyiyayinci.github.io/redirect/index.html");
+                const text = await response.text();
+                const match = text.match(/<meta http-equiv="refresh" content="0;URL=(.*?)">/);
+                if (match) {
+                    const refererAndOrigin = match[1];
+                    return refererAndOrigin;
+                }
+                return null;
+            } catch (error) {
+                console.error("Referer ve Origin alınamadı:", error);
+                return null;
             }
-            return {
-                referer: baseurl,
-                origin: baseurl
+        }
+
+        // Base URL burada tanımlanır
+        const baseurl = "https://m3u8.a02314675.workers.dev/";
+
+        async function initializeStreams() {
+            const refererAndOrigin = await getRefererAndOrigin();
+            if (!refererAndOrigin) {
+                alert("Referer ve Origin alınamadı.");
+                return;
+            }
+
+            const streamListElement = document.getElementById('streamList');
+            streamListElement.innerHTML = "";
+
+            const streamNames = {
+                1: "BEİN SPORTS 1 (ZİRVE)",
+                2: "BEİN SPORTS 1 (1)",
+                3: "BEİN SPORTS 1 (STAR)",
+                4: "BEİN SPORTS 2 ",
+                5: "BEİN SPORTS 3 ",
+                6: "BEİN SPORTS 4 ",
+                7: "BEİN SPORTS 5 ",
+                // Diğer kanal isimlerini buraya ekleyebilirsiniz
             };
-        }
 
-        function getUpdatedDomain(streamUrl) {
-            var match = streamUrl.match(domainPattern);
-            if (match) {
-                return streamUrl.replace(domainPattern, match[0]);
+            for (const key in kanalurl) {
+                const streamPath = kanalurl[key];
+                const streamName = streamNames[key] || streamPath.replace('.m3u8', '');
+                const streamUrl = `${baseurl}${streamPath}|referer=${refererAndOrigin}|origin=${refererAndOrigin}`;
+
+                const listItem = document.createElement('li');
+                listItem.textContent = streamName;
+
+                listItem.onclick = (function (url) {
+                    return function () {
+                        selectedStreamUrl = url;
+                        openModal('actionModal');
+                    };
+                })(streamUrl);
+
+                streamListElement.appendChild(listItem);
             }
-            return streamUrl;
         }
 
-        function createStreamUrl(key) {
-            var streamPath = kanalurl[key];
-            var updatedDomain = getUpdatedDomain(baseurl + streamPath);
-            return `${updatedDomain}|referer=https://trgoals892.xyz|origin=https://trgoals892.xyz`;
-        }
+        let selectedStreamUrl = '';
 
-        var selectedStreamUrl = '';
-
-        // Stream listesi oluştur
-        var streamListElement = document.getElementById('streamList');
-        for (var key in kanalurl) {
-            var streamName = kanalurl[key].replace('.m3u8', '');  // .m3u8 kısmını kaldır
-            var streamUrl = createStreamUrl(key);
-
-            // Liste elemanını oluştur
-            var listItem = document.createElement('li');
-            listItem.textContent = streamName;
-
-            // Tıklama olayı ekle
-            listItem.onclick = (function (url) {
-                return function () {
-                    selectedStreamUrl = url;
-                    openModal('actionModal');
-                };
-            })(streamUrl);
-
-            // Listeye ekle
-            streamListElement.appendChild(listItem);
-        }
-
-        // Oynat düğmesine tıklanınca Wuffy Player ile oynat
         document.getElementById('playButton').onclick = function() {
             closeModal('actionModal');
-            var fullUrl = selectedStreamUrl;
+            const fullUrl = selectedStreamUrl;
             window.location.href = `intent:${fullUrl}#Intent;package=co.wuffy.player;type=video/*;end;`;
         };
 
-        // Kopyala düğmesine tıklanınca akış URL'sini kopyala
         document.getElementById('copyButton').onclick = function() {
             closeModal('actionModal');
-            var cleanUrl = selectedStreamUrl.split('|')[0];
+            const cleanUrl = selectedStreamUrl.split('|')[0];
 
-            // Modern Clipboard API kullanımı
             navigator.clipboard.writeText(cleanUrl).then(function() {
                 alert('Bağlantı kopyalandı: ' + cleanUrl);
             }).catch(function(err) {
-                // Eski yöntemle kopyalama
-                var textArea = document.createElement('textarea');
+                const textArea = document.createElement('textarea');
                 textArea.value = cleanUrl;
                 document.body.appendChild(textArea);
                 textArea.select();
@@ -222,6 +213,17 @@
                 document.body.removeChild(textArea);
             });
         };
+
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = "block";
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+        }
+
+        initializeStreams();
+
     </script>
 </body>
 </html>
