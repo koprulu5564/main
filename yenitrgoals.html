@@ -125,32 +125,24 @@
             36: "yayinex8.m3u8"
         };
 
-        async function getRefererAndOrigin() {
+        async function getBaseUrl() {
             try {
-                const response = await fetch("https://api.codetabs.com/v1/proxy/?quest=https://eniyiyayinci.github.io/redirect/index.html");
+                const response = await fetch("https://api.codetabs.com/v1/proxy/?quest=https://trgoals896.xyz/channel.html");
                 const text = await response.text();
-                const match = text.match(/<meta http-equiv="refresh" content="0;URL=(.*?)">/);
+                const match = text.match(/var\s+baseurl\s*=\s*["']([^"']+)["']/);
                 if (match) {
-                    const refererAndOrigin = match[1];
-                    return refererAndOrigin;
+                    return match[1];
                 }
-                return null;
+                throw new Error("Base URL bulunamadı.");
             } catch (error) {
-                console.error("Referer ve Origin alınamadı:", error);
-                return null;
+                console.error("Base URL alınamadı:", error);
+                return "https://iss.trgoalshls1.shop/";
             }
         }
 
-        // Base URL burada tanımlanır
-        const baseurl = "https://m3u8.a02314675.workers.dev/";
-
         async function initializeStreams() {
-            const refererAndOrigin = await getRefererAndOrigin();
-            if (!refererAndOrigin) {
-                alert("Referer ve Origin alınamadı.");
-                return;
-            }
-
+            const baseurl = await getBaseUrl();
+            const refererAndOrigin = "https://trgoals896.xyz";
             const streamListElement = document.getElementById('streamList');
             streamListElement.innerHTML = "";
 
@@ -224,22 +216,30 @@
             closeModal('actionModal');
             const cleanUrl = selectedStreamUrl.split('|')[0];
 
-            navigator.clipboard.writeText(cleanUrl).then(function() {
-                alert('Bağlantı kopyalandı: ' + cleanUrl);
-            }).catch(function(err) {
-                const textArea = document.createElement('textarea');
-                textArea.value = cleanUrl;
-                document.body.appendChild(textArea);
-                textArea.select();
-                try {
-                    document.execCommand('copy');
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(cleanUrl).then(function() {
                     alert('Bağlantı kopyalandı: ' + cleanUrl);
-                } catch (err) {
-                    alert('Kopyalama başarısız: ', err);
-                }
-                document.body.removeChild(textArea);
-            });
+                }).catch(function(err) {
+                    fallbackCopy(cleanUrl);
+                });
+            } else {
+                fallbackCopy(cleanUrl);
+            }
         };
+
+        function fallbackCopy(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                alert('Bağlantı kopyalandı: ' + text);
+            } catch (err) {
+                alert('Kopyalama başarısız: ' + err);
+            }
+            document.body.removeChild(textArea);
+        }
 
         function openModal(modalId) {
             document.getElementById(modalId).style.display = "block";
