@@ -1,0 +1,15 @@
+#EXTM3U
+#EXT-X-VERSION:3
+
+#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=800000
+https://trgoals.a35167875x28.workers.dev/yayin1.m3u8
+
+#EXTINF:-1,http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+#EXTINF:-1,http-referrer=https://trgoals899.xyz/
+#EXTINF:-1,http-sec-fetch-mode=navigate
+#EXTINF:-1,http-sec-fetch-user=?1
+#EXTINF:-1,http-accept=*/*
+#EXTINF:-1,http-sec-fetch-dest=video
+#EXTINF:-1,http-accept-encoding=identity
+#EXTINF:-1,http-host=trgoals.a35167875x28.workers.dev
+#EXTINF:-1,http-connection=Keep-Alive
