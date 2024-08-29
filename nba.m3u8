@@ -2,15 +2,17 @@
 #EXT-X-VERSION:3
 
 #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=800000
-https://tank.trgoalshls3.shop/yayinnbatv.m3u8
+https://tank.trgoalshls3.shop/yayin1.m3u8
 
-#EXTINF:-1,
-tvg-name="NBA TV",
-tvg-language="English",
-tvg-country="USA",
-tvg-id="Spor_NBATV",
-tvg-logo="https://upload.wikimedia.org/wikipedia/tr/8/89/Nbatv.png",
-group-title="Spor",NBA TV
-
-#EXTINF:-1,http-user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5)
-#EXTINF:-1,http-referrer=https://trgoals899.xyz/
+#EXTINF:-1, sec-fetch-mode=navigate
+#EXTINF:-1, referer=https://trgoals899.xyz/
+#EXTINF:-1, referrer=https://trgoals899.xyz/
+#EXTINF:-1, sec-ch-ua="Chromium";v="91", " Not;A Brand";v="99"
+#EXTINF:-1, sec-ch-ua-mobile=?0
+#EXTINF:-1, sec-fetch-user=?1
+#EXTINF:-1, accept=*/*
+#EXTINF:-1, sec-fetch-dest=video
+#EXTINF:-1, User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
+#EXTINF:-1, Accept-Encoding=gzip
+#EXTINF:-1, Host=tank.trgoalshls3.shop
+#EXTINF:-1, Connection=Keep-Alive
