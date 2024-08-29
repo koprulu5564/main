@@ -1,3 +1,13 @@
 #EXTM3U
+#EXT-X-VERSION:3
+
 #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=800000
-https://dsmartgo-live.ercdn.net/sinemaaksiyon/sinemaaksiyon_1080p.m3u8?st=rA_x3M305dYrJlKwtbKCqQ&e=1724905709&uid=23395889&sid=gwF1SvICDh2Kfw&userid=ed250500&reqid=5d81001366c991fc36ade2294f526fe8&tmode=1
+https://dsmartgo-live.ercdn.net/sinemaaksiyon/sinemaaksiyon_1080p.m3u8
+
+#EXTINF:-1,ST=rA_x3M305dYrJlKwtbKCqQ
+#EXTINF:-1,E=1724905709
+#EXTINF:-1,UID=23395889
+#EXTINF:-1,SID=gwF1SvICDh2Kfw
+#EXTINF:-1,USERID=ed250500
+#EXTINF:-1,REQID=5d81001366c991fc36ade2294f526fe8
+#EXTINF:-1,TMODE=1
