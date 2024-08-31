@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M3U Plus Link Oluşturucu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #6D5BBA 0%, #8D58BF 50%, #DE67A1 100%);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 400px;
+            position: fixed;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: height 0.3s ease, top 0.3s ease;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .output-group {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .output-group input {
+            width: calc(100% - 80px);
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .output-group button {
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .output-group button:hover {
+            background-color: #0069d9;
+        }
+
+        /* Klavye açıldığında formun üst kısmına hizalanması için */
+        .container.active {
+            top: 0;
+            height: 50vh;
+            max-height: 50vh;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                max-width: 100%;
+            }
+
+            .container.active {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="form-container">
+        <h1>M3U Plus Link Oluşturucu</h1>
+        <div class="input-group">
+            <label for="host">Host ve Port:</label>
+            <input type="text" id="host" placeholder="Örnek: http://köprülü.xyz:8080">
+        </div>
+        <div class="input-group">
+            <label for="username">Kullanıcı Adı:</label>
+            <input type="text" id="username" placeholder="Kullanıcı adınızı girin">
+        </div>
+        <div class="input-group">
+            <label for="password">Parola:</label>
+            <input type="password" id="password" placeholder="Parolanızı girin">
+        </div>
+        <button onclick="generateM3ULink()">M3U Linkini Oluştur</button>
+        <div class="output-group">
+            <input type="text" id="m3u-link" readonly>
+            <button onclick="copyLink()">Kopyala</button>
+        </div>
+    </div>
+    <script>
+        function generateM3ULink() {
+            const host = document.getElementById("host").value;
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            if (host && username && password) {
+                const m3uLink = `${host}/get.php?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}&type=m3uplus`;
+                document.getElementById("m3u-link").value = m3uLink;
+            } else {
+                alert("Lütfen tüm alanları doldurun.");
+            }
+        }
+
+        function copyLink() {
+            const m3uLink = document.getElementById("m3u-link");
+            m3uLink.select();
+            m3uLink.setSelectionRange(0, 99999); // Mobil cihazlar için
+
+            try {
+                document.execCommand("copy");
+                alert("M3U linki kopyalandı!");
+            } catch (err) {
+                alert("Kopyalama işlemi başarısız oldu.");
+            }
+        }
+
+        function adjustForm() {
+            const container = document.getElementById('form-container');
+            const viewportHeight = window.innerHeight;
+            const inputHeight = container.getBoundingClientRect().height;
+
+            if (viewportHeight < 500) { // Klavye açıldığında ekran boyutu azalır
+                container.classList.add('active');
+            } else {
+                container.classList.remove('active');
+            }
+        }
+
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', adjustForm);
+            input.addEventListener('blur', () => {
+                setTimeout(adjustForm, 300); // Klavye kapandığında formu eski haline döndür
+            });
+        });
+
+        window.addEventListener('resize', adjustForm);
+    </script>
+</body>
+</html>
