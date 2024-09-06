@@ -1,0 +1,44 @@
+
+#EXTM3U
+#EXTINF:-1 tvg-name="TRT 4K" tvg-id="trt_4_k",TRT 4K
+https://corsproxy.xyz/http://eu1.gurbetstream.cfd/trt_4_k/video.m3u8?token=gCLMW5ivrD9Zt2
+#EXTINF:-1 tvg-name="TRT 1" tvg-id="trt_1",TRT 1
+https://corsproxy.xyz/http://eu1.gurbetstream.cfd/trt_1/video.m3u8?token=gCLMW5ivrD9Zt2
+#EXTINF:-1 tvg-name="Kanal D" tvg-id="kanal_d",Kanal D
+https://corsproxy.xyz/http://eu1.gurbetstream.cfd/kanal_d/video.m3u8?token=gCLMW5ivrD9Zt2
+#EXTINF:-1 tvg-name="Atv" tvg-id="atv",Atv
+https://corsproxy.xyz/http://eu1.gurbetstream.cfd/atv/video.m3u8?token=gCLMW5ivrD9Zt2
+#EXTINF:-1 tvg-name="Now TV" tvg-id="now_tv",Now TV
+https://corsproxy.xyz/http://eu1.gurbetstream.cfd/now_tv/video.m3u8?token=gCLMW5ivrD9Zt2
+#EXTINF:-1 tvg-name="Show TV" tvg-id="show_tv",Show TV
+https://corsproxy.xyz/http://eu1.gurbetstream.cfd/show_tv/video.m3u8?token=gCLMW5ivrD9Zt2
+#EXTINF:-1 tvg-name="Star TV" tvg-id="star_tv",Star TV
+https://corsproxy.xyz/http://eu1.gurbetstream.cfd/star_tv/video.m3u8?token=gCLMW5ivrD9Zt2
+#EXTINF:-1 tvg-name="Kanal 7" tvg-id="kanal_7",Kanal 7
+https://corsproxy.xyz/http://eu1.gurbetstream.cfd/kanal_7/video.m3u8?token=gCLMW5ivrD9Zt2
+#EXTINF:-1 tvg-name="TV8" tvg-id="tv_8",TV8
+https://corsproxy.xyz/http://eu1.gurbetstream.cfd/tv_8/video.m3u8?token=gCLMW5ivrD9Zt2
+#EXTINF:-1 tvg-name="TV8.5" tvg-id="tv_8_5",TV8.5
+https://corsproxy.xyz/http://eu1.gurbetstream.cfd/tv_8_5/video.m3u8?token=gCLMW5ivrD9Zt2
+#EXTINF:-1 tvg-name="360" tvg-id="360",360
+https://corsproxy.xyz/http://eu1.gurbetstream.cfd/360/video.m3u8?token=gCLMW5ivrD9Zt2
+#EXTINF:-1 tvg-name="Beyaz TV" tvg-id="beyaz_tv",Beyaz TV
+https://corsproxy.xyz/http://eu1.gurbetstream.cfd/beyaz_tv/video.m3u8?token=gCLMW5ivrD9Zt2
+#EXTINF:-1 tvg-name="Bbc Earth" tvg-id="bbc_earth",Bbc Earth
+https://corsproxy.xyz/http://eu1.gurbetstream.cfd/bbc_earth/video.m3u8?token=gCLMW5ivrD9Zt2
+#EXTINF:-1 tvg-name="Docu Screen" tvg-id="docu_screen",Docu Screen
+https://corsproxy.xyz/http://eu1.gurbetstream.cfd/docu_screen/video.m3u8?token=gCLMW5ivrD9Zt2
+#EXTINF:-1 tvg-name="Discovery Channel" tvg-id="discovery_channel",Discovery Channel
+https://corsproxy.xyz/http://eu1.gurbetstream.cfd/discovery_channel/video.m3u8?token=gCLMW5ivrD9Zt2
+#EXTINF:-1 tvg-name="Discovery ID" tvg-id="discovery_id",Discovery ID
+https://corsproxy.xyz/http://eu1.gurbetstream.cfd/discovery_id/video.m3u8?token=gCLMW5ivrD9Zt2
+#EXTINF:-1 tvg-name="History Channel" tvg-id="history_channel",History Channel
+https://corsproxy.xyz/http://eu1.gurbetstream.cfd/history_channel/video.m3u8?token=gCLMW5ivrD9Zt2
+#EXTINF:-1 tvg-name="National Geographic" tvg-id="national_geographic",National Geographic
+https://corsproxy.xyz/http://eu1.gurbetstream.cfd/national_geographic/video.m3u8?token=gCLMW5ivrD9Zt2
+#EXTINF:-1 tvg-name="National Geographic Wild" tvg-id="national_geographic_wild",National Geographic Wild
+https://corsproxy.xyz/http://eu1.gurbetstream.cfd/national_geographic_wild/video.m3u8?token=gCLMW5ivrD9Zt2
+#EXTINF:-1 tvg-name="Viasat History" tvg-id="viasat_history",Viasat History
+https://corsproxy.xyz/http://eu1.gurbetstream.cfd/viasat_history/video.m3u8?token=gCLMW5ivrD9Zt2
+#EXTINF:-1 tvg-name="Dmax" tvg-id="dmax",Dmax
+https://corsproxy.xyz/http://eu1.gurbetstream.cfd/dmax/video.m3u8?token=gCLMW5ivrD9Zt2
