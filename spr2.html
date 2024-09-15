@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Segment URL Düzenleyici</title>
+</head>
+<body>
+    <h1>Segment URL Düzenleyici</h1>
+    <form id="idForm">
+        <label for="idInput">ID Girin:</label>
+        <input type="text" id="idInput" placeholder="example-id" required>
+        <button type="submit">Gönder</button>
+    </form>
+
+    <script>
+        async function fetchBaseUrl() {
+            const redirectUrl = "https://api.codetabs.com/v1/proxy/?quest=https://eniyiyayinci.github.io/redirect/index.html";
+            const response = await fetch(redirectUrl);
+            const text = await response.text();
+
+            // Meta tag'i bulma
+            const match = text.match(/<meta http-equiv="refresh" content="0;URL=(.*?)">/);
+            if (match) {
+                return match[1] + '/channel.html';
+            } else {
+                throw new Error("Meta tag bulunamadı.");
+            }
+        }
+
+        async function fetchAndProcessM3U8(id) {
+            try {
+                const baseUrl = await fetchBaseUrl();
+                const response = await fetch(baseUrl);
+                const data = await response.text();
+
+                // Base URL'yi işleme
+                const baseUrlMatch = data.match(/var baseurl\s*=\s*"(.*?)";/);
+                if (baseUrlMatch) {
+                    const baseStreamUrl = baseUrlMatch[1] + id;
+
+                    // M3U8 içeriğini al
+                    const m3u8Response = await fetch(baseStreamUrl);
+                    const m3u8Data = await m3u8Response.text();
+
+                    // Segment URL'lerini düzenle
+                    const updatedM3U8 = m3u8Data.replace(/(https?:\/\/[^\/]+\/[^\/]+)\/[^\/]+\.[a-zA-Z]+/g, '$1.m3u8');
+
+                    // Sonuçları ekrana yazdır
+                    console.log(updatedM3U8);
+                } else {
+                    throw new Error("Base URL bulunamadı.");
+                }
+            } catch (error) {
+                console.error(error.message);
+            }
+        }
+
+        document.getElementById('idForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const id = document.getElementById('idInput').value;
+            fetchAndProcessM3U8(id);
+        });
+    </script>
+</body>
+</html>
