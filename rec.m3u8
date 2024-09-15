@@ -4,18 +4,3 @@
 #EXT-X-MEDIA-SEQUENCE:0
 #EXTINF:10.0,
 https://lives.anystreamrectv3.live/live/sinema1002.m3u8?token=-fDEsimV5WfaN5tzxPUmdA&tms=1726479132
-
-# HTTP Request Headers
-# GET /live/sinema1002.m3u8?token=-fDEsimV5WfaN5tzxPUmdA&tms=1726479132 HTTP/1.1
-# sec-fetch-mode: navigate
-# referer: https://twitter.com/
-# sec-ch-ua: "Chromium";v="91", " Not;A Brand";v="99"
-# sec-ch-ua-mobile: ?0
-# origin: https://twitter.com
-# sec-fetch-user: ?1
-# accept: */*
-# sec-fetch-dest: video
-# User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
-# Accept-Encoding: gzip
-# Host: lives.anystreamrectv3.live
-# Connection: Keep-Alive
