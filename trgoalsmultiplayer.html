@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stream Player</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+        #streamList {
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            margin: 20px auto;
+            width: 80%;
+            text-align: center;
+        }
+        #streamList li {
+            list-style: none;
+            margin: 10px 0;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: background-color 0.3s;
+        }
+        #streamList li:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        h2 {
+            text-align: center;
+            color: #fff;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #333;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+            position: relative;
+        }
+        .modal-content button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #444;
+            color: #fff;
+            transition: background-color 0.3s;
+        }
+        .modal-content button:hover {
+            background-color: #555;
+        }
+        .modal-content .player-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .modal-content .player-buttons button {
+            flex: 1;
+            margin: 0 5px;
+        }
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <h2>(KÖPRÜLÜ) TRGOALS</h2>
+    <ul id="streamList"></ul>
+
+    <!-- Modal -->
+    <div id="actionModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <p>Ne yapmak istersiniz?</p>
+            <div class="player-buttons">
+                <button id="playButtonWuffy">Wuffy ile Oynat</button>
+                <button id="playButtonMX">MX Player ile Oynat</button>
+            </div>
+            <button id="copyButton">Kopyala</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script>
+        const kanalurl = {
+            1: "yayinzirve.m3u8",
+            2: "yayin1.m3u8",
+            3: "yayinstar.m3u8",
+            4: "yayinb2.m3u8",
+            5: "yayinb3.m3u8",
+            6: "yayinb4.m3u8",
+            7: "yayinb5.m3u8",
+            8: "yayinbm1.m3u8",
+            9: "yayinbm2.m3u8",
+            10: "yayinss.m3u8",
+            11: "yayinss2.m3u8",
+            13: "yayint1.m3u8",
+            14: "yayint2.m3u8",
+            15: "yayint3.m3u8",
+            16: "yayinsmarts.m3u8",
+            17: "yayinsms2.m3u8",
+            18: "yayintrtspor.m3u8",
+            19: "yayintrtspor2.m3u8",
+            20: "yayintrt1.m3u8",
+            21: "yayinas.m3u8",
+            22: "yayinatv.m3u8",
+            23: "yayintv8.m3u8",
+            24: "yayintv85.m3u8",
+            25: "yayinf1.m3u8",
+            26: "yayinnbatv.m3u8",
+            27: "yayineu1.m3u8",
+            28: "yayineu2.m3u8",
+            29: "yayinex1.m3u8",
+            30: "yayinex2.m3u8",
+            31: "yayinex3.m3u8",
+            32: "yayinex4.m3u8",
+            33: "yayinex5.m3u8",
+            34: "yayinex6.m3u8",
+            35: "yayinex7.m3u8",
+            36: "yayinex8.m3u8"
+        };
+
+        async function getUpdatedChannelUrl() {
+            try {
+                const response = await fetch("https://api.codetabs.com/v1/proxy/?quest=https://eniyiyayinci.github.io/redirect/index.html");
+                const text = await response.text();
+                const match = text.match(/<meta\s+http-equiv="refresh"\s+content="\d+;URL=([^"]+)"/i);
+                if (match) {
+                    return match[1] + "/channel.html";
+                }
+                throw new Error("Güncel channel.html URL bulunamadı.");
+            } catch (error) {
+                console.error("Güncel channel.html URL alınamadı:", error);
+                return "https://trgoals896.xyz/channel.html"; // Varsayılan URL
+            }
+        }
+
+        async function getBaseUrl(channelUrl) {
+            try {
+                const response = await fetch(`https://api.codetabs.com/v1/proxy/?quest=${channelUrl}`);
+                const text = await response.text();
+                const match = text.match(/var\s+baseurl\s*=\s*["']([^"']+)["']/);
+                if (match) {
+                    return match[1];
+                }
+                throw new Error("Base URL bulunamadı.");
+            } catch (error) {
+                console.error("Base URL alınamadı:", error);
+                return "https://iss.trgoalshls1.shop/";
+            }
+        }
+
+        async function getUpdatedUrl() {
+            try {
+                const response = await fetch("https://api.codetabs.com/v1/proxy/?quest=https://eniyiyayinci.github.io/redirect/index.html");
+                const text = await response.text();
+                const match = text.match(/<meta\s+http-equiv="refresh"\s+content="\d+;URL=([^"]+)"/i);
+                if (match) {
+                    return match[1];
+                }
+                throw new Error("Güncel URL bulunamadı.");
+            } catch (error) {
+                console.error("Güncel URL alınamadı:", error);
+                return "https://trgoals896.xyz"; // varsayılan URL
+            }
+        }
+
+        async function initializeStreams() {
+            const baseurl = await getBaseUrl(await getUpdatedChannelUrl());
+            const refererAndOrigin = await getUpdatedUrl();
+            const streamListElement = document.getElementById('streamList');
+            streamListElement.innerHTML = "";
+
+            const streamNames = {
+                1: "BEİN SPORTS 1 (ZİRVE)",
+                2: "BEİN SPORTS 1 (1)",
+                3: "BEİN SPORTS 1 (STAR)",
+                4: "BEİN SPORTS 2 ",
+                5: "BEİN SPORTS 3 ",
+                6: "BEİN SPORTS 4 ",
+                7: "BEİN SPORTS 5 ",
+                8: "BEİN SPORTS MAX 1 ",
+                9: "BEİN SPORTS MAX 2 ",
+                10: "S SPORT PLUS 1",
+                11: "S SPORT PLUS 2",
+                13: "TİVİBU SPOR 1",
+                14: "TİVİBU SPOR 2",
+                15: "TİVİBU SPOR 3",
+                16: "SPOR SMART 1",
+                17: "SPOR SMART 2",
+                18: "TRT SPOR 1",
+                19: "TRT SPOR 2",
+                20: "TRT 1",
+                21: "A SPOR",
+                22: "ATV",
+                23: "TV 8",
+                24: "TV 8.5",
+                25: "FORMULA 1",
+                26: "NBA TV",
+                27: "EURO SPORT 1",
+                28: "EURO SPORT 2",
+                29: "EXXEN SPOR 1",
+                30: "EXXEN SPOR 2",
+                31: "EXXEN SPOR 3",
+                32: "EXXEN SPOR 4",
+                33: "EXXEN SPOR 5",
+                34: "EXXEN SPOR 6",
+                35: "EXXEN SPOR 7",
+                36: "EXXEN SPOR 8",
+                // Diğer kanal isimlerini buraya ekleyebilirsiniz
+            };
+
+
+            for (const key in kanalurl) {
+                const streamPath = kanalurl[key];
+                const streamName = streamNames[key] || streamPath.replace('.m3u8', '');
+                const streamUrl = `${baseurl}${streamPath}|referer=${refererAndOrigin}|origin=${refererAndOrigin}`;
+
+                const listItem = document.createElement('li');
+                listItem.textContent = streamName;
+
+                listItem.onclick = (function (url) {
+                    return function () {
+                        selectedStreamUrl = url;
+                        openModal('actionModal');
+                    };
+                })(streamUrl);
+
+                streamListElement.appendChild(listItem);
+            }
+        }
+
+        let selectedStreamUrl = '';
+
+        // Wuffy Player ile oynatma
+        document.getElementById('playButtonWuffy').onclick = function() {
+            closeModal('actionModal');
+            const fullUrl = selectedStreamUrl;
+            window.location.href = `intent:${fullUrl}#Intent;package=co.wuffy.player;type=video/*;end;`;
+        };
+
+        // MX Player ile oynatma
+        document.getElementById('playButtonMX').onclick = function() {
+            closeModal('actionModal');
+            const fullUrl = selectedStreamUrl;
+            window.location.href = `intent:${fullUrl}#Intent;package=com.mxtech.videoplayer.ad;type=video/*;end;`;
+        };
+
+        // Kopyala
+        document.getElementById('copyButton').onclick = function() {
+            closeModal('actionModal');
+            const cleanUrl = selectedStreamUrl.split('|')[0];
+
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(cleanUrl).then(function() {
+                    alert('Bağlantı kopyalandı: ' + cleanUrl);
+                }).catch(function(err) {
+                    fallbackCopy(cleanUrl);
+                });
+            } else {
+                fallbackCopy(cleanUrl);
+            }
+        };
+
+        function fallbackCopy(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                alert('Bağlantı kopyalandı: ' + text);
+            } catch (err) {
+                alert('Kopyalama başarısız: ' + err);
+            }
+            document.body.removeChild(textArea);
+        }
+
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.style.display = "block";
+            window.onclick = function(event) {
+                if (event.target === modal) {
+                    closeModal(modalId);
+                }
+            };
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+        }
+
+        document.getElementById('closeModal').onclick = function() {
+            closeModal('actionModal');
+        };
+
+        initializeStreams();
+    </script>
+</body>
+</html>
