@@ -79,7 +79,7 @@
 
     <script>
         const kanalurl = {
-            1: "yayinzirve",
+            1: "yayinzirve.m3u8",
             2: "yayin1",
             3: "yayinstar",
             4: "yayinb2",
@@ -166,7 +166,7 @@
                 listItem.textContent = streamName;
 
                 listItem.onclick = function () {
-                    const videoUrl = `https://api.codetabs.com/v1/proxy/?quest=https://taraftarium24.dev/channel.html?id=${streamId}`;
+                    const videoUrl = `https://koprulu.global.ssl.fastly.net/taraftarium24/?id=${streamId}`;
                     openPlayer(videoUrl);
                 };
 
