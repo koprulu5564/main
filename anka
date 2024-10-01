@@ -1,0 +1,9 @@
+#EXTM3U
+#EXTINF:-1, Sinema
+#EXTVLCOPT:http-user-agent=AnkaTV Created By Hypnos
+#EXTVLCOPT:http-referrer=Hypnostan calani sikimmm
+#EXTVLCOPT:http-cookie=ASP.NET_SessionId=dt2zddk32q0rwo7rdmev4u2m; emwId=d35cb6a8-1af5-4331-b2b0-651b839899fc; eSessionId=0
+#EXTVLCOPT:http-origin=AnkaTV
+#EXTVLCOPT:http-header=Connection: Keep-Alive
+#EXTVLCOPT:http-header=Accept-Encoding: gzip
+http://live1sr.kablowebtv.com/Live/HLS/4060/2500.m3u8
