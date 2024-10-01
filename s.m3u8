@@ -1,16 +1,1 @@
-#EXTM3U
-#EXT-X-VERSION:6
-#EXT-X-ALLOW-CACHE:NO
-#EXT-X-TARGETDURATION:6
-#EXT-X-MEDIA-SEQUENCE:684
-#EXT-X-INDEPENDENT-SEGMENTS
-#EXTINF:6.000000,
-https://c.cf-worker-b3711512277a9e53.workers.dev/1652c7858f9b3defa3eee3ab7a529b4e/3451/streamradar_yarak_ye_hadi_hokus_pokus_063d71f2_hd_684.ttf
-#EXTINF:6.000000,
-https://c.cf-worker-b3711512277a9e53.workers.dev/1652c7858f9b3defa3eee3ab7a529b4e/3451/streamradar_yarak_ye_hadi_hokus_pokus_063d71f2_hd_685.ttf
-#EXTINF:6.000000,
-https://c.cf-worker-b3711512277a9e53.workers.dev/1652c7858f9b3defa3eee3ab7a529b4e/3451/streamradar_yarak_ye_hadi_hokus_pokus_063d71f2_hd_686.ttf
-#EXTINF:6.000000,
-https://c.cf-worker-b3711512277a9e53.workers.dev/1652c7858f9b3defa3eee3ab7a529b4e/3451/streamradar_yarak_ye_hadi_hokus_pokus_063d71f2_hd_687.ttf
-#EXTINF:6.000000,
-https://c.cf-worker-b3711512277a9e53.workers.dev/1652c7858f9b3defa3eee3ab7a529b4e/3451/streamradar_yarak_ye_hadi_hokus_pokus_063d71f2_hd_688.ttf
+#EXTM3U#EXTINF:0,Sinema TV 1002#EXTVLCOPT:http-user-agent=Darthttps://tv.anystreamrectv3.live/live/sinema1002.m3u8
