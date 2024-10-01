@@ -1,1 +1,26 @@
-#EXTM3U#EXTINF:0,Sinema TV 1002#EXTVLCOPT:http-user-agent=Darthttps://tv.anystreamrectv3.live/live/sinema1002.m3u8
+
+#EXTM3U
+#EXT-X-VERSION:3
+#EXT-X-MEDIA-SEQUENCE:2429
+#EXT-X-TARGETDURATION:4
+#EXTINF:4.000,
+https://lives.anystreamrectv3.live/live/ahaber-1727751757785.ts
+#EXTINF:4.000,
+https://lives.anystreamrectv3.live/live/ahaber-1727751760899.ts
+#EXTINF:4.000,
+https://lives.anystreamrectv3.live/live/ahaber-1727751765258.ts
+#EXTINF:4.000,
+https://lives.anystreamrectv3.live/live/ahaber-1727751769394.ts
+#EXTINF:4.000,
+https://lives.anystreamrectv3.live/live/ahaber-1727751773456.ts
+#EXTINF:4.000,
+https://lives.anystreamrectv3.live/live/ahaber-1727751778698.ts
+#EXTINF:4.000,
+https://lives.anystreamrectv3.live/live/ahaber-1727751784760.ts
+#EXTINF:4.000,
+https://lives.anystreamrectv3.live/live/ahaber-1727751787815.ts
+#EXTINF:4.000,
+https://lives.anystreamrectv3.live/live/ahaber-1727751790708.ts
+#EXTINF:4.000,
+https://lives.anystreamrectv3.live/live/ahaber-1727751793907.ts
+
