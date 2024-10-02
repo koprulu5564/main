@@ -1,8 +1,8 @@
 #EXTM3U
 #EXTINF:-1, M3U8 Stream
-https://koprulu.global.ssl.fastly.net/taraftarium24.m3u8/?id=yayinzirve
-#EXTVLCOPT:referer=https://koprulu.global.ssl.fastly.net/taraftarium24.m3u8/
-#EXTVLCOPT:referer=https://koprulu.global.ssl.fastly.net/taraftarium24.m3u8/
-#EXTVLCOPT:Origin=https://koprulu.global.ssl.fastly.net/taraftarium24.m3u8/
-#EXTVLCOPT:Origin=https://koprulu.global.ssl.fastly.net/taraftarium24.m3u8/
-#EXTVLCOPT:Host=https://koprulu.global.ssl.fastly.net/taraftarium24.m3u8/
+https://taraftarium24.dev/channel.html?id=yayin1
+#EXTVLCOPT:referer=https://taraftarium24.dev
+#EXTVLCOPT:referer=https://taraftarium24.dev
+#EXTVLCOPT:Origin=https://taraftarium24.dev
+#EXTVLCOPT:Origin=https://taraftarium24.dev
+#EXTVLCOPT:Host=https://taraftarium24.dev
