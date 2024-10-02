@@ -1,0 +1,9 @@
+#EXTM3U
+#EXTINF:-1, M3U8 Stream
+https://a.trgoalshls50.shop/yayin1.m3u8
+#EXTINF:referer=https://trgoals956.xyz/
+#EXTINF:referer=https://trgoals956.xyz/
+#EXTINF:Cache-Control=max-age=0
+#EXTINF:Host=a.trgoalshls50.shop
+#EXTINF:Connection=Keep-Alive
+#EXTINF:Accept-Encoding=gzip
