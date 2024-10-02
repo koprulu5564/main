@@ -1,9 +1,8 @@
 #EXTM3U
 #EXTINF:-1, M3U8 Stream
-https://a.trgoalshls50.shop/yayin1.m3u8
-#EXTINF:referer=https://trgoals956.xyz/
-#EXTINF:referer=https://trgoals956.xyz/
-#EXTINF:Cache-Control=max-age=0
-#EXTINF:Host=a.trgoalshls50.shop
-#EXTINF:Connection=Keep-Alive
-#EXTINF:Accept-Encoding=gzip
+https://koprulu.global.ssl.fastly.net/taraftarium24.m3u8/?id=yayinzirve
+#EXTVLCOPT:referer=https://koprulu.global.ssl.fastly.net/taraftarium24.m3u8/
+#EXTVLCOPT:referer=https://koprulu.global.ssl.fastly.net/taraftarium24.m3u8/
+#EXTVLCOPT:Origin=https://koprulu.global.ssl.fastly.net/taraftarium24.m3u8/
+#EXTVLCOPT:Origin=https://koprulu.global.ssl.fastly.net/taraftarium24.m3u8/
+#EXTVLCOPT:Host=https://koprulu.global.ssl.fastly.net/taraftarium24.m3u8/
