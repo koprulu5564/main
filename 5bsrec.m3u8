@@ -1,35 +1,16 @@
 
 #EXTM3U
-#EXT-X-VERSION:3
-#EXT-X-MEDIA-SEQUENCE:68076
-#EXT-X-TARGETDURATION:50
-#EXT-X-DISCONTINUITY
-#EXTINF:50.000,
-https://bold-heart-12d1.rectv1466.workers.dev/live/bs5/1727961359066.jpeg
-#EXT-X-DISCONTINUITY
-#EXTINF:50.000,
-https://bold-heart-12d1.rectv1466.workers.dev/live/bs5/1727961362529.jpeg
-#EXT-X-DISCONTINUITY
-#EXTINF:50.000,
-https://bold-heart-12d1.rectv1466.workers.dev/live/bs5/1727961365515.jpeg
-#EXT-X-DISCONTINUITY
-#EXTINF:50.000,
-https://bold-heart-12d1.rectv1466.workers.dev/live/bs5/1727961368741.jpeg
-#EXT-X-DISCONTINUITY
-#EXTINF:50.000,
-https://bold-heart-12d1.rectv1466.workers.dev/live/bs5/1727961372446.jpeg
-#EXT-X-DISCONTINUITY
-#EXTINF:50.000,
-https://bold-heart-12d1.rectv1466.workers.dev/live/bs5/1727961375302.jpeg
-#EXT-X-DISCONTINUITY
-#EXTINF:50.000,
-https://bold-heart-12d1.rectv1466.workers.dev/live/bs5/1727961378272.jpeg
-#EXT-X-DISCONTINUITY
-#EXTINF:49.940,
-https://bold-heart-12d1.rectv1466.workers.dev/live/bs5/1727961381980.jpeg
-#EXT-X-DISCONTINUITY
-#EXTINF:49.760,
-https://bold-heart-12d1.rectv1466.workers.dev/live/bs5/1727961385220.jpeg
-#EXT-X-DISCONTINUITY
-#EXTINF:50.000,
-https://bold-heart-12d1.rectv1466.workers.dev/live/bs5/1727961390361.jpeg
+#EXT-X-VERSION:6
+#EXT-X-HEADER:sec-fetch-mode: navigate
+#EXT-X-HEADER:referer: https://google.com/
+#EXT-X-HEADER:origin: https://google.com/
+#EXT-X-HEADER:sec-ch-ua: "Chromium";v="91", " Not;A Brand";v="99"
+#EXT-X-HEADER:sec-ch-ua-mobile: ?0
+#EXT-X-HEADER:sec-fetch-user: ?1
+#EXT-X-HEADER:accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+#EXT-X-HEADER:sec-fetch-dest: video
+#EXT-X-HEADER:User-Agent: Mozilla/5.0 (Linux; Android 11; SM-G988B) AppleWebKit/537.36 (KHTML, like Gecko) SoulBrowser/1.0 Chrome/91.0.4472.120 Mobile Safari/537.36
+#EXT-X-HEADER:Accept-Encoding: gzip
+#EXT-X-HEADER:Connection: Keep-Alive
+#EXT-X-STREAM-INF:BANDWIDTH=2085600,RESOLUTION=1280x720,CLOSED-CAPTIONS=NONE,CODECS="avc1.640029,mp4a.40.2"
+https://n.trgoalshls52.shop/yayinb5.m3u8
