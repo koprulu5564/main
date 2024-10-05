@@ -2,13 +2,5 @@
 #EXT-X-VERSION:3
 #EXT-X-TARGETDURATION:8
 #EXT-X-MEDIA-SEQUENCE:5222
-#EXTINF:3.066667,
-https://koprulu64.global.ssl.fastly.net/taraftarium24.m3u8/?id=yayinb5.m3u8
-#EXTINF:8.333333,
-https://koprulu64.global.ssl.fastly.net/taraftarium24.m3u8/?id=yayinb5.m3u8
-#EXTINF:8.333333,
-https://koprulu64.global.ssl.fastly.net/taraftarium24.m3u8/?id=yayinb5.m3u8
-#EXTINF:8.333333,
-https://koprulu64.global.ssl.fastly.net/taraftarium24.m3u8/?id=yayinb5.m3u8
-#EXTINF:5.533333,
+#EXTINF:1.0,166675,
 https://koprulu64.global.ssl.fastly.net/taraftarium24.m3u8/?id=yayinb5.m3u8
