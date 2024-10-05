@@ -1,4 +1,4 @@
 #EXTM3U
 #EXT-X-VERSION:6
 #EXT-X-STREAM-INF:BANDWIDTH=2085600,RESOLUTION=1280x720,CLOSED-CAPTIONS=NONE,CODECS="avc1.640029,mp4a.40.2"
-https://koprulu64.global.ssl.fastly.net/taraftarium24.m3u8/?id=yayinb5.m3u8
+https://koprulu.global.ssl.fastly.net/proxy.m3u8/?url=https://koprulu64.global.ssl.fastly.net/taraftarium24.m3u8/?id=yayinb5.m3u8
