@@ -1,0 +1,14 @@
+#EXTM3U
+#EXT-X-VERSION:3
+#EXT-X-TARGETDURATION:7
+#EXT-X-MEDIA-SEQUENCE:101
+#EXTINF:6.566667,
+https://koprulu55.serv00.net/spor.m3u8/yayint1_4160_101.jpg
+#EXTINF:3.766667,
+https://koprulu55.serv00.net/spor.m3u8/yayint1_4160_102.jpg
+#EXTINF:1.500000,
+https://koprulu55.serv00.net/spor.m3u8/yayint1_4160_103.jpg
+#EXTINF:1.500000,
+https://koprulu55.serv00.net/spor.m3u8/yayint1_4160_104.jpg
+#EXTINF:7.200000,
+https://koprulu55.serv00.net/spor.m3u8/yayint1_4160_105.jpg
