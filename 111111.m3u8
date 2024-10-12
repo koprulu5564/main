@@ -1,0 +1,6 @@
+#EXTM3U
+#EXTINF:-1, M3U8 Stream
+http://live1pop04.kablowebtv.com/Live/HLS/4060/4060.m3u8
+#EXTVLCOPT:user-agent=ExoPlayerDemo/1.14 (Linux;Android 10) ExoPlayerLib/1.5.11
+#EXTVLCOPT:Cookie=ASP.NET_SessionId=dt2zddk32q0rwo7rdmev4u2m; emwId=d35cb6a8-1af5-4331-b2b0-651b839899fc; eSessionId=0
+#EXTVLCOPT:Accept-Encoding=gzip
