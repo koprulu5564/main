@@ -1,6 +1,6 @@
 #EXTM3U
 #EXTINF:-1, M3U8 Stream
-http://live1pop01.kablowebtv.com/Live/HLS/2004/2500.m3u8
+http://live1pop01.kablowebtv.com/Live/HLS/2004/2004.m3u8
 #EXTVLCOPT:user-agent=NetSurf/1.0 (Linux; i686)
 #EXTVLCOPT:Accept=*/*
 #EXTVLCOPT:Connection=keep-alive
