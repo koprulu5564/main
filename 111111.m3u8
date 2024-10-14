@@ -1,8 +1,36 @@
+
 #EXTM3U
-#EXTINF:-1, M3U8 Stream
-http://live1pop01.kablowebtv.com/Live/HLS/2004/2004.m3u8
-#EXTVLCOPT:user-agent=NetSurf/1.0 (Linux; i686)
-#EXTVLCOPT:Accept=*/*
-#EXTVLCOPT:Connection=keep-alive
-#EXTVLCOPT:Icy-MetaData=1
-#EXTVLCOPT:cookie=cookie:ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim; emwId=51093b0c-e1a6-4684-81dc-16af380240e1; eSessionId=35012045
+#EXT-X-VERSION:3
+#EXT-X-MEDIA-SEQUENCE:319094
+#EXT-X-TARGETDURATION:50
+#EXT-X-DISCONTINUITY
+#EXTINF:49.940,
+https://gentle-star-7f6e.rectv1468.workers.dev/live/bs11/1728917992324.jpeg
+#EXT-X-DISCONTINUITY
+#EXTINF:49.760,
+https://gentle-star-7f6e.rectv1468.workers.dev/live/bs11/1728917993414.jpeg
+#EXT-X-DISCONTINUITY
+#EXTINF:50.000,
+https://gentle-star-7f6e.rectv1468.workers.dev/live/bs11/1728917994987.jpeg
+#EXT-X-DISCONTINUITY
+#EXTINF:50.000,
+https://gentle-star-7f6e.rectv1468.workers.dev/live/bs11/1728917996086.jpeg
+#EXT-X-DISCONTINUITY
+#EXTINF:50.000,
+https://gentle-star-7f6e.rectv1468.workers.dev/live/bs11/1728917997205.jpeg
+#EXT-X-DISCONTINUITY
+#EXTINF:50.000,
+https://gentle-star-7f6e.rectv1468.workers.dev/live/bs11/1728917998311.jpeg
+#EXT-X-DISCONTINUITY
+#EXTINF:50.000,
+https://gentle-star-7f6e.rectv1468.workers.dev/live/bs11/1728917999417.jpeg
+#EXT-X-DISCONTINUITY
+#EXTINF:50.000,
+https://gentle-star-7f6e.rectv1468.workers.dev/live/bs11/1728918000483.jpeg
+#EXT-X-DISCONTINUITY
+#EXTINF:50.000,
+https://gentle-star-7f6e.rectv1468.workers.dev/live/bs11/1728918001561.jpeg
+#EXT-X-DISCONTINUITY
+#EXTINF:50.000,
+https://gentle-star-7f6e.rectv1468.workers.dev/live/bs11/1728918002631.jpeg
+
