@@ -1,0 +1,4 @@
+#EXTM3U
+#EXTINF:-1, M3U8 Stream
+https://tre.ea2b640d592bd041.click/p/selcuksportshd1393.xyz/602/a.cf-worker-2b1a3eb6a8c05e92.workers.dev/chunklist_hd.m3u8
+#EXTVLCOPT:Headers=GET /p/selcuksportshd1393.xyz/602/a.cf-worker-2b1a3eb6a8c05e92.workers.dev/chunklist_hd.m3u8 HTTP/1.1 Host: tre.ea2b640d592bd041.click Connection: keep-alive sec-ch-ua-platform: "Android" User-Agent: Mozilla/5.0 (Linux; Android 13; SM-A127F) AppleWebKit/537.36 (KHTML, like Gecko) Soul/4.0 Chrome/129.0.6668.81 Mobile Safari/537.36 sec-ch-ua: "Android WebView";v="129", "Not=A?Brand";v="8", "Chromium";v="129" sec-ch-ua-mobile: ?1 Accept: */* Origin: https://ic.strmrdrfroof.click X-Requested-With: com.mycompany.app.soulbrowses Sec-Fetch-Site: cross-site Sec-Fetch-Mode: cors Sec-Fetch-Dest: empty Referer: https://ic.strmrdrfroof.click/ Accept-Encoding: gzip, deflate, br, zstd Accept-Language: tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7
