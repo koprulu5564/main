@@ -1,0 +1,119 @@
+#EXTM3U
+#EXTINF:-1 tvg-id="" tvg-name="play1" tvg-logo="" group-title="BluTV Kanalları",play1
+https://play1.blutv.com/blutv_play1/smil:blutv_play1.smil/playlist.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="play1" tvg-logo="" group-title="BluTV Kanalları",play1
+https://play1.blutv.com/blutv_play1/smil:blutv_play1.smil/playlist.m3u8?DVR","drm":false,"hevc":false}]},{"type":"channel","category":"BluTV Kanalları","id":"5df3cd89866ac30eac569589","channelId":"3844","title":"BLUTV PLAY 2","url":"/canli-yayin/blutv-play-2-izle","logo":"6295d42d866ac31658881732","order":2,"isFree":false,"mediaUrl":[{"url":"https://play2.blutv.com/blutv_play2/smil:blutv_play2.smil/playlist.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="play2" tvg-logo="" group-title="BluTV Kanalları",play2
+https://play2.blutv.com/blutv_play2/smil:blutv_play2.smil/playlist.m3u8?DVR","drm":false,"hevc":false}]},{"type":"channel","category":"Discovery+ Kanalları","id":"608d59f5866ac31c0c351a76","channelId":"66","title":"EUROSPORT1","url":"/canli-yayin/eurosport1-izle","logo":"66ab7a22866ac318108e1f6d","order":3,"isFree":false,"mediaUrl":[{"url":"https://eurosport1.blutv.com/blutv_eurosport1/smil:eurosport1.smil/playlist.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="eurosport2" tvg-logo="" group-title="BluTV Kanalları",eurosport2
+https://eurosport2.blutv.com/blutv_eurosport2/smil:eurosport2.smil/playlist.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="kanal7" tvg-logo="" group-title="BluTV Kanalları",kanal7
+https://kanal7.blutv.com/blutv_kanal7_live/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="kanal7 DVR" tvg-logo="" group-title="BluTV Kanalları",kanal7 DVR
+https://kanal7dvr.blutv.com/blutv_kanal7_dvr2/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="360tv" tvg-logo="" group-title="BluTV Kanalları",360tv
+https://360tv.blutv.com/blutv_360tv_live/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="360tv DVR" tvg-logo="" group-title="BluTV Kanalları",360tv DVR
+https://360tvdvr.blutv.com/blutv_360tv_dvr/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="haberturk" tvg-logo="" group-title="BluTV Kanalları",haberturk
+https://haberturk.blutv.com/blutv_haberturk_live/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="haberturk DVR" tvg-logo="" group-title="BluTV Kanalları",haberturk DVR
+https://haberturkdvr.blutv.com/blutv_haberturk_dvr2/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="tlc" tvg-logo="" group-title="BluTV Kanalları",tlc
+https://tlc.blutv.com/blutv_tlc_live/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="tlc DVR" tvg-logo="" group-title="BluTV Kanalları",tlc DVR
+https://tlcdvr.blutv.com/blutv_tlc_dvr2/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="dmax2" tvg-logo="" group-title="BluTV Kanalları",dmax2
+https://dmax.blutv.com/blutv_dmax2/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="dmax DVR" tvg-logo="" group-title="BluTV Kanalları",dmax DVR
+https://dmaxdvr.blutv.com/blutv_dmax_dvr/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="cnnint" tvg-logo="" group-title="BluTV Kanalları",cnnint
+https://cnnint.blutv.com/blutv_cnnint/smil:cnnint.smil/playlist.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="discovery" tvg-logo="" group-title="BluTV Kanalları",discovery
+https://discovery.blutv.com/blutv_discovery/smil:discovery.smil/playlist.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="discoveryid" tvg-logo="" group-title="BluTV Kanalları",discoveryid
+https://discoveryid.blutv.com/blutv_discoveryid/smil:discoveryid.smil/playlist.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="beyaztv" tvg-logo="" group-title="BluTV Kanalları",beyaztv
+https://beyaztv.blutv.com/blutv_beyaztv_live/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="beyaztv DVR" tvg-logo="" group-title="BluTV Kanalları",beyaztv DVR
+https://beyaztvdvr.blutv.com/blutv_beyaztv_dvr2/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="tv100" tvg-logo="" group-title="BluTV Kanalları",tv100
+https://tv100.blutv.com/blutv_tv100_live/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="tv1002 DVR" tvg-logo="" group-title="BluTV Kanalları",tv1002 DVR
+https://tv100dvr.blutv.com/blutv_tv1002_dvr/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="szctv" tvg-logo="" group-title="BluTV Kanalları",szctv
+https://szctv.blutv.com/blutv_szctv/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="szctv DVR" tvg-logo="" group-title="BluTV Kanalları",szctv DVR
+https://szctvdvr.blutv.com/blutv_szctv_dvr/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="tele1" tvg-logo="" group-title="BluTV Kanalları",tele1
+https://tele1.blutv.com/blutv_tele1_live/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="tele1 DVR" tvg-logo="" group-title="BluTV Kanalları",tele1 DVR
+https://tele1dvr.blutv.com/blutv_tele1_dvr2/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="halktv" tvg-logo="" group-title="BluTV Kanalları",halktv
+https://halktv.blutv.com/blutv_halktv_live/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="halktv2 DVR" tvg-logo="" group-title="BluTV Kanalları",halktv2 DVR
+https://halktvdvr.blutv.com/blutv_halktv2_dvr/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="bloomberght2" tvg-logo="" group-title="BluTV Kanalları",bloomberght2
+https://bloomberght2.blutv.com/blutv_bloomberght2/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="bloomberght DVR" tvg-logo="" group-title="BluTV Kanalları",bloomberght DVR
+https://bloomberght2dvr.blutv.com/blutv_bloomberght_dvr/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="haberglobal2" tvg-logo="" group-title="BluTV Kanalları",haberglobal2
+https://haberglobal.blutv.com/blutv_haberglobal2/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="haberglobal DVR" tvg-logo="" group-title="BluTV Kanalları",haberglobal DVR
+https://haberglobaldvr.blutv.com/blutv_haberglobal_dvr/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="krt" tvg-logo="" group-title="BluTV Kanalları",krt
+https://krt.blutv.com/blutv_krt_live/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="krt DVR" tvg-logo="" group-title="BluTV Kanalları",krt DVR
+https://krtdvr.blutv.com/blutv_krt_live_dvr/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="ulusalkanal" tvg-logo="" group-title="BluTV Kanalları",ulusalkanal
+https://ulusalkanal.blutv.com/blutv_ulusalkanal/blutv_ulusalkanal/playlist.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="ekoturk2" tvg-logo="" group-title="BluTV Kanalları",ekoturk2
+https://ekoturk.blutv.com/blutv_ekoturk2/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="ekoturk DVR" tvg-logo="" group-title="BluTV Kanalları",ekoturk DVR
+https://ekoturkdvr.blutv.com/blutv_ekoturk_dvr/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="tgrthaber2" tvg-logo="" group-title="BluTV Kanalları",tgrthaber2
+https://tgrthaber.blutv.com/blutv_tgrthaber2/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="tgrthaber2 DVR" tvg-logo="" group-title="BluTV Kanalları",tgrthaber2 DVR
+https://tgrthaberdvr.blutv.com/blutv_tgrthaber2_dvr/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="ulketv2" tvg-logo="" group-title="BluTV Kanalları",ulketv2
+https://ulketv.blutv.com/blutv_ulketv2/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="kanal24" tvg-logo="" group-title="BluTV Kanalları",kanal24
+https://kanal24.blutv.com/blutv_kanal24_live/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="kanal24 DVR" tvg-logo="" group-title="BluTV Kanalları",kanal24 DVR
+https://kanal24dvr.blutv.com/blutv_kanal24_dvr/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="flashtv" tvg-logo="" group-title="BluTV Kanalları",flashtv
+https://flashtv.blutv.com/blutv_flashtv/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="flashtv DVR" tvg-logo="" group-title="BluTV Kanalları",flashtv DVR
+https://flashtvdvr.blutv.com/blutv_flashtv_dvr/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="tv4" tvg-logo="" group-title="BluTV Kanalları",tv4
+https://tv4.blutv.com/blutv_tv4/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="tv4 DVR" tvg-logo="" group-title="BluTV Kanalları",tv4 DVR
+https://tv4dvr.blutv.com/blutv_tv4_dvr/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="cartoonnetwork" tvg-logo="" group-title="BluTV Kanalları",cartoonnetwork
+https://cartoonnetwork.blutv.com/blutv_cartoonnetwork/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="cartoonito" tvg-logo="" group-title="BluTV Kanalları",cartoonito
+https://cartoonito.blutv.com/blutv_cartoonito/smil:cartoonito.smil/playlist.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="sportstv2" tvg-logo="" group-title="BluTV Kanalları",sportstv2
+https://sportstv.blutv.com/blutv_sportstv2/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="agrotv" tvg-logo="" group-title="BluTV Kanalları",agrotv
+https://agrotv.blutv.com/blutv_agrotv/blutv_agrotv/playlist.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="womantv" tvg-logo="" group-title="BluTV Kanalları",womantv
+https://womantv.blutv.com/blutv_womantv/smil:blutv_womantv.smil/playlist.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="ertv2" tvg-logo="" group-title="BluTV Kanalları",ertv2
+https://ertv.blutv.com/blutv_ertv2/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="kontv2" tvg-logo="" group-title="BluTV Kanalları",kontv2
+https://kontv.blutv.com/blutv_kontv2/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="kanalb2" tvg-logo="" group-title="BluTV Kanalları",kanalb2
+https://kanalb.blutv.com/blutv_kanalb2/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="vuslattv2" tvg-logo="" group-title="BluTV Kanalları",vuslattv2
+https://vuslattv.blutv.com/blutv_vuslattv2/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="n1" tvg-logo="" group-title="BluTV Kanalları",n1
+https://nr1.blutv.com/blutv_n1/blutv_n1/playlist.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="n1turk" tvg-logo="" group-title="BluTV Kanalları",n1turk
+https://nr1turk.blutv.com/blutv_n1turk/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="powerhd" tvg-logo="" group-title="BluTV Kanalları",powerhd
+https://powerhd.blutv.com/blutv_powerhd/smil:blutv_powerhd.smil/playlist.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="powerturk" tvg-logo="" group-title="BluTV Kanalları",powerturk
+https://powerturk.blutv.com/blutv_powerturk/blutv_powerturk/playlist.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="testt DVR" tvg-logo="" group-title="BluTV Kanalları",testt DVR
+https://mnorigin-cmn-5.mncdn.com/haberturk_testt_dvr/live.m3u8
