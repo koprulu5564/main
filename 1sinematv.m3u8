@@ -1,4 +1,0 @@
-#EXTM3U
-#EXTINF:0,SİNEMA TV HD
-#EXTVLCOPT:http-user-agent=NetSurf/1.0 (Linux; i686)
-http://live1sr.kablowebtv.com/Live/HLS/4060/4060.m3u8| cookie=ASP.NET_SessionId=klzdsxrl5rptypvzcaoghbim;%20emwId=51093b0c-e1a6-4684-81dc-16af380240e1;%20eSessionId=35012045
