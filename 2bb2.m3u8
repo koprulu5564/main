@@ -1,3 +1,0 @@
-#EXTM3U
-#EXTINF:-1 Host="koprulu.global.ssl.fastly.net" Accept="*/*" Origin="https://playhls.com" Referer="https://playhls.com/" sec-ch-ua=""Chromium";v="130", "Android WebView";v="130", "Not?A_Brand";v="99"" Connection="keep-alive" User-Agent="Mozilla/5.0 (Linux; Android 13; SM-A127F) AppleWebKit/537.36 (KHTML, like Gecko) Soul/4.0 Chrome/130.0.6723.60 Mobile Safari/537.36" Sec-Fetch-Dest="empty" Sec-Fetch-Mode="cors" Sec-Fetch-Site="cross-site" Accept-Encoding="gzip, deflate, br, zstd" Accept-Language="tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7" X-Requested-With="com.mycompany.app.soulbrowses" sec-ch-ua-mobile="?1" sec-ch-ua-platform=""Android"" group-title="All",Bein sports 2 yayinb2
-https://koprulu.global.ssl.fastly.net/spor.m3u8/?id=yayinb2.m3u8
