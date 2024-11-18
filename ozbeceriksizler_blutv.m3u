@@ -57,10 +57,6 @@ https://halktvdvr.blutv.com/blutv_halktv2_dvr/live.m3u8
 https://bloomberght2.blutv.com/blutv_bloomberght2/live.m3u8
 #EXTINF:-1 tvg-id="" tvg-name="bloomberght DVR" tvg-logo="" group-title="BluTV Kanalları",bloomberght DVR
 https://bloomberght2dvr.blutv.com/blutv_bloomberght_dvr/live.m3u8
-#EXTINF:-1 tvg-id="" tvg-name="haberglobal2" tvg-logo="" group-title="BluTV Kanalları",haberglobal2
-https://haberglobal.blutv.com/blutv_haberglobal2/live.m3u8
-#EXTINF:-1 tvg-id="" tvg-name="haberglobal DVR" tvg-logo="" group-title="BluTV Kanalları",haberglobal DVR
-https://haberglobaldvr.blutv.com/blutv_haberglobal_dvr/live.m3u8
 #EXTINF:-1 tvg-id="" tvg-name="krt" tvg-logo="" group-title="BluTV Kanalları",krt
 https://krt.blutv.com/blutv_krt_live/live.m3u8
 #EXTINF:-1 tvg-id="" tvg-name="krt DVR" tvg-logo="" group-title="BluTV Kanalları",krt DVR
@@ -91,8 +87,6 @@ https://tv4.blutv.com/blutv_tv4/live.m3u8
 https://tv4dvr.blutv.com/blutv_tv4_dvr/live.m3u8
 #EXTINF:-1 tvg-id="" tvg-name="cartoonnetwork" tvg-logo="" group-title="BluTV Kanalları",cartoonnetwork
 https://cartoonnetwork.blutv.com/blutv_cartoonnetwork/live.m3u8
-#EXTINF:-1 tvg-id="" tvg-name="cartoonito" tvg-logo="" group-title="BluTV Kanalları",cartoonito
-https://cartoonito.blutv.com/blutv_cartoonito/smil:cartoonito.smil/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-name="sportstv2" tvg-logo="" group-title="BluTV Kanalları",sportstv2
 https://sportstv.blutv.com/blutv_sportstv2/live.m3u8
 #EXTINF:-1 tvg-id="" tvg-name="agrotv" tvg-logo="" group-title="BluTV Kanalları",agrotv
@@ -101,19 +95,17 @@ https://agrotv.blutv.com/blutv_agrotv/blutv_agrotv/playlist.m3u8
 https://womantv.blutv.com/blutv_womantv/smil:blutv_womantv.smil/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-name="ertv2" tvg-logo="" group-title="BluTV Kanalları",ertv2
 https://ertv.blutv.com/blutv_ertv2/live.m3u8
-#EXTINF:-1 tvg-id="" tvg-name="kontv2" tvg-logo="" group-title="BluTV Kanalları",kontv2
-https://kontv.blutv.com/blutv_kontv2/live.m3u8
-#EXTINF:-1 tvg-id="" tvg-name="kanalb2" tvg-logo="" group-title="BluTV Kanalları",kanalb2
-https://kanalb.blutv.com/blutv_kanalb2/live.m3u8
 #EXTINF:-1 tvg-id="" tvg-name="vuslattv2" tvg-logo="" group-title="BluTV Kanalları",vuslattv2
 https://vuslattv.blutv.com/blutv_vuslattv2/live.m3u8
 #EXTINF:-1 tvg-id="" tvg-name="n1" tvg-logo="" group-title="BluTV Kanalları",n1
 https://nr1.blutv.com/blutv_n1/blutv_n1/playlist.m3u8
 #EXTINF:-1 tvg-id="" tvg-name="n1turk" tvg-logo="" group-title="BluTV Kanalları",n1turk
 https://nr1turk.blutv.com/blutv_n1turk/live.m3u8
-#EXTINF:-1 tvg-id="" tvg-name="powerhd" tvg-logo="" group-title="BluTV Kanalları",powerhd
-https://powerhd.blutv.com/blutv_powerhd/smil:blutv_powerhd.smil/playlist.m3u8
-#EXTINF:-1 tvg-id="" tvg-name="powerturk" tvg-logo="" group-title="BluTV Kanalları",powerturk
-https://powerturk.blutv.com/blutv_powerturk/blutv_powerturk/playlist.m3u8
-#EXTINF:-1 tvg-id="" tvg-name="testt DVR" tvg-logo="" group-title="BluTV Kanalları",testt DVR
-https://mnorigin-cmn-5.mncdn.com/haberturk_testt_dvr/live.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="discovery" tvg-logo="" group-title="BluTV Kanalları",discovery
+https://discovery.blutv.com/blutv_discovery/smil:discovery_drm.smil/playlist.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="discovery" tvg-logo="" group-title="BluTV Kanalları",discovery
+https://discoverydash.blutv.com/blutv_discovery_dash/manifest.mpd","drm":true,"hevc":false}]},{"type":"channel","category":"Müzik Kanalları","id":"660fa636866ac30368c03d04","channelId":"","title":"BLUTV TEST 4","url":"/canli-yayin/blutv-test-4-izle","logo":"66a9f625866ac3089c3c565a","order":1003,"isFree":false,"mediaUrl":[{"url":"https://discoveryid.blutv.com/blutv_discoveryid/smil:discoveryid_drm.smil/playlist.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="discoveryid" tvg-logo="" group-title="BluTV Kanalları",discoveryid
+https://discoveryiddash.blutv.com/blutv_discoveryid_dash/manifest.mpd","drm":true,"hevc":false}]},{"type":"channel","category":"Müzik Kanalları","id":"669653c9866ac3188c577841","channelId":"","title":"BLUTV TEST 5","url":"/canli-yayin/blutv-test-5-izle","logo":"66a9f6c2866ac313b8d6a20d","order":1005,"isFree":false,"mediaUrl":[{"url":"https://cnnint.blutv.com/blutv_cnnint/smil:cnnint_drm.smil/playlist.m3u8
+#EXTINF:-1 tvg-id="" tvg-name="cnnint" tvg-logo="" group-title="BluTV Kanalları",cnnint
+https://cnnintdash.blutv.com/blutv_cnnint_dash/manifest.mpd","drm":true,"hevc":false}]}],"sections":[{"templateId":"63ca480e866ac307d0a275ec","refId":"6433c85f5cd417115b138d4a","widgetId":"63c7fdb5866ac311083ac220","IxName":"WidgetAds","hasSection":false,"sectionTitle":"Live Top Banners","banners":[{"deviceType":"Desktop","sizes":[[970,250]],"adUnit":"/21852615636,22688508966/BluTV/WEB_2023/Desktop_Display/Desktop_Display_Canli_Yayin_Guest_970x250","id":"id-0-/21852615636,22688508966/BluTV/WEB_2023/Desktop_Display/Desktop_Display_Canli_Yayin_Guest_970x250-63c7fdb5866ac311083ac220"},{"deviceType":"Tablet","sizes":[[728,90]],"adUnit":"/21852615636,22688508966/BluTV/WEB_2023/Desktop_Display/Desktop_Display_Canli_Yayin_Guest_728x90","id":"id-1-/21852615636,22688508966/BluTV/WEB_2023/Desktop_Display/Desktop_Display_Canli_Yayin_Guest_728x90-63c7fdb5866ac311083ac220"}]},{"templateId":"63ca480e866ac307d0a275ec","refId":"624f36b176eab2857cb7684d","widgetId":"624f368c866ac31044cc8a06","IxName":"WidgetHeadlineLive","hasSection":false,"sectionTitle":"Category Manşet","banners":[{"deviceType":"Desktop","sizes":[[336,280]],"adUnit":"/21852615636,22688508966/BluTV/WEB_2023/Desktop_Display/Desktop_Display_Canli_Yayin_Guest_336x280","id":"id-0-/21852615636,22688508966/BluTV/WEB_2023/Desktop_Display/Desktop_Display_Canli_Yayin_Guest_336x280-624f368c866ac31044cc8a06"},{"deviceType":"Mobile","sizes":[[300,250]],"adUnit":"/21852615636,22688508966/BluTV/WEB_2023/Mobile_Display/Mobile_Display_Canli_Yayin_Guest","id":"id-1-/21852615636,22688508966/BluTV/WEB_2023/Mobile_Display/Mobile_Display_Canli_Yayin_Guest-624f368c866ac31044cc8a06"}]},{"templateId":"63ca480e866ac307d0a275ec","refId":"624f1989e5361e1222924c4a","widgetId":"624f1964866ac31044cc89d9","IxName":"WidgetChannel","hasSection":false,"sectionTitle":"Tüm Kanallar","banners":null},{"templateId":"63ca480e866ac307d0a275ec","refId":"611385b170e61acdaeca7e2f","widgetId":"5da5ade0866ac319d4c5c49d","IxName":"WidgetEditorReference","hasSection":true,"viewType":"LargePortrait","sectionTitle":"BluTV Özel Yapımlar","contentItem":[{"id":"61114831866ac30acc27b40e","contentType":"SerieContainer","startDate":"2021-08-09T15:28:00Z","endDate":"2100-10-24T21:00:00Z","origin":"Türkiye","title":"İlk Ve Son ","duration":3891,"url":"/diziler/yerli/ilk-ve-son","parentalRating":18,"files":[{"id":"67121359866ac30a14ccfaf5"},{"id":"67111940866ac30808383e17"},{"id":"6111494d866ac30acc27b413"},{"id":"6111495c866ac30acc27b418"},{"id":"61114965866ac30acc27b41c"},{"id":"6111496d866ac30acc27b41f"},{"id":"61114974866ac30acc27b423"},{"id":"6708c3f3866ac3076ce1183b"}],"posters":[{"id":"67110cc3866ac30808383df8"},{"id":"61114991866ac30acc27b42e"}],"image":"67110cc3866ac30808383df8","imageLandscape":"6708c3f3866ac3076ce1183b","announcement":"2. Sezon!","videoSource":"https://cdn-blutv.akamaized.net/blutv-origin/5bd2f293ac08fb00066d2b88/outputs/611163635c01510006b76963/v3/clear-hls-0/master.m3u8
