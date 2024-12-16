@@ -133,14 +133,14 @@
             for (const key in kanalurl) {
                 const streamPath = kanalurl[key];
                 const streamName = streamNames[key] || streamPath.replace('.m3u8', '');
-                const streamUrl = `${baseurl}${streamPath}|referer=${refererAndOrigin}|origin=${refererAndOrigin}`;
+                const streamUrl = `${baseurl}${streamPath}`;
 
                 const listItem = document.createElement('li');
                 listItem.textContent = streamName;
 
                 listItem.onclick = (function (url) {
                     return function () {
-                        window.location.href = url;
+                        window.location.href = `https://kopruluu55.github.io/main/trgoalsmultiplayer.html?stream=${encodeURIComponent(url)}`;
                     };
                 })(streamUrl);
 
