@@ -38,79 +38,12 @@
             text-align: center;
             color: #fff;
         }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.8);
-            padding-top: 60px;
-        }
-        .modal-content {
-            background-color: #333;
-            margin: 5% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 400px;
-            text-align: center;
-            position: relative;
-        }
-        .modal-content button {
-            padding: 10px 20px;
-            margin: 5px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            background-color: #444;
-            color: #fff;
-            transition: background-color 0.3s;
-        }
-        .modal-content button:hover {
-            background-color: #555;
-        }
-        .modal-content .player-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-        .modal-content .player-buttons button {
-            flex: 1;
-            margin: 0 5px;
-        }
-        .close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 24px;
-            cursor: pointer;
-            color: #fff;
-        }
     </style>
 </head>
 <body>
     <h2>(KÖPRÜLÜ) TRGOALS</h2>
     <ul id="streamList"></ul>
 
-    <!-- Modal -->
-    <div id="actionModal" class="modal">
-        <div class="modal-content">
-            <span class="close" id="closeModal">&times;</span>
-            <p>Ne yapmak istersiniz?</p>
-            <div class="player-buttons">
-                <button id="playButtonWuffy">Wuffy ile Oynat</button>
-                <button id="playButtonMX">MX Player ile Oynat</button>
-                <button id="playButtonVLC">VLC Player ile Oynat</button>
-            </div>
-            <button id="copyButton">Kopyala</button>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script>
         const kanalurl = {
             1: "yayinzirve.m3u8",
@@ -188,136 +121,47 @@
             36: "EXXEN SPOR 8",
         };
 
-        async function getUpdatedChannelUrl() {
-            try {
-                const response = await fetch("https://api.codetabs.com/v1/proxy/?quest=https://eniyiyayinci.github.io/redirect/index.html");
-                const text = await response.text();
-                const match = text.match(/<meta\s+http-equiv="refresh"\s+content="\d+;URL=([^"]+)"/i);
-                if (match) {
-                    return match[1] + "/channel.html";
-                }
-                throw new Error("Güncel channel.html URL bulunamadı.");
-            } catch (error) {
-                console.error("Güncel channel.html URL alınamadı:", error);
-                return "https://trgoals896.xyz/channel.html"; // Varsayılan URL
+        function playStream(streamUrl) {
+            const player = prompt("Hangi player ile oynatmak istersiniz? (vlc, mx, wuffy)").toLowerCase();
+            let playerIntent;
+
+            if (player === "vlc") {
+                playerIntent = `intent:${streamUrl}#Intent;package=org.videolan.vlc;type=video/*;end;`;
+            } else if (player === "mx") {
+                playerIntent = `intent:${streamUrl}#Intent;package=com.mxtech.videoplayer.ad;type=video/*;end;`;
+            } else if (player === "wuffy") {
+                playerIntent = `intent:${streamUrl}#Intent;package=co.wuffy.player;type=video/*;end;`;
+            } else {
+                alert("Desteklenmeyen player.");
+                return;
             }
+            window.location.href = playerIntent;
         }
 
-        async function getBaseUrl(channelUrl) {
-            try {
-                const response = await fetch(`https://api.codetabs.com/v1/proxy/?quest=${channelUrl}`);
-                const text = await response.text();
-                const match = text.match(/var\s+baseurl\s*=\s*["']([^"']+)["']/);
-                if (match) {
-                    return match[1];
-                }
-                throw new Error("Base URL bulunamadı.");
-            } catch (error) {
-                console.error("Base URL alınamadı:", error);
-                return "https://iss.trgoalshls1.shop/";
-            }
-        }
-
-        async function getUpdatedUrl() {
-            try {
-                const response = await fetch("https://api.codetabs.com/v1/proxy/?quest=https://eniyiyayinci.github.io/redirect/index.html");
-                const text = await response.text();
-                const match = text.match(/<meta\s+http-equiv="refresh"\s+content="\d+;URL=([^"]+)"/i);
-                if (match) {
-                    return match[1];
-                }
-                throw new Error("Güncel URL bulunamadı.");
-            } catch (error) {
-                console.error("Güncel URL alınamadı:", error);
-                return "https://trgoals896.xyz"; // varsayılan URL
-            }
-        }
-
-        // Handle URL params
-        function getQueryParameter(name) {
+        function initializeStreams() {
+            const streamListElement = document.getElementById("streamList");
             const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(name);
-        }
+            const streamId = urlParams.get("stream");
 
-        async function initializeStreams() {
-            const baseurl = await getBaseUrl(await getUpdatedChannelUrl());
-            const refererAndOrigin = await getUpdatedUrl();
-            const streamListElement = document.getElementById('streamList');
-            streamListElement.innerHTML = "";
-
-            const streamNameFromParam = getQueryParameter("stream");
-
-            let selectedStreamUrl = "";
-            if (streamNameFromParam) {
-                selectedStreamUrl = kanalurl[streamNameFromParam];
+            if (streamId) {
+                const streamUrl = kanalurl[streamId];
+                if (streamUrl) {
+                    playStream(streamUrl);
+                } else {
+                    alert("Geçersiz akış!");
+                }
+                return;
             }
 
-            for (let key in kanalurl) {
-                const streamUrl = baseurl + kanalurl[key];
+            for (let id in kanalurl) {
                 const li = document.createElement("li");
-                li.textContent = streamNames[key];
-                li.onclick = function () {
-                    handleStreamSelection(streamUrl);
-                };
+                li.textContent = streamNames[id] || `Akış ${id}`;
+                li.onclick = () => playStream(kanalurl[id]);
                 streamListElement.appendChild(li);
             }
-
-            if (selectedStreamUrl) {
-                const selectedStreamFullUrl = baseurl + selectedStreamUrl;
-                handleStreamSelection(selectedStreamFullUrl);
-            }
         }
 
-        function handleStreamSelection(url) {
-            openModal(url);
-        }
-
-        function openModal(url) {
-            const modal = document.getElementById("actionModal");
-            const closeButton = document.getElementById("closeModal");
-            const playButtonWuffy = document.getElementById("playButtonWuffy");
-            const playButtonMX = document.getElementById("playButtonMX");
-            const playButtonVLC = document.getElementById("playButtonVLC");
-            const copyButton = document.getElementById("copyButton");
-
-            copyButton.onclick = function () {
-                navigator.clipboard.writeText(url);
-                alert("URL kopyalandı.");
-            };
-
-            playButtonWuffy.onclick = function () {
-                openInPlayer(url, "Wuffy");
-            };
-
-            playButtonMX.onclick = function () {
-                openInPlayer(url, "MX");
-            };
-
-            playButtonVLC.onclick = function () {
-                openInPlayer(url, "VLC");
-            };
-
-            modal.style.display = "block";
-
-            closeButton.onclick = function () {
-                modal.style.display = "none";
-            };
-
-            window.onclick = function (event) {
-                if (event.target == modal) {
-                    modal.style.display = "none";
-                }
-            };
-        }
-
-        function openInPlayer(url, player) {
-            alert(`Yayın ${player} ile açılacak: ${url}`);
-            // Burada player logic'ini entegre edebilirsiniz
-        }
-
-        window.onload = function () {
-            initializeStreams();
-        };
+        initializeStreams();
     </script>
 </body>
 </html>
