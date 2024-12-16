@@ -38,77 +38,11 @@
             text-align: center;
             color: #fff;
         }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.8);
-            padding-top: 60px;
-        }
-        .modal-content {
-            background-color: #333;
-            margin: 5% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 400px;
-            text-align: center;
-            position: relative;
-        }
-        .modal-content button {
-            padding: 10px 20px;
-            margin: 5px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            background-color: #444;
-            color: #fff;
-            transition: background-color 0.3s;
-        }
-        .modal-content button:hover {
-            background-color: #555;
-        }
-        .modal-content .player-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-        .modal-content .player-buttons button {
-            flex: 1;
-            margin: 0 5px;
-        }
-        .close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 24px;
-            cursor: pointer;
-            color: #fff;
-        }
     </style>
 </head>
 <body>
     <h2>(KÖPRÜLÜ) TRGOALS</h2>
     <ul id="streamList"></ul>
-
-    <!-- Modal -->
-    <div id="actionModal" class="modal">
-        <div class="modal-content">
-            <span class="close" id="closeModal">&times;</span>
-            <p>Ne yapmak istersiniz?</p>
-            <div class="player-buttons">
-                <button id="playButtonWuffy">Wuffy ile Oynat</button>
-                <button id="playButtonMX">MX Player ile Oynat</button>
-                <button id="playButtonVLC">VLC Player ile Oynat</button>
-            </div>
-            <button id="copyButton">Kopyala</button>
-        </div>
-    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script>
@@ -206,35 +140,13 @@
 
                 listItem.onclick = (function (url) {
                     return function () {
-                        selectedStreamUrl = url;
-                        openModal('actionModal');
+                        window.location.href = url;
                     };
                 })(streamUrl);
 
                 streamListElement.appendChild(listItem);
             }
         }
-
-        // Wuffy Player ile oynatma
-        document.getElementById('playButtonWuffy').onclick = function() {
-            closeModal('actionModal');
-            const fullUrl = selectedStreamUrl;
-            window.location.href = `intent:${fullUrl}#Intent;package=co.wuffy.player;type=video/*;end;`;
-        };
-
-        // MX Player ile oynatma
-        document.getElementById('playButtonMX').onclick = function() {
-            closeModal('actionModal');
-            const fullUrl = selectedStreamUrl;
-            window.location.href = `intent:${fullUrl}#Intent;package=com.mxtech.videoplayer.ad;type=video/*;end;`;
-        };
-
-        // VLC Player ile oynatma
-        document.getElementById('playButtonVLC').onclick = function() {
-            closeModal('actionModal');
-            const cleanUrl = selectedStreamUrl.split('|')[0];
-            window.location.href = `intent:${cleanUrl}#Intent;package=org.videolan.vlc;type=video/*;end;`;
-        };
 
         // URL'den parametre kontrolü
         function getQueryParam(param) {
@@ -245,28 +157,11 @@
         const streamParam = getQueryParam('stream');
         if (streamParam) {
             const baseurl = "https://iss.trgoalshls1.shop/";
-            const refererAndOrigin = "https://trgoals896.xyz";
-            const fullUrl = `${baseurl}${streamParam}|referer=${refererAndOrigin}|origin=${refererAndOrigin}`;
             const cleanUrl = `${baseurl}${streamParam}`;
 
-            // Varsayılan olarak VLC Player ile oynat
-            window.location.href = `intent:${cleanUrl}#Intent;package=org.videolan.vlc;type=video/*;end;`;
+            // Dışarıdan istekte bulunulmuşsa temiz akış linki ile oynat
+            window.location.href = cleanUrl;
         }
-
-        function openModal(modalId) {
-            const modal = document.getElementById(modalId);
-            modal.style.display = 'block';
-        }
-
-        function closeModal(modalId) {
-            const modal = document.getElementById(modalId);
-            modal.style.display = 'none';
-        }
-
-        // Modal kapatma butonu
-        document.getElementById('closeModal').onclick = function () {
-            closeModal('actionModal');
-        };
 
         initializeStreams();
     </script>
