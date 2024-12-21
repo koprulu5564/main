@@ -9,24 +9,29 @@
     <h1>Dynamic Domain Finder</h1>
     <p id="status">Domain taranıyor...</p>
     <p id="result"></p>
+    <p id="progress"></p>
     <script>
         async function findDomain() {
             const baseDomain = "https://inattvcom";
             const startNumber = 8000;
             const endNumber = 9000;
+            const proxy = "https://cors-anywhere.herokuapp.com/"; // Proxy adresi
             let foundDomain = null;
 
             for (let i = startNumber; i <= endNumber; i++) {
                 const testDomain = `${baseDomain}${i}.xyz/player.php?id=test`;
 
+                // İlerlemeyi göster
+                document.getElementById('progress').textContent = `Deneme: ${testDomain}`;
+
                 try {
-                    const response = await fetch(testDomain, { method: 'HEAD' });
+                    const response = await fetch(proxy + testDomain, { method: 'HEAD' });
                     if (response.ok) {
                         foundDomain = `${baseDomain}${i}.xyz`;
                         break;
                     }
                 } catch (error) {
-                    // Devam et, hata oluşursa önemli değil
+                    console.error(`Hata: ${testDomain}`, error);
                 }
             }
 
@@ -34,21 +39,8 @@
                 document.getElementById('status').textContent = "Bulunan domain:";
                 document.getElementById('result').textContent = foundDomain;
 
-                // Güncel domain'i bir JSON dosyasına yazma
-                const domainData = { domain: foundDomain };
-                const githubEndpoint = "https://api.github.com/repos/<USERNAME>/<REPO>/contents/domain.json";
-
-                await fetch(githubEndpoint, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": "Bearer <YOUR_PERSONAL_ACCESS_TOKEN>"
-                    },
-                    body: JSON.stringify({
-                        message: "Update domain",
-                        content: btoa(JSON.stringify(domainData))
-                    })
-                });
+                // Güncel domain'i bir JSON dosyasına yazma (isteğe bağlı)
+                console.log("Bulunan domain:", foundDomain);
             } else {
                 document.getElementById('status').textContent = "Uygun domain bulunamadı.";
             }
