@@ -9,11 +9,12 @@
     <h1>Dynamic Domain Finder</h1>
     <p id="status">Domain taranıyor...</p>
     <p id="result"></p>
+
     <script>
         async function findDomain() {
             const baseDomain = "https://inattvcom";
-            const startNumber = 8000;
-            const endNumber = 9000;
+            const startNumber = 8000;  // Başlangıç numarası
+            const endNumber = 9000;    // Bitiş numarası
             let foundDomain = null;
 
             for (let i = startNumber; i <= endNumber; i++) {
@@ -24,28 +25,31 @@
 
                 try {
                     const response = await fetch(testDomain, { method: 'HEAD' });
+
+                    // Eğer bağlantı başarılıysa
                     if (response.ok) {
                         foundDomain = `${baseDomain}${i}.xyz`;
-                        break;
+                        break;  // Bulunduğunda döngüyü kır
                     }
                 } catch (error) {
                     console.error(`Hata: ${testDomain}`, error);
                 }
             }
 
-            // Bulunan domain'i ekrana veya JSON olarak döndür
+            // Bulunan domain'i ekrana yazdır
             if (foundDomain) {
                 document.getElementById('status').textContent = "Bulunan domain:";
                 document.getElementById('result').textContent = foundDomain;
 
-                // JSON olarak çıktı üret
+                // JSON çıktısı olarak döndür
                 console.log(JSON.stringify({ domain: foundDomain }));
             } else {
                 document.getElementById('status').textContent = "Uygun domain bulunamadı.";
+                document.getElementById('result').textContent = "";
             }
         }
 
-        // Fonksiyonu çağır
+        // Tarama işlemini başlat
         findDomain();
     </script>
 </body>
