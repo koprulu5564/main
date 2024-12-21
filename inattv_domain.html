@@ -9,23 +9,21 @@
     <h1>Dynamic Domain Finder</h1>
     <p id="status">Domain taranıyor...</p>
     <p id="result"></p>
-    <p id="progress"></p>
     <script>
         async function findDomain() {
             const baseDomain = "https://inattvcom";
             const startNumber = 8000;
             const endNumber = 9000;
-            const proxy = "https://cors-anywhere.herokuapp.com/"; // Proxy adresi
             let foundDomain = null;
 
             for (let i = startNumber; i <= endNumber; i++) {
                 const testDomain = `${baseDomain}${i}.xyz/player.php?id=test`;
 
-                // İlerlemeyi göster
-                document.getElementById('progress').textContent = `Deneme: ${testDomain}`;
+                // Durumu ekranda göster
+                document.getElementById('status').textContent = `Deneme: ${testDomain}`;
 
                 try {
-                    const response = await fetch(proxy + testDomain, { method: 'HEAD' });
+                    const response = await fetch(testDomain, { method: 'HEAD' });
                     if (response.ok) {
                         foundDomain = `${baseDomain}${i}.xyz`;
                         break;
@@ -35,17 +33,19 @@
                 }
             }
 
+            // Bulunan domain'i ekrana veya JSON olarak döndür
             if (foundDomain) {
                 document.getElementById('status').textContent = "Bulunan domain:";
                 document.getElementById('result').textContent = foundDomain;
 
-                // Güncel domain'i bir JSON dosyasına yazma (isteğe bağlı)
-                console.log("Bulunan domain:", foundDomain);
+                // JSON olarak çıktı üret
+                console.log(JSON.stringify({ domain: foundDomain }));
             } else {
                 document.getElementById('status').textContent = "Uygun domain bulunamadı.";
             }
         }
 
+        // Fonksiyonu çağır
         findDomain();
     </script>
 </body>
