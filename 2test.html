@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Domain Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        #result {
+            margin-top: 20px;
+            white-space: pre-wrap;
+            text-align: left;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Dynamic Domain Generator</h1>
+    <button onclick="generateDomains()">Generate Domains</button>
+    <div id="result">Generated domains will appear here...</div>
+
+    <script>
+        function generateDomains() {
+            const baseDomain = "https://inattvcom";
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = "Generating domains...<br>";
+
+            // 0000 - 9999 arasında domain üret
+            for (let i = 0; i <= 9999; i++) {
+                let dynamicPart = String(i).padStart(4, '0');
+                let url = `${baseDomain}${dynamicPart}.xyz`;
+                resultDiv.innerHTML += `${url}<br>`;
+            }
+            resultDiv.innerHTML += "<br>Domain generation complete!";
+        }
+    </script>
+</body>
+</html>
