@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HLS Video Oynatıcı</title>
-    <script src="https://api.codetabs.com/v1/proxy/?quest=https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         body {
             display: flex;
@@ -27,21 +27,38 @@
         var video = document.getElementById('video');
         var videoSrc = 'https://vavoo.to/play/1332310706/index.m3u8';
 
-        if (Hls.isSupported()) {
-            var hls = new Hls();
-            hls.loadSource(videoSrc);
-            hls.attachMedia(video);
-            hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                video.play();
-            });
-        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            video.src = videoSrc;
-            video.addEventListener('loadedmetadata', function() {
-                video.play();
-            });
-        } else {
-            alert('Tarayıcınız HLS formatını desteklemiyor!');
-        }
+        // Tarayıcı çerezleri ve oturum bilgilerini kullanarak m3u8 dosyasını yükler
+        fetch(videoSrc, {
+            method: 'GET',
+            credentials: 'include'  // Çerezleri kullan
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.url;  // Yönlendirilmiş m3u8 dosyasını al
+            } else {
+                throw new Error('Akış yüklenemedi!');
+            }
+        })
+        .then(url => {
+            if (Hls.isSupported()) {
+                var hls = new Hls();
+                hls.loadSource(url);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                    video.play();
+                });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = url;
+                video.addEventListener('loadedmetadata', function() {
+                    video.play();
+                });
+            } else {
+                alert('Tarayıcınız HLS formatını desteklemiyor!');
+            }
+        })
+        .catch(error => {
+            console.error('Video yüklenemedi:', error);
+        });
     </script>
 </body>
 </html>
