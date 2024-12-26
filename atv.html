@@ -27,10 +27,14 @@
         var video = document.getElementById('video');
         var videoSrc = 'https://vavoo.to/play/1332310706/index.m3u8';
 
-        // Tarayıcı çerezleri ve oturum bilgilerini kullanarak m3u8 dosyasını yükler
         fetch(videoSrc, {
             method: 'GET',
-            credentials: 'include'  // Çerezleri kullan
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Accept': '*/*',
+                'Connection': 'keep-alive'
+            },
+            credentials: 'include'  // Çerezleri dahil et
         })
         .then(response => {
             if (response.ok) {
