@@ -7,7 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/video.js@7.11.4/dist/video-js.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/video.js@7.11.4/dist/video.min.js"></script>
     <style>
-        /* Sayfa düzeni ve Flexbox ile ortalama */
+        /* Sayfa düzeni: Flexbox ile ortalama */
         body {
             margin: 0;
             padding: 0;
@@ -16,15 +16,18 @@
             justify-content: center;
             align-items: center;
             background-color: #000;
-            flex-direction: column;
         }
 
-        /* Video player için boyutlandırma */
+        /* Video player için genişlik ve yükseklik ayarları */
         video {
-            width: 100%;  /* Genişlik %100 */
-            height: 35vh;  /* Yükseklik %35 */
+            width: 100%; /* Ekranın tam genişliği */
+            height: 35vh; /* Yüksekliği ekranın %35'i kadar yap */
             background-color: black;
-            border: 2px solid #ccc;
+        }
+
+        /* Video player etrafındaki boşlukları kaldırmak */
+        .video-js {
+            border: none;
         }
     </style>
 </head>
@@ -36,17 +39,17 @@
 </video>
 
 <script>
-    // Base URL
+    // Video kaynağı URL'si için base URL
     const baseUrl = "https://vavoo.to/play/";
 
-    // Video ID URL'den alınacak, örnek olarak: "123456/index.m3u8"
-    const videoId = window.location.search.split('id=')[1]; // URL'den 'id' parametresi alınır
+    // URL'den alınacak 'id' parametresi
+    const videoId = new URLSearchParams(window.location.search).get('id'); // 'id' parametresi alınır
 
     if (videoId) {
-        const videoUrlInput = baseUrl + videoId;  // Dinamik video URL'si oluşturuluyor
+        const videoUrl = baseUrl + videoId;  // Dinamik video URL'si oluşturuluyor
 
         // Video kaynağını ayarlama
-        document.getElementById('video-source').src = videoUrlInput;
+        document.getElementById('video-source').src = videoUrl;
 
         // Video.js player'ı başlatma
         const player = videojs('video-player', {
