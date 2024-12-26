@@ -49,28 +49,24 @@
         Your browser does not support the video tag.
     </video>
 
-    <input type="text" id="id-input" placeholder="İçerik ID'sini girin (örneğin: 123456)" />
-    <button id="play-button">Videoyu Oynat</button>
-
     <script>
         const baseUrl = 'https://vavoo.to/play/'; // Base URL burada tanımlanıyor
         const videoPlayer = document.getElementById('video-player');
         const videoSource = document.getElementById('video-source');
-        const playButton = document.getElementById('play-button');
-        const idInput = document.getElementById('id-input');
+        
+        // URL parametrelerinden ID'yi al
+        const urlParams = new URLSearchParams(window.location.search);
+        const videoId = urlParams.get('id'); // 'id' parametresini al
 
-        // Oynatma butonuna tıklanıldığında video URL'sini oluştur ve videoyu oynat
-        playButton.addEventListener('click', function() {
-            const videoId = idInput.value.trim(); // Kullanıcının girdiği ID'yi al
-            if (videoId) {
-                const videoUrl = `${baseUrl}${videoId}/index.m3u8`; // ID'yi base URL ile birleştir
-                videoSource.src = videoUrl; // Video kaynak URL'sini ayarla
-                videoPlayer.load(); // Video yükle
-                videoPlayer.play(); // Videoyu oynat
-            } else {
-                alert("Lütfen geçerli bir içerik ID'si girin!");
-            }
-        });
+        // Eğer ID parametresi varsa, video kaynağını ayarla ve oynat
+        if (videoId) {
+            const videoUrl = `${baseUrl}${videoId}/index.m3u8`; // ID'yi base URL ile birleştir
+            videoSource.src = videoUrl; // Video kaynak URL'sini ayarla
+            videoPlayer.load(); // Video yükle
+            videoPlayer.play(); // Videoyu oynat
+        } else {
+            alert("Lütfen video ID'sini URL parametresi olarak girin.");
+        }
     </script>
 
 </body>
