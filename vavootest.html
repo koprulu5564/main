@@ -14,12 +14,13 @@
             height: 100vh;
             margin: 0;
             background-color: #f4f4f4;
+            overflow: hidden; /* Taşmaları engellemek için */
         }
         video {
-            width: 100%;
+            width: 100%;  /* Genişlik %100 yapıldı */
             height: 35vh; /* Yüksekliği %35 olarak ayarlandı */
-            max-width: 100%;
-            object-fit: cover;
+            max-width: 100%;  /* Ekranın dışına taşmayı engellemek için */
+            object-fit: contain;  /* Video içeriğinin bozulmadan sığmasını sağlamak */
             display: block;
             margin-bottom: 20px;
         }
