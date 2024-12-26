@@ -3,73 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Oynatıcı</title>
-    <link href="https://cdn.jsdelivr.net/npm/video.js@7.11.4/dist/video-js.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/video.js@7.11.4/dist/video.min.js"></script>
+    <title>Video Player</title>
     <style>
-        /* Sayfa düzeni: Flexbox ile ortalama */
+        /* Stil düzenlemeleri */
         body {
-            margin: 0;
-            padding: 0;
-            height: 100vh;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            background-color: #000;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
         }
-
-        /* Video player için genişlik ve yükseklik ayarları */
         video {
-            width: 100%; /* Ekranın tam genişliği */
-            height: 35vh; /* Yüksekliği ekranın %35'i kadar yap */
-            background-color: black;
+            width: 100%;
+            height: 35vh; /* Yüksekliği %35 olarak ayarlandı */
+            max-width: 100%;
+            object-fit: cover;
+            display: block;
+            margin-bottom: 20px;
         }
-
-        /* Video player etrafındaki boşlukları kaldırmak */
-        .video-js {
+        #id-input {
+            margin-bottom: 20px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        #play-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #28a745;
+            color: white;
             border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #play-button:hover {
+            background-color: #218838;
         }
     </style>
 </head>
 <body>
 
-<!-- Video Player -->
-<video id="video-player" class="video-js vjs-default-skin vjs-big-play-centered" controls>
-    <source id="video-source" src="" type="application/x-mpegURL">
-</video>
+    <video id="video-player" controls>
+        <source id="video-source" src="" type="application/x-mpegURL">
+        Your browser does not support the video tag.
+    </video>
 
-<script>
-    // Video kaynağı URL'si için base URL
-    const baseUrl = "https://vavoo.to/play/";
+    <input type="text" id="id-input" placeholder="İçerik ID'sini girin (örneğin: 123456)" />
+    <button id="play-button">Videoyu Oynat</button>
 
-    // URL'den alınacak 'id' parametresi
-    const videoId = new URLSearchParams(window.location.search).get('id'); // 'id' parametresi alınır
+    <script>
+        const baseUrl = 'https://vavoo.to/play/'; // Base URL burada tanımlanıyor
+        const videoPlayer = document.getElementById('video-player');
+        const videoSource = document.getElementById('video-source');
+        const playButton = document.getElementById('play-button');
+        const idInput = document.getElementById('id-input');
 
-    if (videoId) {
-        const videoUrl = baseUrl + videoId;  // Dinamik video URL'si oluşturuluyor
-
-        // Video kaynağını ayarlama
-        document.getElementById('video-source').src = videoUrl;
-
-        // Video.js player'ı başlatma
-        const player = videojs('video-player', {
-            autoplay: true,
-            controls: true,
-            preload: 'auto',
-            techOrder: ["html5", "flash"],
-            html5: {
-                hls: {
-                    withCredentials: false
-                }
+        // Oynatma butonuna tıklanıldığında video URL'sini oluştur ve videoyu oynat
+        playButton.addEventListener('click', function() {
+            const videoId = idInput.value.trim(); // Kullanıcının girdiği ID'yi al
+            if (videoId) {
+                const videoUrl = `${baseUrl}${videoId}/index.m3u8`; // ID'yi base URL ile birleştir
+                videoSource.src = videoUrl; // Video kaynak URL'sini ayarla
+                videoPlayer.load(); // Video yükle
+                videoPlayer.play(); // Videoyu oynat
+            } else {
+                alert("Lütfen geçerli bir içerik ID'si girin!");
             }
         });
-
-        player.load();
-        player.play();
-    } else {
-        alert("Geçersiz video ID'si!");
-    }
-</script>
+    </script>
 
 </body>
 </html>
