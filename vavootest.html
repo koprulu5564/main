@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Oynatıcı</title>
+    <link href="https://cdn.jsdelivr.net/npm/video.js@7.11.4/dist/video-js.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/video.js@7.11.4/dist/video.min.js"></script>
+    <style>
+        /* Sayfa düzeni ve Flexbox ile ortalama */
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #000;
+            flex-direction: column;
+        }
+
+        /* Video player için boyutlandırma */
+        video {
+            width: 100%;  /* Genişlik %100 */
+            height: 35vh;  /* Yükseklik %35 */
+            background-color: black;
+            border: 2px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Video Player -->
+<video id="video-player" class="video-js vjs-default-skin vjs-big-play-centered" controls>
+    <source id="video-source" src="" type="application/x-mpegURL">
+</video>
+
+<script>
+    // Base URL
+    const baseUrl = "https://vavoo.to/play/";
+
+    // Video ID URL'den alınacak, örnek olarak: "123456/index.m3u8"
+    const videoId = window.location.search.split('id=')[1]; // URL'den 'id' parametresi alınır
+
+    if (videoId) {
+        const videoUrlInput = baseUrl + videoId;  // Dinamik video URL'si oluşturuluyor
+
+        // Video kaynağını ayarlama
+        document.getElementById('video-source').src = videoUrlInput;
+
+        // Video.js player'ı başlatma
+        const player = videojs('video-player', {
+            autoplay: true,
+            controls: true,
+            preload: 'auto',
+            techOrder: ["html5", "flash"],
+            html5: {
+                hls: {
+                    withCredentials: false
+                }
+            }
+        });
+
+        player.load();
+        player.play();
+    } else {
+        alert("Geçersiz video ID'si!");
+    }
+</script>
+
+</body>
+</html>
