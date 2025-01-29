@@ -61,7 +61,7 @@
 
         // Eğer ID parametresi varsa, video kaynağını ayarla ve oynat
         if (videoId) {
-            const videoUrl = `${baseUrl}${videoId}/index.m3u8`; // ID'yi base URL ile birleştir
+            const videoUrl = `${baseUrl}${videoId}`; // ID'yi base URL ile birleştir
             videoSource.src = videoUrl; // Video kaynak URL'sini ayarla
             videoPlayer.load(); // Video yükle
             videoPlayer.play(); // Videoyu oynat
