@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Player</title>
+    <style>
+        /* Stil düzenlemeleri */
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+            overflow: hidden; /* Taşmaları engellemek için */
+        }
+        video {
+            width: 100%;  /* Genişlik %100 yapıldı */
+            height: 35vh; /* Yüksekliği %35 olarak ayarlandı */
+            max-width: 100%;  /* Ekranın dışına taşmayı engellemek için */
+            object-fit: contain;  /* Video içeriğinin bozulmadan sığmasını sağlamak */
+            display: block;
+            margin-bottom: 20px;
+        }
+        #id-input {
+            margin-bottom: 20px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        #play-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #play-button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <video id="video-player" controls>
+        <source id="video-source" src="" type="application/x-mpegURL">
+        Your browser does not support the video tag.
+    </video>
+
+    <script>
+        const baseUrl = 'https://koprulu1.global.ssl.fastly.net/app3/romanya/?id='; // Base URL burada tanımlanıyor
+        const videoPlayer = document.getElementById('video-player');
+        const videoSource = document.getElementById('video-source');
+        
+        // URL parametrelerinden ID'yi al
+        const urlParams = new URLSearchParams(window.location.search);
+        const videoId = urlParams.get('id'); // 'id' parametresini al
+
+        // Eğer ID parametresi varsa, video kaynağını ayarla ve oynat
+        if (videoId) {
+            const videoUrl = `${baseUrl}${videoId}/index.m3u8`; // ID'yi base URL ile birleştir
+            videoSource.src = videoUrl; // Video kaynak URL'sini ayarla
+            videoPlayer.load(); // Video yükle
+            videoPlayer.play(); // Videoyu oynat
+        } else {
+            alert("Lütfen video ID'sini URL parametresi olarak girin.");
+        }
+    </script>
+
+</body>
+</html>
