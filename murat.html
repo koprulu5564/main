@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IPTV Uygulaması</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .categories {
+      background-color: #1a73e8;
+      padding: 10px;
+      overflow-x: auto;
+      white-space: nowrap;
+      display: flex;
+      gap: 10px;
+    }
+
+    .category {
+      padding: 10px 20px;
+      background-color: #fff;
+      color: #1a73e8;
+      border-radius: 20px;
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .category.active {
+      background-color: #0c47a1;
+      color: #fff;
+    }
+
+    .content-container {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .content-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      background: #fff;
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+    }
+
+    .content-item img {
+      width: 50px;
+      height: 50px;
+      border-radius: 5px;
+    }
+
+    .content-item .title {
+      font-size: 16px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="categories" class="categories"></div>
+    <div id="content-container" class="content-container"></div>
+  </div>
+
+  <script>
+    const m3uUrl = "https://m3u.work/ZibUI6.m3u";
+    const categoriesContainer = document.getElementById("categories");
+    const contentContainer = document.getElementById("content-container");
+
+    let categories = [];
+    let contents = {};
+    let currentCategory = null;
+
+    async function fetchM3UData() {
+      try {
+        const response = await fetch(m3uUrl);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.text();
+        parseM3U(data);
+        renderCategories();
+      } catch (error) {
+        console.error("M3U dosyası alınırken bir hata oluştu:", error);
+        alert("Veri alınamadı. Konsolu kontrol edin.");
+      }
+    }
+
+    function parseM3U(data) {
+      const lines = data.split("\n");
+      let currentGroup = null;
+
+      lines.forEach(line => {
+        if (line.startsWith("#EXTINF")) {
+          const groupMatch = line.match(/group-title="([^"]+)"/);
+          const logoMatch = line.match(/tvg-logo="([^"]+)"/);
+          const titleMatch = line.match(/,([^\n]+)/);
+
+          const group = groupMatch ? groupMatch[1] : "Genel";
+          const logo = logoMatch ? logoMatch[1] : "";
+          const title = titleMatch ? titleMatch[1].trim() : "";
+
+          if (!categories.includes(group)) {
+            categories.push(group);
+            contents[group] = [];
+          }
+
+          currentGroup = group;
+          contents[group].push({ title, logo });
+        } else if (line && currentGroup) {
+          contents[currentGroup][contents[currentGroup].length - 1].url = line.trim();
+        }
+      });
+    }
+
+    function renderCategories() {
+      categoriesContainer.innerHTML = "";
+      categories.forEach(category => {
+        const categoryElement = document.createElement("div");
+        categoryElement.className = "category";
+        categoryElement.innerText = category;
+        categoryElement.onclick = () => showCategory(category);
+        categoriesContainer.appendChild(categoryElement);
+      });
+
+      const savedCategory = history.state ? history.state.category : categories[0];
+      showCategory(savedCategory);
+    }
+
+    function showCategory(category) {
+      currentCategory = category; // Seçili kategoriyi kaydediyoruz.
+
+      // URL durumu kaydedilir, geri dönüşte aynı kategori açılır
+      history.pushState({ category }, "", "");
+
+      document.querySelectorAll(".category").forEach(el => el.classList.remove("active"));
+      document.querySelectorAll(".category").forEach(el => {
+        if (el.innerText === category) el.classList.add("active");
+      });
+
+      contentContainer.innerHTML = "";
+      contents[category].forEach(content => {
+        const contentElement = document.createElement("div");
+        contentElement.className = "content-item";
+        contentElement.innerHTML = `
+          <img src="${content.logo}" alt="${content.title}">
+          <span class="title">${content.title}</span>
+        `;
+        contentElement.onclick = () => openContent(content.url);
+        contentContainer.appendChild(contentElement);
+      });
+    }
+
+    function openContent(url) {
+      window.open(url, "_self"); // Varsayılan oynatıcıda URL'yi açar.
+    }
+
+    // Sayfa geri geldiğinde bulunduğunuz kategoriyi açar
+    window.addEventListener("popstate", () => {
+      const savedCategory = history.state ? history.state.category : categories[0];
+      showCategory(savedCategory);
+    });
+
+    fetchM3UData();
+  </script>
+</body>
+</html>
