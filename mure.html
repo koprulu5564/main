@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IPTV Uygulaması</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; }
+    .container { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+    .categories { background-color: #1a73e8; padding: 10px; overflow-x: auto; white-space: nowrap; display: flex; gap: 10px; }
+    .category { padding: 10px 20px; background-color: #fff; color: #1a73e8; border-radius: 20px; cursor: pointer; user-select: none; white-space: nowrap; }
+    .category.active { background-color: #0c47a1; color: #fff; }
+    .content-container { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+    .content-item { display: flex; align-items: center; gap: 15px; background: #fff; padding: 10px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); cursor: pointer; }
+    .content-item img { width: 50px; height: 50px; border-radius: 5px; }
+    .content-item .title { font-size: 16px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="categories" class="categories"></div>
+    <div id="content-container" class="content-container"></div>
+  </div>
+
+  <script>
+    const m3uUrl = "https://m3u.work/ZibUI6.m3u";
+    const categoriesContainer = document.getElementById("categories");
+    const contentContainer = document.getElementById("content-container");
+
+    let contents = [];
+    let categories = [];
+
+    async function fetchM3UData() {
+      try {
+        const response = await fetch(m3uUrl);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.text();
+        parseM3U(data);
+        createCategories();
+        renderCategories();
+      } catch (error) {
+        console.error("M3U dosyası alınırken bir hata oluştu:", error);
+        alert("Veri alınamadı. Konsolu kontrol edin.");
+      }
+    }
+
+    function parseM3U(data) {
+      const lines = data.split("\n");
+      for (let i = 0; i < lines.length; i++) {
+        if (lines[i].startsWith("#EXTINF")) {
+          const titleMatch = lines[i].match(/,([^\n]+)/);
+          const logoMatch = lines[i].match(/tvg-logo="([^"]+)"/);
+          const title = titleMatch ? titleMatch[1].trim() : `Kanal ${i}`;
+          const logo = logoMatch ? logoMatch[1] : "";
+          let url = "";
+
+          for (let j = i + 1; j < lines.length; j++) {
+            if (lines[j] && !lines[j].startsWith("#")) {
+              url = lines[j].trim();
+              break;
+            }
+          }
+
+          contents.push({ title, logo, url });
+        }
+      }
+    }
+
+    function createCategories() {
+      const total = contents.length;
+      const perCategory = Math.ceil(total / 10);
+      for (let i = 0; i < 10; i++) {
+        categories.push({
+          name: `Filmler Liste ${i + 1}`,
+          items: contents.slice(i * perCategory, (i + 1) * perCategory)
+        });
+      }
+    }
+
+    function renderCategories() {
+      categoriesContainer.innerHTML = "";
+      categories.forEach((category, index) => {
+        const categoryElement = document.createElement("div");
+        categoryElement.className = "category";
+        categoryElement.innerText = category.name;
+        categoryElement.onclick = () => showCategory(index);
+        categoriesContainer.appendChild(categoryElement);
+      });
+      showCategory(0);
+    }
+
+    function showCategory(index) {
+      document.querySelectorAll(".category").forEach(el => el.classList.remove("active"));
+      document.querySelectorAll(".category")[index].classList.add("active");
+      contentContainer.innerHTML = "";
+      categories[index].items.forEach(content => {
+        const contentElement = document.createElement("div");
+        contentElement.className = "content-item";
+        contentElement.innerHTML = `
+          <img src="${content.logo}" alt="${content.title}">
+          <span class="title">${content.title}</span>
+        `;
+        contentElement.onclick = () => window.location.href = content.url;
+        contentContainer.appendChild(contentElement);
+      });
+    }
+
+    fetchM3UData();
+  </script>
+</body>
+</html>
