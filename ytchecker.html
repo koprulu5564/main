@@ -7,39 +7,39 @@
 </head>
 <body>
     <h2>HLS Manifest URL</h2>
-    <p id="hls-url">Yükleniyor...</p>
-    <iframe id="yt-frame" style="display:none;"></iframe>
+    <input type="text" id="urlInput" placeholder="YouTube Video ID">
+    <button onclick="fetchHlsUrl()">HLS URL Getir</button>
+    <p id="hls-url">Sonuç burada görünecek</p>
 
     <script>
-        function getQueryParam(param) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(param);
-        }
-
-        const videoId = getQueryParam('id');
-
-        if (videoId) {
-            const baseUrl = "https://m.youtube.com/watch?v=";
-            const requestUrl = baseUrl + videoId;
-            const iframe = document.getElementById('yt-frame');
-            iframe.src = requestUrl;
-
-            iframe.onload = function () {
-                try {
-                    const doc = iframe.contentDocument || iframe.contentWindow.document;
-                    const pageText = doc.body.innerHTML;
-                    const match = pageText.match(/"hlsManifestUrl":"(https:[^"]+\.m3u8)"/);
+        function fetchHlsUrl() {
+            const videoId = document.getElementById("urlInput").value;
+            if (!videoId) {
+                alert("Lütfen bir video ID girin.");
+                return;
+            }
+            
+            const requestUrl = `https://m.youtube.com/watch?v=${videoId}`;
+            
+            fetch(requestUrl, {
+                method: "GET",
+                headers: {
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36",
+                    "Referer": "https://m.youtube.com/"
+                }
+            })
+                .then(response => response.text())
+                .then(html => {
+                    const match = html.match(/"hlsManifestUrl":"(https:[^"]+\.m3u8)"/);
                     if (match && match[1]) {
                         document.getElementById('hls-url').textContent = match[1];
                     } else {
                         document.getElementById('hls-url').textContent = "HLS bağlantısı bulunamadı.";
                     }
-                } catch (error) {
-                    document.getElementById('hls-url').textContent = "Hata: Erişim Engellendi (CORS).";
-                }
-            };
-        } else {
-            document.getElementById('hls-url').textContent = "Lütfen bir video ID'si belirtin.";
+                })
+                .catch(error => {
+                    document.getElementById('hls-url').textContent = "Hata: " + error.message;
+                });
         }
     </script>
 </body>
