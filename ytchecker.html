@@ -18,7 +18,7 @@
         const videoId = getQueryParam('id');
 
         if (videoId) {
-            const baseUrl = "https://m.youtube.com/watch?v=";
+            const baseUrl = "https://api.codetabs.com/v1/proxy/?quest=https://m.youtube.com/watch?v=";
             const requestUrl = baseUrl + videoId;
             const iframe = document.getElementById('yt-frame');
             iframe.src = requestUrl;
