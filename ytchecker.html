@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HLS URL Çekici</title>
+</head>
+<body>
+    <h2>HLS Manifest URL</h2>
+    <p id="hls-url">Yükleniyor...</p>
+
+    <script>
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        const videoId = getQueryParam('id');
+
+        if (videoId) {
+            const baseUrl = "https://m.youtube.com/watch?v=";
+            const requestUrl = baseUrl + videoId;
+
+            fetch(requestUrl, {
+                method: "GET",
+                headers: {
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36",
+                    "Referer": "https://m.youtube.com/"
+                }
+            })
+                .then(response => response.text())
+                .then(html => {
+                    const match = html.match(/"hlsManifestUrl":"(https:[^"]+\.m3u8)"/);
+                    if (match && match[1]) {
+                        document.getElementById('hls-url').textContent = match[1];
+                    } else {
+                        document.getElementById('hls-url').textContent = "HLS bağlantısı bulunamadı.";
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('hls-url').textContent = "Hata: " + error.message;
+                });
+        } else {
+            document.getElementById('hls-url').textContent = "Lütfen bir video ID'si belirtin.";
+        }
+    </script>
+</body>
+</html>
