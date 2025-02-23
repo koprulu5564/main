@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stream Player</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        #streamList {
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin: 20px auto;
+            width: 80%;
+        }
+
+        #streamList li {
+            list-style: none;
+            margin: 10px 0;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.3);
+            transition: background-color 0.3s;
+        }
+
+        #streamList li:hover {
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+
+        h2 {
+            text-align: center;
+            color: #fff;
+        }
+
+        .player-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        .player-container iframe {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 40vh; /* Yükseklik %40 olarak ayarlandı */
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <h2>(KÖPRÜLÜ) TRGOALS</h2>
+    <ul id="streamList"></ul>
+
+    <div class="player-container" id="playerContainer">
+        <iframe id="videoFrame" src="" allowfullscreen></iframe>
+    </div>
+
+    <script>
+        const kanalurl = {
+            1: "yayinzirve.m3u8",
+            2: "yayin1.m3u8",
+            3: "yayininat.m3u8",
+            4: "yayinb2.m3u8",
+            5: "yayinb3.m3u8",
+            6: "yayinb4.m3u8",
+            7: "yayinb5.m3u8",
+            8: "yayinbm1.m3u8",
+            9: "yayinbm2.m3u8",
+            10: "yayinss.m3u8",
+            11: "yayinss2.m3u8",
+            12: "yayint1.m3u8",
+            13: "yayint2.m3u8",
+            14: "yayint3.m3u8",
+            15: "yayint4.m3u8",
+            16: "yayinsmarts.m3u8",
+            17: "yayinsms2.m3u8",
+            18: "yayintrtspor.m3u8",
+            19: "yayintrtspor2.m3u8",
+            20: "yayintrt1.m3u8",
+            21: "yayinas.m3u8",
+            22: "yayinatv.m3u8",
+            23: "yayintv8.m3u8",
+            24: "yayintv85.m3u8",
+            25: "yayinf1.m3u8",
+            26: "yayinnbatv.m3u8",
+            27: "yayineu1.m3u8",
+            28: "yayineu2.m3u8",
+            29: "yayinex7.m3u8",
+            30: "yayinex1.m3u8",
+            31: "yayinex2.m3u8",
+            32: "yayinex3.m3u8",
+            33: "yayinex4.m3u8",
+            34: "yayinex5.m3u8",
+            35: "yayinex6.m3u8",
+            
+        };
+
+        const streamNames = {
+            1: "BEİN SPORTS 1 (ZİRVE)",
+            2: "BEİN SPORTS 1 (1)",
+            3: "BEİN SPORTS 1 (İNAT)",
+            4: "BEİN SPORTS 2",
+            5: "BEİN SPORTS 3",
+            6: "BEİN SPORTS 4",
+            7: "BEİN SPORTS 5",
+            8: "BEİN SPORTS MAX 1",
+            9: "BEİN SPORTS MAX 2",
+            10: "S SPORT PLUS 1",
+            11: "S SPORT PLUS 2",
+            12: "TİVİBU SPOR 1",
+            13: "TİVİBU SPOR 2",
+            14: "TİVİBU SPOR 3",
+            15: "TİVİBU SPOR 4",
+            16: "SPOR SMART 1",
+            17: "SPOR SMART 2",
+            18: "TRT SPOR 1",
+            19: "TRT SPOR 2",
+            20: "TRT 1",
+            21: "A SPOR",
+            22: "ATV",
+            23: "TV 8",
+            24: "TV 8.5",
+            25: "FORMULA 1",
+            26: "NBA TV",
+            27: "EURO SPORT 1",
+            28: "EURO SPORT 2",
+            29: "TABİ SPOR",
+            30: "TABİ SPOR 1",
+            31: "TABİ SPOR 2",
+            32: "TABİ SPOR 3",
+            33: "TABİ SPOR 4",
+            34: "TABİ SPOR 5",
+            35: "TABİ SPOR 6",
+            
+            
+        };
+
+        // Java tarafından sağlanan başlıkları almak için fonksiyon
+        function fetchHeadersAndPlayStream(url) {
+            // Burada başlık bilgilerini almak için Java uygulamanızdan veri alıyorsunuz
+            fetch('path_to_your_server/trgoals_header', {
+                method: 'GET', 
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(headers => {
+                // Başlık bilgilerini aldıktan sonra, içerik sağlayıcısına istek yapıyoruz
+                fetch(url, {
+                    method: 'GET',
+                    headers: headers // Header bilgilerini burada gönderiyoruz
+                })
+                .then(res => res.blob()) // Veriyi alıyoruz
+                .then(data => {
+                    // Veriyi video oynatma işlemi için kullanıyoruz
+                    const iframe = document.getElementById('videoFrame');
+                    iframe.src = URL.createObjectURL(data);
+                })
+                .catch(err => console.error('Content fetch error: ', err));
+            })
+            .catch(err => console.error('Header fetch error: ', err));
+        }
+
+        function initializeStreams() {
+            const streamListElement = document.getElementById('streamList');
+            streamListElement.innerHTML = "";
+
+            for (const key in kanalurl) {
+                const streamId = kanalurl[key];
+                const streamName = streamNames[key];
+
+                const listItem = document.createElement('li');
+                listItem.textContent = streamName;
+
+                listItem.onclick = function () {
+                    const videoUrl = `https://koprulu1.global.ssl.fastly.net/spor3.m3u8/?id=${streamId}`;
+                    fetchHeadersAndPlayStream(videoUrl); // Yeni fonksiyonu kullanarak başlıkları alıp, içeriği oynat
+                };
+
+                streamListElement.appendChild(listItem);
+            }
+        }
+
+        function openPlayer(url) {
+            const iframe = document.getElementById('videoFrame');
+            iframe.src = url;
+
+            const playerContainer = document.getElementById('playerContainer');
+            const streamList = document.getElementById('streamList');
+
+            // Listeyi gizle
+            streamList.style.display = 'none';
+            document.querySelector('h2').style.display = 'none';
+
+            playerContainer.style.display = 'block';
+
+            // Player dışına tıklanma ile kapama
+            playerContainer.onclick = function (event) {
+                if (event.target === playerContainer) {
+                    closePlayer();
+                }
+            };
+
+            // Geri tuşu ile kapatma
+            window.onkeydown = function (event) {
+                if (event.key === 'Backspace' || event.key === 'Escape') {
+                    closePlayer();
+                }
+            };
+        }
+
+        function closePlayer() {
+            const playerContainer = document.getElementById('playerContainer');
+            const iframe = document.getElementById('videoFrame');
+            const streamList = document.getElementById('streamList');
+
+            // Listeyi geri getir
+            streamList.style.display = 'block';
+            document.querySelector('h2').style.display = 'block';
+
+            playerContainer.style.display = 'none';
+            iframe.src = '';
+        }
+
+        initializeStreams();
+    </script>
+</body>
+</html>
