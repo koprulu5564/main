@@ -113,8 +113,7 @@
             32: "yayinex3.m3u8",
             33: "yayinex4.m3u8",
             34: "yayinex5.m3u8",
-            35: "yayinex6.m3u8",
-            
+            35: "yayinex6.m3u8"
         };
 
         const streamNames = {
@@ -152,9 +151,7 @@
             32: "TABİ SPOR 3",
             33: "TABİ SPOR 4",
             34: "TABİ SPOR 5",
-            35: "TABİ SPOR 6",
-            
-            
+            35: "TABİ SPOR 6"
         };
 
         // Java tarafından sağlanan başlıkları almak için fonksiyon
@@ -169,17 +166,8 @@
             .then(response => response.json())
             .then(headers => {
                 // Başlık bilgilerini aldıktan sonra, içerik sağlayıcısına istek yapıyoruz
-                fetch(url, {
-                    method: 'GET',
-                    headers: headers // Header bilgilerini burada gönderiyoruz
-                })
-                .then(res => res.blob()) // Veriyi alıyoruz
-                .then(data => {
-                    // Veriyi video oynatma işlemi için kullanıyoruz
-                    const iframe = document.getElementById('videoFrame');
-                    iframe.src = URL.createObjectURL(data);
-                })
-                .catch(err => console.error('Content fetch error: ', err));
+                const videoUrl = `${url}?id=${headers.id}`; // Örnek video URL'si
+                openPlayer(videoUrl);
             })
             .catch(err => console.error('Header fetch error: ', err));
         }
@@ -196,7 +184,7 @@
                 listItem.textContent = streamName;
 
                 listItem.onclick = function () {
-                    const videoUrl = `https://koprulu1.global.ssl.fastly.net/spor3.m3u8/?id=${streamId}`;
+                    const videoUrl = `https://koprulu1.global.ssl.fastly.net/spor3.m3u8`; 
                     fetchHeadersAndPlayStream(videoUrl); // Yeni fonksiyonu kullanarak başlıkları alıp, içeriği oynat
                 };
 
