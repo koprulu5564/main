@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link Kontrol Aracı</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        #results { max-height: 400px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; }
+        button { margin: 10px 0; }
+        #progress { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h2>Link Kontrol Aracı</h2>
+    <button onclick="checkLinks()">Bağlantıları Kontrol Et</button>
+    <button onclick="copyLinks()">Tümünü Kopyala</button>
+    <p id="progress">İlerleme: 0/10000</p>
+    <ul id="results"></ul>
+    
+    <script>
+        async function checkLinks() {
+            const baseUrl = "http://89.36.94.225/956bassem/BHrMOpKtyb/";
+            const results = document.getElementById("results");
+            const progress = document.getElementById("progress");
+            results.innerHTML = "";
+            
+            let checked = 0;
+            let concurrentRequests = 10;
+            let promises = [];
+            
+            for (let i = 1; i <= 10000; i++) {
+                let url = `${baseUrl}${i}`;
+                
+                let promise = fetch(url, { method: 'GET' })
+                    .then(response => {
+                        if (response.status === 200) {
+                            let li = document.createElement("li");
+                            li.textContent = url;
+                            results.appendChild(li);
+                        }
+                    })
+                    .catch(error => {
+                        console.warn(`Bağlantı başarısız: ${url}`);
+                    })
+                    .finally(() => {
+                        checked++;
+                        progress.textContent = `İlerleme: ${checked}/10000`;
+                    });
+                
+                promises.push(promise);
+                
+                if (promises.length >= concurrentRequests) {
+                    await Promise.all(promises);
+                    promises = [];
+                }
+            }
+            await Promise.all(promises);
+        }
+
+        function copyLinks() {
+            let links = Array.from(document.querySelectorAll("#results li"))
+                .map(li => li.textContent)
+                .join("\n");
+            
+            navigator.clipboard.writeText(links).then(() => {
+                alert("Bağlantılar kopyalandı!");
+            }).catch(err => {
+                console.error("Kopyalama hatası", err);
+            });
+        }
+    </script>
+</body>
+</html>
