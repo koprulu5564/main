@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link Kontrol Aracı</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        #results { max-height: 400px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; }
+        button { margin: 10px 0; }
+        #progress { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h2>Link Kontrol Aracı</h2>
+    <button onclick="checkLinks()">Bağlantıları Kontrol Et</button>
+    <button onclick="copyLinks()">Tümünü Kopyala</button>
+    <p id="progress">İlerleme: 0/50000</p>
+    <ul id="results"></ul>
+    
+    <script>
+        async function checkLinks() {
+            const baseUrl = "https://217.30.11.74/e/";
+            const results = document.getElementById("results");
+            const progress = document.getElementById("progress");
+            results.innerHTML = "";
+            
+            let checked = 0;
+            let concurrentRequests = 10;
+            let promises = [];
+            
+            for (let i = 1; i <= 50000; i++) {
+                let url = `${baseUrl}${i}.m3u8`;
+                
+                let promise = fetch(url, { method: 'HEAD' })
+                    .then(response => {
+                        if (response.status === 200) {
+                            let li = document.createElement("li");
+                            li.textContent = url;
+                            results.a
