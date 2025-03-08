@@ -77,24 +77,6 @@
     .content-item.active {
       background-color: #ffeb3b;
     }
-
-    /* Player ekranı için stil */
-    .player-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 35vh;
-      background-color: black;
-      display: none;
-      align-items: center;
-      justify-content: center;
-    }
-
-    video {
-      width: 100%;
-      height: 100%;
-    }
   </style>
 </head>
 <body>
@@ -103,19 +85,12 @@
     <div id="content-container" class="content-container"></div>
   </div>
 
-  <!-- Video Player Ekranı -->
-  <div id="player-container" class="player-container">
-    <video id="video-player" controls autoplay></video>
-  </div>
-
   <script>
     const originalM3UUrl = "http://newpanel12.xyz:8080/get.php?username=JKR4434VOD&password=ygdUrPQWcH&type=m3u_plus&output=m3u8";
     const proxyUrl = "https://api.codetabs.com/v1/proxy/?quest=" + encodeURIComponent(originalM3UUrl);
 
     const categoriesContainer = document.getElementById("categories");
     const contentContainer = document.getElementById("content-container");
-    const playerContainer = document.getElementById("player-container");
-    const videoPlayer = document.getElementById("video-player");
 
     let categories = [];
     let contents = {};
@@ -217,26 +192,20 @@
 
     function openContent(url, title) {
         // URL'nin uzantısını al
-        const extensionMatch = url.match(/\.(m3u8|mp4|mkv|flv|avi|webm)$/);
+        const extensionMatch = url.match(/\.(m3u8|mp4|mkv)$/);
         const extension = extensionMatch ? extensionMatch[1] : "";
 
-        // Eğer desteklenen format ise video player ile aç
-        if (extension) {
-            videoPlayer.src = url;
-            playerContainer.style.display = "flex";
-            currentContent = title;
-            localStorage.setItem("selectedContent", title);
-        } else {
-            // Desteklenmeyen format ise direkt olarak tarayıcıda aç
-            window.open(url, "_self");
-        }
+        // Yeni URL'yi oluştur
+        // Düzenleme yapılmış URL kodlama hatasını engellemek için
+        const modifiedUrl = `https://webplayers.vercel.app/?cor=FF9800&link=${encodeURIComponent(url).replace(/%3A/g, ':').replace(/%2F/g, '/')}&atp=true&player=fluid&type=${extension}`;
+
+        // Vurguyu kaydet ve aç
+        currentContent = title;
+        localStorage.setItem("selectedContent", title);
+        window.open(modifiedUrl, "_self");
     }
 
-    // Geri tuşu ile video player'ı kapatma ve kategoriye dönme
     window.addEventListener("popstate", () => {
-        playerContainer.style.display = "none";
-        videoPlayer.pause();
-        videoPlayer.src = "";
         const savedCategory = localStorage.getItem("selectedCategory") || categories[0];
         showCategory(savedCategory);
     });
