@@ -73,6 +73,10 @@
       font-size: 16px;
       font-weight: bold;
     }
+
+    .content-item.active {
+      background-color: #ffeb3b;
+    }
   </style>
 </head>
 <body>
@@ -84,94 +88,53 @@
   <script>
     const originalM3UUrl = "http://newpanel12.xyz:8080/get.php?username=JKR4434VOD&password=ygdUrPQWcH&type=m3u_plus&output=m3u8";
     const proxyUrl = "https://api.codetabs.com/v1/proxy/?quest=" + encodeURIComponent(originalM3UUrl);
-    
+
     const categoriesContainer = document.getElementById("categories");
     const contentContainer = document.getElementById("content-container");
 
     let categories = [];
     let contents = {};
-    let currentCategory = null;
-
-    async function fetchWithTimeout(url, timeout = 30000, retries = 3) {
-        for (let i = 0; i < retries; i++) {
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), timeout);
-            try {
-                const response = await fetch(url, { signal: controller.signal });
-                clearTimeout(timeoutId);
-                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-                return response;
-            } catch (error) {
-                if (i === retries - 1) throw error;
-                console.warn(`Fetch başarısız, tekrar denenecek (${i + 1}/${retries})`);
-            }
-        }
-    }
+    let currentCategory = localStorage.getItem("selectedCategory") || null;
+    let currentContent = localStorage.getItem("selectedContent") || null;
 
     async function fetchM3UData() {
         try {
-            const response = await fetchWithTimeout(proxyUrl);
-            const reader = response.body.getReader();
-            const decoder = new TextDecoder();
-            let buffer = "";
-            let counter = 0;
-
-            async function processStream() {
-                while (true) {
-                    const { done, value } = await reader.read();
-                    if (done) break;
-
-                    buffer += decoder.decode(value, { stream: true });
-                    const lines = buffer.split("\n");
-                    buffer = lines.pop(); // Son satırın eksik olup olmadığını kontrol et
-
-                    for (const line of lines) {
-                        processM3ULine(line);
-                        counter++;
-
-                        if (counter % 20 === 0) {
-                            renderCategories();
-                            await new Promise(resolve => setTimeout(resolve, 10));
-                        }
-                    }
-                }
-
-                if (buffer) processM3ULine(buffer);
-                renderCategories();
-            }
-
-            await processStream();
+            const response = await fetch(proxyUrl);
+            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+            const data = await response.text();
+            parseM3U(data);
+            renderCategories();
         } catch (error) {
             console.error("M3U dosyası alınırken bir hata oluştu:", error);
             alert("Veri alınamadı. Konsolu kontrol edin.");
         }
     }
 
-    function processM3ULine(line) {
-        if (line.startsWith("#EXTINF")) {
-            const groupMatch = line.match(/group-title="([^"]+)"/);
-            const logoMatch = line.match(/tvg-logo="([^"]+)"/);
-            const titleMatch = line.match(/,([^\n]+)/);
+    function parseM3U(data) {
+        const lines = data.split("\n");
+        let currentGroup = null;
 
-            const group = groupMatch ? groupMatch[1] : "Genel";
-            const logo = logoMatch ? logoMatch[1] : "";
-            const title = titleMatch ? titleMatch[1].trim() : "";
+        lines.forEach(line => {
+            if (line.startsWith("#EXTINF")) {
+                const groupMatch = line.match(/group-title="([^"]+)"/);
+                const logoMatch = line.match(/tvg-logo="([^"]+)"/);
+                const titleMatch = line.match(/,([^\n]+)/);
 
-            if (!categories.includes(group)) {
-                categories.push(group);
-                contents[group] = [];
-                renderCategories();
+                const group = groupMatch ? groupMatch[1] : "Genel";
+                const logo = logoMatch ? logoMatch[1] : "";
+                const title = titleMatch ? titleMatch[1].trim() : "";
+
+                if (!categories.includes(group)) {
+                    categories.push(group);
+                    contents[group] = [];
+                }
+
+                currentGroup = group;
+                contents[group].push({ title, logo });
+            } else if (line.trim() && currentGroup) {
+                contents[currentGroup][contents[currentGroup].length - 1].url = line.trim();
             }
-
-            contents[group].push({ title, logo });
-
-        } else if (line.trim() && categories.length > 0) {
-            const lastCategory = categories[categories.length - 1];
-            if (contents[lastCategory]) {
-                contents[lastCategory][contents[lastCategory].length - 1].url = line.trim();
-                renderCategoryItems(lastCategory);
-            }
-        }
+        });
     }
 
     function renderCategories() {
@@ -180,18 +143,25 @@
             const categoryElement = document.createElement("div");
             categoryElement.className = "category";
             categoryElement.innerText = category;
+            if (category === currentCategory) {
+                categoryElement.classList.add("active");
+            }
             categoryElement.onclick = () => showCategory(category);
             categoriesContainer.appendChild(categoryElement);
         });
 
         if (!currentCategory && categories.length > 0) {
             showCategory(categories[0]);
+        } else {
+            showCategory(currentCategory);
         }
     }
 
     function showCategory(category) {
+        if (!category || !contents[category]) return;
+
         currentCategory = category;
-        history.pushState({ category }, "", "");
+        localStorage.setItem("selectedCategory", category);
 
         document.querySelectorAll(".category").forEach(el => el.classList.remove("active"));
         document.querySelectorAll(".category").forEach(el => {
@@ -203,7 +173,7 @@
 
     function renderCategoryItems(category) {
         if (!contents[category]) return;
-        
+
         contentContainer.innerHTML = "";
         contents[category].forEach(content => {
             const contentElement = document.createElement("div");
@@ -212,17 +182,22 @@
                 <img src="${content.logo}" alt="${content.title}">
                 <span class="title">${content.title}</span>
             `;
-            contentElement.onclick = () => openContent(content.url);
+            if (content.title === currentContent) {
+                contentElement.classList.add("active");
+            }
+            contentElement.onclick = () => openContent(content.url, content.title);
             contentContainer.appendChild(contentElement);
         });
     }
 
-    function openContent(url) {
+    function openContent(url, title) {
+        currentContent = title;
+        localStorage.setItem("selectedContent", title);
         window.open(url, "_self");
     }
 
     window.addEventListener("popstate", () => {
-        const savedCategory = history.state ? history.state.category : categories[0];
+        const savedCategory = localStorage.getItem("selectedCategory") || categories[0];
         showCategory(savedCategory);
     });
 
