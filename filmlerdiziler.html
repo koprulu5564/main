@@ -1,5 +1,90 @@
-<script>
-    const m3uUrl = "http://newpanel12.xyz:8080/get.php?username=JKR4434VOD&password=ygdUrPQWcH&type=m3u_plus&output=m3u8";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IPTV Uygulaması</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .categories {
+      background-color: #1a73e8;
+      padding: 10px;
+      overflow-x: auto;
+      white-space: nowrap;
+      display: flex;
+      gap: 10px;
+    }
+
+    .category {
+      padding: 10px 20px;
+      background-color: #fff;
+      color: #1a73e8;
+      border-radius: 20px;
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .category.active {
+      background-color: #0c47a1;
+      color: #fff;
+    }
+
+    .content-container {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .content-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      background: #fff;
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+    }
+
+    .content-item img {
+      width: 50px;
+      height: 50px;
+      border-radius: 5px;
+    }
+
+    .content-item .title {
+      font-size: 16px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="categories" class="categories"></div>
+    <div id="content-container" class="content-container"></div>
+  </div>
+
+  <script>
+    const originalM3UUrl = "http://newpanel12.xyz:8080/get.php?username=JKR4434VOD&password=ygdUrPQWcH&type=m3u_plus&output=m3u8";
+    const proxyUrl = "https://api.codetabs.com/v1/proxy/?quest=" + encodeURIComponent(originalM3UUrl);
+    
     const categoriesContainer = document.getElementById("categories");
     const contentContainer = document.getElementById("content-container");
 
@@ -7,14 +92,29 @@
     let contents = {};
     let currentCategory = null;
 
+    async function fetchWithTimeout(url, timeout = 30000, retries = 3) {
+        for (let i = 0; i < retries; i++) {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), timeout);
+            try {
+                const response = await fetch(url, { signal: controller.signal });
+                clearTimeout(timeoutId);
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                return response;
+            } catch (error) {
+                if (i === retries - 1) throw error;
+                console.warn(`Fetch başarısız, tekrar denenecek (${i + 1}/${retries})`);
+            }
+        }
+    }
+
     async function fetchM3UData() {
         try {
-            const response = await fetch(m3uUrl);
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
+            const response = await fetchWithTimeout(proxyUrl);
             const reader = response.body.getReader();
             const decoder = new TextDecoder();
             let buffer = "";
+            let counter = 0;
 
             async function processStream() {
                 while (true) {
@@ -23,18 +123,20 @@
 
                     buffer += decoder.decode(value, { stream: true });
                     const lines = buffer.split("\n");
-
-                    // Son satırın eksik olup olmadığını kontrol et
-                    buffer = lines.pop(); 
+                    buffer = lines.pop(); // Son satırın eksik olup olmadığını kontrol et
 
                     for (const line of lines) {
                         processM3ULine(line);
+                        counter++;
+
+                        if (counter % 20 === 0) {
+                            renderCategories();
+                            await new Promise(resolve => setTimeout(resolve, 10));
+                        }
                     }
                 }
 
-                // Son kalan satır varsa işle
                 if (buffer) processM3ULine(buffer);
-
                 renderCategories();
             }
 
@@ -58,17 +160,16 @@
             if (!categories.includes(group)) {
                 categories.push(group);
                 contents[group] = [];
-                renderCategories(); // Yeni kategori eklenince hemen göster
+                renderCategories();
             }
 
             contents[group].push({ title, logo });
 
         } else if (line.trim() && categories.length > 0) {
-            // Son eklenen içeriğe URL ekle
             const lastCategory = categories[categories.length - 1];
             if (contents[lastCategory]) {
                 contents[lastCategory][contents[lastCategory].length - 1].url = line.trim();
-                renderCategoryItems(lastCategory); // İçeriği hemen göster
+                renderCategoryItems(lastCategory);
             }
         }
     }
@@ -126,4 +227,6 @@
     });
 
     fetchM3UData();
-</script>
+  </script>
+</body>
+</html>
