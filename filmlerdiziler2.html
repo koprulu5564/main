@@ -186,7 +186,19 @@
                 contentElement.classList.add("active");
             }
             contentElement.onclick = () => openContent(content.url, content.title);
+
+            // Dinamik olarak aktif içerik vurgusunu güncelle
             contentContainer.appendChild(contentElement);
+        });
+
+        // Dinamik olarak içerik tıklandığında aktif vurguyu ekle
+        document.querySelectorAll('.content-item').forEach((item) => {
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.content-item').forEach((el) => {
+                    el.classList.remove('active');
+                });
+                item.classList.add('active');
+            });
         });
     }
 
