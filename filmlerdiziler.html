@@ -1,0 +1,129 @@
+<script>
+    const m3uUrl = "http://newpanel12.xyz:8080/get.php?username=JKR4434VOD&password=ygdUrPQWcH&type=m3u_plus&output=m3u8";
+    const categoriesContainer = document.getElementById("categories");
+    const contentContainer = document.getElementById("content-container");
+
+    let categories = [];
+    let contents = {};
+    let currentCategory = null;
+
+    async function fetchM3UData() {
+        try {
+            const response = await fetch(m3uUrl);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = "";
+
+            async function processStream() {
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split("\n");
+
+                    // Son satırın eksik olup olmadığını kontrol et
+                    buffer = lines.pop(); 
+
+                    for (const line of lines) {
+                        processM3ULine(line);
+                    }
+                }
+
+                // Son kalan satır varsa işle
+                if (buffer) processM3ULine(buffer);
+
+                renderCategories();
+            }
+
+            await processStream();
+        } catch (error) {
+            console.error("M3U dosyası alınırken bir hata oluştu:", error);
+            alert("Veri alınamadı. Konsolu kontrol edin.");
+        }
+    }
+
+    function processM3ULine(line) {
+        if (line.startsWith("#EXTINF")) {
+            const groupMatch = line.match(/group-title="([^"]+)"/);
+            const logoMatch = line.match(/tvg-logo="([^"]+)"/);
+            const titleMatch = line.match(/,([^\n]+)/);
+
+            const group = groupMatch ? groupMatch[1] : "Genel";
+            const logo = logoMatch ? logoMatch[1] : "";
+            const title = titleMatch ? titleMatch[1].trim() : "";
+
+            if (!categories.includes(group)) {
+                categories.push(group);
+                contents[group] = [];
+                renderCategories(); // Yeni kategori eklenince hemen göster
+            }
+
+            contents[group].push({ title, logo });
+
+        } else if (line.trim() && categories.length > 0) {
+            // Son eklenen içeriğe URL ekle
+            const lastCategory = categories[categories.length - 1];
+            if (contents[lastCategory]) {
+                contents[lastCategory][contents[lastCategory].length - 1].url = line.trim();
+                renderCategoryItems(lastCategory); // İçeriği hemen göster
+            }
+        }
+    }
+
+    function renderCategories() {
+        categoriesContainer.innerHTML = "";
+        categories.forEach(category => {
+            const categoryElement = document.createElement("div");
+            categoryElement.className = "category";
+            categoryElement.innerText = category;
+            categoryElement.onclick = () => showCategory(category);
+            categoriesContainer.appendChild(categoryElement);
+        });
+
+        if (!currentCategory && categories.length > 0) {
+            showCategory(categories[0]);
+        }
+    }
+
+    function showCategory(category) {
+        currentCategory = category;
+        history.pushState({ category }, "", "");
+
+        document.querySelectorAll(".category").forEach(el => el.classList.remove("active"));
+        document.querySelectorAll(".category").forEach(el => {
+            if (el.innerText === category) el.classList.add("active");
+        });
+
+        renderCategoryItems(category);
+    }
+
+    function renderCategoryItems(category) {
+        if (!contents[category]) return;
+        
+        contentContainer.innerHTML = "";
+        contents[category].forEach(content => {
+            const contentElement = document.createElement("div");
+            contentElement.className = "content-item";
+            contentElement.innerHTML = `
+                <img src="${content.logo}" alt="${content.title}">
+                <span class="title">${content.title}</span>
+            `;
+            contentElement.onclick = () => openContent(content.url);
+            contentContainer.appendChild(contentElement);
+        });
+    }
+
+    function openContent(url) {
+        window.open(url, "_self");
+    }
+
+    window.addEventListener("popstate", () => {
+        const savedCategory = history.state ? history.state.category : categories[0];
+        showCategory(savedCategory);
+    });
+
+    fetchM3UData();
+</script>
