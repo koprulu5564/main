@@ -191,9 +191,17 @@
     }
 
     function openContent(url, title) {
+        // URL'nin uzantısını al
+        const extensionMatch = url.match(/\.(m3u8|mp4|mkv)$/);
+        const extension = extensionMatch ? extensionMatch[1] : "";
+
+        // Yeni URL'yi oluştur
+        const modifiedUrl = `https://webplayers.vercel.app/?cor=FF9800&link=${encodeURIComponent(url)}&atp=true&player=fluid&type=${extension}`;
+
+        // Vurguyu kaydet ve aç
         currentContent = title;
         localStorage.setItem("selectedContent", title);
-        window.open(url, "_self");
+        window.open(modifiedUrl, "_self");
     }
 
     window.addEventListener("popstate", () => {
