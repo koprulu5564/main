@@ -214,7 +214,19 @@
         // Vurguyu kaydet ve aç
         currentContent = title;
         localStorage.setItem("selectedContent", title);
-        window.open(modifiedUrl, "_self");
+
+        // Kullanıcı ajanını eklemek için fetch ile isteği özelleştiriyoruz
+        fetch(modifiedUrl, {
+            method: 'GET',
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'  // Yaygın bir User-Agent
+            }
+        })
+        .then(response => response.text())
+        .then(data => {
+            window.open(modifiedUrl, "_self");
+        })
+        .catch(error => console.error("User-Agent ile içerik açılırken hata:", error));
     }
 
     window.addEventListener("popstate", () => {
