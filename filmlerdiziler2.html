@@ -105,6 +105,7 @@
   </div>
 
   <script>
+    // M3U dosyasını almak için proxy kullanarak veri isteği yapıyoruz
     const m3uUrl = "https://api.codetabs.com/v1/proxy/?quest=http://newpanel12.xyz:8080/get.php?username=JKR4434VOD&password=ygdUrPQWcH&type=m3u_plus&output=m3u8";
     const categoriesContainer = document.getElementById("categories");
     const contentContainer = document.getElementById("content-container");
@@ -119,12 +120,18 @@
     async function fetchM3UData() {
       try {
         const response = await fetch(m3uUrl);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        
+        if (!response.ok) {
+          console.error("Hata: M3U dosyasına erişilemedi, HTTP durumu: " + response.status);
+          alert("Veri alınamadı. Konsolu kontrol edin.");
+          return;
+        }
+
         const data = await response.text();
         parseM3U(data);
         renderCategories();
       } catch (error) {
-        console.error("M3U dosyası alınırken bir hata oluştu:", error);
+        console.error("M3U dosyasını alırken hata:", error);
         alert("Veri alınamadı. Konsolu kontrol edin.");
       }
     }
