@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IPTV Uygulaması</title>
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script> <!-- HLS.js -->
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -23,21 +22,24 @@
     .categories {
       background-color: #1a73e8;
       padding: 10px;
+      overflow-x: auto;
+      white-space: nowrap;
       display: flex;
       gap: 10px;
-      overflow-x: auto;
     }
 
     .category {
       padding: 10px 20px;
-      background: #fff;
+      background-color: #fff;
       color: #1a73e8;
       border-radius: 20px;
       cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
     }
 
     .category.active {
-      background: #0c47a1;
+      background-color: #0c47a1;
       color: #fff;
     }
 
@@ -45,6 +47,9 @@
       flex: 1;
       padding: 20px;
       overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
     }
 
     .content-item {
@@ -69,52 +74,22 @@
       font-weight: bold;
     }
 
-    /* Video Player */
-    .video-player {
+    /* Player ekranı için stil */
+    .player-container {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.9);
-      display: flex;
-      justify-content: center;
+      background-color: black;
+      display: none;
       align-items: center;
-      z-index: 1000;
-      visibility: hidden;
-      opacity: 0;
-      transition: opacity 0.3s ease-in-out;
-    }
-
-    .video-player.show {
-      visibility: visible;
-      opacity: 1;
-    }
-
-    .video-container {
-      width: 100%;
-      height: 35%;
-      background: black;
-      position: relative;
+      justify-content: center;
     }
 
     video {
       width: 100%;
-      height: 100%;
-      outline: none;
-    }
-
-    .close-btn {
-      position: absolute;
-      top: 10px;
-      right: 15px;
-      font-size: 24px;
-      color: white;
-      cursor: pointer;
-      background: rgba(0, 0, 0, 0.5);
-      border: none;
-      padding: 5px 10px;
-      border-radius: 5px;
+      height: 35vh;
     }
   </style>
 </head>
@@ -124,122 +99,118 @@
     <div id="content-container" class="content-container"></div>
   </div>
 
-  <!-- Video Player -->
-  <div id="video-player" class="video-player">
-    <div class="video-container">
-      <button class="close-btn" onclick="closePlayer()">X</button>
-      <video id="video-element" controls autoplay></video>
-    </div>
+  <!-- Video Player Ekranı -->
+  <div id="player-container" class="player-container">
+    <video id="video-player" controls autoplay></video>
   </div>
 
   <script>
-    const originalM3UUrl = "http://newpanel12.xyz:8080/get.php?username=JKR4434VOD&password=ygdUrPQWcH&type=m3u_plus&output=m3u8";
-    const proxyUrl = "https://api.codetabs.com/v1/proxy/?quest=" + encodeURIComponent(originalM3UUrl);
-
+    const m3uUrl = "https://api.codetabs.com/v1/proxy/?quest=http://newpanel12.xyz:8080/get.php?username=JKR4434VOD&password=ygdUrPQWcH&type=m3u_plus&output=m3u8";
     const categoriesContainer = document.getElementById("categories");
     const contentContainer = document.getElementById("content-container");
+    const playerContainer = document.getElementById("player-container");
     const videoPlayer = document.getElementById("video-player");
-    const videoElement = document.getElementById("video-element");
 
-    let hlsInstance = null;
     let categories = [];
     let contents = {};
-    let currentCategory = localStorage.getItem("selectedCategory") || null;
-    let currentContent = localStorage.getItem("selectedContent") || null;
+    let currentCategory = null;
+    let lastSelectedContent = null;
 
     async function fetchM3UData() {
-        try {
-            const response = await fetch(proxyUrl);
-            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-            const data = await response.text();
-            parseM3U(data);
-            renderCategories();
-        } catch (error) {
-            console.error("M3U dosyası alınırken bir hata oluştu:", error);
-            alert("Veri alınamadı. Konsolu kontrol edin.");
-        }
+      try {
+        const response = await fetch(m3uUrl);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.text();
+        parseM3U(data);
+        renderCategories();
+      } catch (error) {
+        console.error("M3U dosyası alınırken bir hata oluştu:", error);
+        alert("Veri alınamadı. Konsolu kontrol edin.");
+      }
     }
 
     function parseM3U(data) {
-        const lines = data.split("\n");
-        let currentGroup = null;
+      const lines = data.split("\n");
+      let currentGroup = null;
 
-        lines.forEach(line => {
-            if (line.startsWith("#EXTINF")) {
-                const groupMatch = line.match(/group-title="([^"]+)"/);
-                const logoMatch = line.match(/tvg-logo="([^"]+)"/);
-                const titleMatch = line.match(/,([^\n]+)/);
+      lines.forEach(line => {
+        if (line.startsWith("#EXTINF")) {
+          const groupMatch = line.match(/group-title="([^"]+)"/);
+          const logoMatch = line.match(/tvg-logo="([^"]+)"/);
+          const titleMatch = line.match(/,([^\n]+)/);
 
-                const group = groupMatch ? groupMatch[1] : "Genel";
-                const logo = logoMatch ? logoMatch[1] : "";
-                const title = titleMatch ? titleMatch[1].trim() : "";
+          const group = groupMatch ? groupMatch[1] : "Genel";
+          const logo = logoMatch ? logoMatch[1] : "";
+          const title = titleMatch ? titleMatch[1].trim() : "";
 
-                if (!categories.includes(group)) {
-                    categories.push(group);
-                    contents[group] = [];
-                }
+          if (!categories.includes(group)) {
+            categories.push(group);
+            contents[group] = [];
+          }
 
-                currentGroup = group;
-                contents[group].push({ title, logo });
-            } else if (line.trim() && currentGroup) {
-                contents[currentGroup][contents[currentGroup].length - 1].url = line.trim();
-            }
-        });
+          currentGroup = group;
+          contents[group].push({ title, logo });
+        } else if (line.trim() && currentGroup) {
+          contents[currentGroup][contents[currentGroup].length - 1].url = line.trim();
+        }
+      });
     }
 
     function renderCategories() {
-        categoriesContainer.innerHTML = "";
-        categories.forEach(category => {
-            const categoryElement = document.createElement("div");
-            categoryElement.className = "category";
-            categoryElement.innerText = category;
-            if (category === currentCategory) {
-                categoryElement.classList.add("active");
-            }
-            categoryElement.onclick = () => showCategory(category);
-            categoriesContainer.appendChild(categoryElement);
-        });
+      categoriesContainer.innerHTML = "";
+      categories.forEach(category => {
+        const categoryElement = document.createElement("div");
+        categoryElement.className = "category";
+        categoryElement.innerText = category;
+        categoryElement.onclick = () => showCategory(category);
+        categoriesContainer.appendChild(categoryElement);
+      });
 
-        showCategory(currentCategory);
+      const savedCategory = history.state ? history.state.category : categories[0];
+      showCategory(savedCategory);
     }
 
     function showCategory(category) {
-        if (!category || !contents[category]) return;
+      currentCategory = category;
+      history.pushState({ category }, "", "");
 
-        currentCategory = category;
-        localStorage.setItem("selectedCategory", category);
+      document.querySelectorAll(".category").forEach(el => el.classList.remove("active"));
+      document.querySelectorAll(".category").forEach(el => {
+        if (el.innerText === category) el.classList.add("active");
+      });
 
-        renderCategoryItems(category);
-    }
-
-    function renderCategoryItems(category) {
-        contentContainer.innerHTML = "";
-        contents[category].forEach(content => {
-            const contentElement = document.createElement("div");
-            contentElement.className = "content-item";
-            contentElement.innerHTML = `<img src="${content.logo}" alt="${content.title}"><span class="title">${content.title}</span>`;
-            contentElement.onclick = () => openContent(content.url);
-            contentContainer.appendChild(contentElement);
-        });
+      contentContainer.innerHTML = "";
+      contents[category].forEach(content => {
+        const contentElement = document.createElement("div");
+        contentElement.className = "content-item";
+        contentElement.innerHTML = `
+          <img src="${content.logo}" alt="${content.title}">
+          <span class="title">${content.title}</span>
+        `;
+        contentElement.onclick = () => openContent(content.url);
+        contentContainer.appendChild(contentElement);
+      });
     }
 
     function openContent(url) {
-        if (url.endsWith(".m3u8") && Hls.isSupported()) {
-            hlsInstance = new Hls();
-            hlsInstance.loadSource(url);
-            hlsInstance.attachMedia(videoElement);
-        } else {
-            videoElement.src = url;
-        }
-        videoPlayer.classList.add("show");
+      lastSelectedContent = url;
+      const fileType = url.split(".").pop(); // Uzantıyı al
+      const supportedFormats = ["mp4", "mkv", "flv", "avi", "webm", "m3u8"];
+
+      if (supportedFormats.includes(fileType)) {
+        videoPlayer.src = url;
+        playerContainer.style.display = "flex";
+      } else {
+        window.open(url, "_self");
+      }
     }
 
-    function closePlayer() {
-        if (hlsInstance) hlsInstance.destroy();
-        videoElement.pause();
-        videoElement.src = "";
-        videoPlayer.classList.remove("show");
-    }
+    // Geri tuşuna basınca player kapansın ve son seçilen kategori ve içerik vurgulu olsun
+    window.addEventListener("popstate", () => {
+      playerContainer.style.display = "none";
+      videoPlayer.pause();
+      videoPlayer.src = "";
+    });
 
     fetchM3UData();
   </script>
