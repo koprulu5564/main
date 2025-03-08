@@ -74,13 +74,17 @@
       font-weight: bold;
     }
 
+    .content-item.active {
+      background-color: #ffeb3b;
+    }
+
     /* Player ekranı için stil */
     .player-container {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
-      height: 100%;
+      height: 35vh;
       background-color: black;
       display: none;
       align-items: center;
@@ -89,7 +93,7 @@
 
     video {
       width: 100%;
-      height: 35vh;
+      height: 100%;
     }
   </style>
 </head>
@@ -105,8 +109,9 @@
   </div>
 
   <script>
-    // M3U dosyasını almak için proxy kullanarak veri isteği yapıyoruz
-    const m3uUrl = "https://api.codetabs.com/v1/proxy/?quest=http://newpanel12.xyz:8080/get.php?username=JKR4434VOD&password=ygdUrPQWcH&type=m3u_plus&output=m3u8";
+    const originalM3UUrl = "http://newpanel12.xyz:8080/get.php?username=JKR4434VOD&password=ygdUrPQWcH&type=m3u_plus&output=m3u8";
+    const proxyUrl = "https://api.codetabs.com/v1/proxy/?quest=" + encodeURIComponent(originalM3UUrl);
+
     const categoriesContainer = document.getElementById("categories");
     const contentContainer = document.getElementById("content-container");
     const playerContainer = document.getElementById("player-container");
@@ -114,109 +119,126 @@
 
     let categories = [];
     let contents = {};
-    let currentCategory = null;
-    let lastSelectedContent = null;
+    let currentCategory = localStorage.getItem("selectedCategory") || null;
+    let currentContent = localStorage.getItem("selectedContent") || null;
 
     async function fetchM3UData() {
-      try {
-        const response = await fetch(m3uUrl);
-        
-        if (!response.ok) {
-          console.error("Hata: M3U dosyasına erişilemedi, HTTP durumu: " + response.status);
-          alert("Veri alınamadı. Konsolu kontrol edin.");
-          return;
+        try {
+            const response = await fetch(proxyUrl);
+            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+            const data = await response.text();
+            parseM3U(data);
+            renderCategories();
+        } catch (error) {
+            console.error("M3U dosyası alınırken bir hata oluştu:", error);
+            alert("Veri alınamadı. Konsolu kontrol edin.");
         }
-
-        const data = await response.text();
-        parseM3U(data);
-        renderCategories();
-      } catch (error) {
-        console.error("M3U dosyasını alırken hata:", error);
-        alert("Veri alınamadı. Konsolu kontrol edin.");
-      }
     }
 
     function parseM3U(data) {
-      const lines = data.split("\n");
-      let currentGroup = null;
+        const lines = data.split("\n");
+        let currentGroup = null;
 
-      lines.forEach(line => {
-        if (line.startsWith("#EXTINF")) {
-          const groupMatch = line.match(/group-title="([^"]+)"/);
-          const logoMatch = line.match(/tvg-logo="([^"]+)"/);
-          const titleMatch = line.match(/,([^\n]+)/);
+        lines.forEach(line => {
+            if (line.startsWith("#EXTINF")) {
+                const groupMatch = line.match(/group-title="([^"]+)"/);
+                const logoMatch = line.match(/tvg-logo="([^"]+)"/);
+                const titleMatch = line.match(/,([^\n]+)/);
 
-          const group = groupMatch ? groupMatch[1] : "Genel";
-          const logo = logoMatch ? logoMatch[1] : "";
-          const title = titleMatch ? titleMatch[1].trim() : "";
+                const group = groupMatch ? groupMatch[1] : "Genel";
+                const logo = logoMatch ? logoMatch[1] : "";
+                const title = titleMatch ? titleMatch[1].trim() : "";
 
-          if (!categories.includes(group)) {
-            categories.push(group);
-            contents[group] = [];
-          }
+                if (!categories.includes(group)) {
+                    categories.push(group);
+                    contents[group] = [];
+                }
 
-          currentGroup = group;
-          contents[group].push({ title, logo });
-        } else if (line.trim() && currentGroup) {
-          contents[currentGroup][contents[currentGroup].length - 1].url = line.trim();
-        }
-      });
+                currentGroup = group;
+                contents[group].push({ title, logo });
+            } else if (line.trim() && currentGroup) {
+                contents[currentGroup][contents[currentGroup].length - 1].url = line.trim();
+            }
+        });
     }
 
     function renderCategories() {
-      categoriesContainer.innerHTML = "";
-      categories.forEach(category => {
-        const categoryElement = document.createElement("div");
-        categoryElement.className = "category";
-        categoryElement.innerText = category;
-        categoryElement.onclick = () => showCategory(category);
-        categoriesContainer.appendChild(categoryElement);
-      });
+        categoriesContainer.innerHTML = "";
+        categories.forEach(category => {
+            const categoryElement = document.createElement("div");
+            categoryElement.className = "category";
+            categoryElement.innerText = category;
+            if (category === currentCategory) {
+                categoryElement.classList.add("active");
+            }
+            categoryElement.onclick = () => showCategory(category);
+            categoriesContainer.appendChild(categoryElement);
+        });
 
-      const savedCategory = history.state ? history.state.category : categories[0];
-      showCategory(savedCategory);
+        if (!currentCategory && categories.length > 0) {
+            showCategory(categories[0]);
+        } else {
+            showCategory(currentCategory);
+        }
     }
 
     function showCategory(category) {
-      currentCategory = category;
-      history.pushState({ category }, "", "");
+        if (!category || !contents[category]) return;
 
-      document.querySelectorAll(".category").forEach(el => el.classList.remove("active"));
-      document.querySelectorAll(".category").forEach(el => {
-        if (el.innerText === category) el.classList.add("active");
-      });
+        currentCategory = category;
+        localStorage.setItem("selectedCategory", category);
 
-      contentContainer.innerHTML = "";
-      contents[category].forEach(content => {
-        const contentElement = document.createElement("div");
-        contentElement.className = "content-item";
-        contentElement.innerHTML = `
-          <img src="${content.logo}" alt="${content.title}">
-          <span class="title">${content.title}</span>
-        `;
-        contentElement.onclick = () => openContent(content.url);
-        contentContainer.appendChild(contentElement);
-      });
+        document.querySelectorAll(".category").forEach(el => el.classList.remove("active"));
+        document.querySelectorAll(".category").forEach(el => {
+            if (el.innerText === category) el.classList.add("active");
+        });
+
+        renderCategoryItems(category);
     }
 
-    function openContent(url) {
-      lastSelectedContent = url;
-      const fileType = url.split(".").pop(); // Uzantıyı al
-      const supportedFormats = ["mp4", "mkv", "flv", "avi", "webm", "m3u8"];
+    function renderCategoryItems(category) {
+        if (!contents[category]) return;
 
-      if (supportedFormats.includes(fileType)) {
-        videoPlayer.src = url;
-        playerContainer.style.display = "flex";
-      } else {
-        window.open(url, "_self");
-      }
+        contentContainer.innerHTML = "";
+        contents[category].forEach(content => {
+            const contentElement = document.createElement("div");
+            contentElement.className = "content-item";
+            contentElement.innerHTML = `
+                <img src="${content.logo}" alt="${content.title}">
+                <span class="title">${content.title}</span>
+            `;
+            if (content.title === currentContent) {
+                contentElement.classList.add("active");
+            }
+            contentElement.onclick = () => openContent(content.url, content.title);
+            contentContainer.appendChild(contentElement);
+        });
     }
 
-    // Geri tuşuna basınca player kapansın ve son seçilen kategori ve içerik vurgulu olsun
+    function openContent(url, title) {
+        // URL'nin uzantısını al
+        const extensionMatch = url.match(/\.(m3u8|mp4|mkv|flv|avi|webm)$/);
+        const extension = extensionMatch ? extensionMatch[1] : "";
+
+        // Eğer desteklenen format ise video player ile aç
+        if (extension) {
+            videoPlayer.src = url;
+            playerContainer.style.display = "flex";
+            currentContent = title;
+            localStorage.setItem("selectedContent", title);
+        } else {
+            // Desteklenmeyen format ise direkt olarak tarayıcıda aç
+            window.open(url, "_self");
+        }
+    }
+
+    // Geri tuşu ile video player'ı kapatma ve kategoriye dönme
     window.addEventListener("popstate", () => {
-      playerContainer.style.display = "none";
-      videoPlayer.pause();
-      videoPlayer.src = "";
+        playerContainer.style.display = "none";
+        videoPlayer.pause();
+        videoPlayer.src = "";
+        const savedCategory = localStorage.getItem("selectedCategory") || categories[0];
+        showCategory(savedCategory);
     });
 
     fetchM3UData();
