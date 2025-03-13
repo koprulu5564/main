@@ -1,4 +1,4 @@
 #EXTM3U
 #EXTINF:-1, M3U8 Stream
-https://tv.arectv13.sbs/live/atv1.m3u8
+https://tv.arectv13.sbs/live/atv1.m3u8|user-agent=googleusercontent
 #EXTVLCOPT:user-agent=googleusercontent
