@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stream Player</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        #streamList {
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin: 20px auto;
+            width: 80%;
+        }
+
+        #streamList li {
+            list-style: none;
+            margin: 10px 0;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.3);
+            transition: background-color 0.3s;
+        }
+
+        #streamList li:hover {
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+
+        h2 {
+            text-align: center;
+            color: #fff;
+        }
+
+        .player-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        .player-container iframe {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 40vh; /* Yükseklik %40 olarak ayarlandı */
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <h2>(KÖPRÜLÜ) SELÇUK SPORTS</h2>
+    <ul id="streamList"></ul>
+
+    <div class="player-container" id="playerContainer">
+        <iframe id="videoFrame" src="" allowfullscreen></iframe>
+    </div>
+
+    <script>
+        const kanalurl = {
+            1: "selcukbeinsports1",
+            2: "selcukbeinsports2",
+            3: "selcukbeinsports3",
+            4: "selcukbeinsports4",
+            5: "selcukbeinsports5&referer=https://www.selcuksportshd78.biz",
+            6: "selcukbeinsportsmax1",
+            7: "selcukbeinsportsmax2",
+            8: "ssportplus1",
+            9: "ssportplus2",
+            10: "selcuksmartspor",
+            11: "selcuksmartspor2",
+            13: "selcuktivibuspor1",
+            14: "selcuktivibuspor2",
+            15: "selcuktivibuspor3",
+            16: "selcuktivibuspor4",
+            17: "172",
+            18: "2889",
+            19: "2890",
+            20: "2891",
+            21: "2888",
+            22: "112",
+            23: "132",
+            24: "142",
+            25: "4011",
+        };
+
+        const streamNames = {
+            1: "BEİN SPORTS 1",
+            2: "BEİN SPORTS 2",
+            3: "BEİN SPORTS 3",
+            4: "BEİN SPORTS 4",
+            5: "BEİN SPORTS 5",
+            6: "BEİN SPORTS  MAX 1",
+            7: "BEİN SPORTS  MAX 2",
+            8: "S SPORT PLUS 1",
+            9: "S SPORT PLUS 2",
+            10: "SPOR SMART 1",
+            11: "SPOR SMART 2",
+            13: "TİVİBU SPOR 1",
+            14: "TİVİBU SPOR 2",
+            15: "TİVİBU SPOR 3",
+            16: "TİVİBU SPOR 4",
+            17: "A SPOR",
+            18: "TRT SPOR",
+            19: "TRT SPOR 2",
+            20: "TRT AVAZ",
+            21: "TRT 1",
+            22: "NBA TV",
+            23: "EURO SPORT 1",
+            24: "EURO SPORT 2",
+            25: "EXXEN TV",
+        };
+
+        async function getDynamicBaseUrl() {
+            const proxyUrl = "https://api.codetabs.com/v1/proxy/?quest=";
+            const targetUrl = "https://www.selcuksportshd78.biz";
+
+            try {
+                // İlk sayfadan href'i al
+                const response = await fetch(proxyUrl + targetUrl);
+                const text = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(text, "text/html");
+
+                const bcDiv = doc.querySelector('div[data-device-desktop] div.bc a');
+                if (!bcDiv) throw new Error("Href bulunamadı!");
+
+                const href = bcDiv.getAttribute('href');
+
+                // İkinci sayfadan data-url'yi al
+                const secondResponse = await fetch(proxyUrl + href);
+                const secondText = await secondResponse.text();
+                const secondDoc = parser.parseFromString(secondText, "text/html");
+
+                const dataUrlElement = secondDoc.querySelector('[data-url]');
+                if (!dataUrlElement) throw new Error("Data-url bulunamadı!");
+
+                const dataUrl = dataUrlElement.getAttribute('data-url');
+                // Base URL'yi al (id= kısmına kadar olan kısım)
+                const baseUrl = dataUrl.split("id=")[0] + "id=";
+                return baseUrl;
+            } catch (error) {
+                console.error("URL alınırken hata oluştu:", error);
+                return null;
+            }
+        }
+
+        async function initializeStreams() {
+            const streamListElement = document.getElementById('streamList');
+            streamListElement.innerHTML = "";
+
+            const dynamicBaseUrl = await getDynamicBaseUrl();
+            if (!dynamicBaseUrl) {
+                alert("Dinamik URL alınamadı. Lütfen daha sonra tekrar deneyin.");
+                return;
+            }
+
+            for (const key in kanalurl) {
+                const streamId = kanalurl[key];
+                const streamName = streamNames[key];
+
+                const listItem = document.createElement('li');
+                listItem.textContent = streamName;
+
+                listItem.onclick = function () {
+                    const videoUrl = `${dynamicBaseUrl}${streamId}`;
+                    openPlayer(videoUrl);
+                };
+
+                streamListElement.appendChild(listItem);
+            }
+        }
+
+        function openPlayer(url) {
+            const iframe = document.getElementById('videoFrame');
+            iframe.src = url;
+
+            const playerContainer = document.getElementById('playerContainer');
+            const streamList = document.getElementById('streamList');
+
+            // Listeyi gizle
+            streamList.style.display = 'none';
+            document.querySelector('h2').style.display = 'none';
+
+            playerContainer.style.display = 'block';
+
+            // Player dışına tıklanma ile kapama
+            playerContainer.onclick = function (event) {
+                if (event.target === playerContainer) {
+                    closePlayer();
+                }
+            };
+
+            // Geri tuşu ile kapatma
+            window.onkeydown = function (event) {
+                if (event.key === 'Backspace' || event.key === 'Escape') {
+                    closePlayer();
+                }
+            };
+        }
+
+        function closePlayer() {
+            const playerContainer = document.getElementById('playerContainer');
+            const iframe = document.getElementById('videoFrame');
+            const streamList = document.getElementById('streamList');
+
+            // Listeyi geri getir
+            streamList.style.display = 'block';
+            document.querySelector('h2').style.display = 'block';
+
+            playerContainer.style.display = 'none';
+            iframe.src = '';
+        }
+
+        initializeStreams();
+    </script>
+</body>
+</html>
