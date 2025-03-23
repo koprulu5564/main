@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IPTV Uygulaması</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .search-container {
+      padding: 10px;
+      background: #fff;
+      border-bottom: 2px solid #ccc;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .clear-btn {
+      background: red;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-left: 10px;
+    }
+
+    .content-container {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .category-section {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .category-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .category-title {
+      font-size: 22px;
+      font-weight: bold;
+      color: #1a73e8;
+      padding: 5px 0;
+    }
+
+    .category-toggle {
+      font-size: 24px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .category-content {
+      display: flex;
+      overflow-x: auto;
+      gap: 15px;
+      padding-bottom: 10px;
+    }
+
+    .content-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      width: calc(33.33% - 10px); /* 3 içerik sığacak şekilde genişlik ayarı */
+      flex: 0 0 auto;
+      overflow: hidden;
+    }
+
+    .content-item img {
+      width: 100%;
+      height: 180px;
+      object-fit: contain;
+      border-radius: 10px 10px 0 0;
+    }
+
+    .content-item .title {
+      font-size: 14px;
+      font-weight: bold;
+      text-align: center;
+      padding: 10px;
+      background: #f9f9f9;
+      width: 100%;
+      border-radius: 0 0 10px 10px;
+    }
+
+    .content-item.active {
+      background-color: #ffeb3b;
+    }
+
+    /* Genişletilmiş kategori için stil */
+    .expanded .category-content {
+      display: flex;
+      flex-wrap: wrap; /* İçerikleri alt alta sırala */
+      gap: 15px;
+      overflow-y: auto; /* Aşağı kaydırılabilir */
+      max-height: 70vh; /* Maksimum yükseklik */
+    }
+
+    /* Yükleme ekranı */
+    .loading-screen {
+      position: fixed;
+      width: 100%;
+      height: 100vh;
+      background-color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 40px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 5px;
+      z-index: 9999;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 0.7; }
+      50% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(1); opacity: 0.7; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Yükleme ekranı -->
+  <div id="loading-screen" class="loading-screen">KÖPRÜLÜ</div>
+
+  <div class="container" id="app-container">
+    <!-- Arama Kutusu -->
+    <div class="search-container" id="search-container">
+      <input type="text" id="search-input" class="search-input" placeholder="Ara..." oninput="filterContent()">
+      <button id="clear-btn" class="clear-btn" onclick="clearSearch()">X</button>
+    </div>
+
+    <div id="content-container" class="content-container"></div>
+  </div>
+
+  <script>
+    const originalM3UUrl = "https://koprulu2.global.ssl.fastly.net/app7/rectv.m3u";
+    const additionalM3UUrls = [
+      "https://raw.githubusercontent.com/kopruluu55/main/refs/heads/main/recfilm.m3u",
+      "https://raw.githubusercontent.com/kopruluu55/main/refs/heads/main/recdizi.m3u"
+    ];
+
+    const contentContainer = document.getElementById("content-container");
+    const searchContainer = document.getElementById("search-container");
+    const searchInput = document.getElementById("search-input");
+
+    let categories = [];
+    let contents = {};
+    let currentContent = localStorage.getItem("selectedContent") || null;
+    let expandedCategory = null; // Genişletilmiş kategoriyi takip etmek için
+
+    async function fetchM3UData() {
+        try {
+            // İlk M3U dosyasını proxy ile çek
+            const proxyUrl = "https://koprulu2.global.ssl.fastly.net/yt2/index.php/?url=" + encodeURIComponent(originalM3UUrl);
+            const response = await fetch(proxyUrl);
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const data = await response.text();
+            parseM3U(data);
+
+            // Ek M3U dosyalarını proxy olmadan çek
+            for (const url of additionalM3UUrls) {
+                const additionalResponse = await fetch(url);
+                if (!additionalResponse.ok) {
+                    throw new Error(`HTTP error! Status: ${additionalResponse.status}`);
+                }
+                const additionalData = await additionalResponse.text();
+                parseM3U(additionalData);
+            }
+
+            renderContent();
+            // Yükleme ekranını kaldır
+            document.getElementById("loading-screen").style.display = "none";
+            // Uygulama içeriğini ve arama kutusunu göster
+            document.getElementById("app-container").style.display = "flex";
+            searchContainer.style.display = "flex"; // Arama kutusunu göster
+        } catch (error) {
+            console.error("M3U dosyası alınırken bir hata oluştu:", error);
+            alert("Veri alınamadı. Konsolu kontrol edin.");
+            document.getElementById("loading-screen").style.display = "none";
+        }
+    }
+
+    function parseM3U(data) {
+        const lines = data.split("\n");
+        let currentGroup = null;
+
+        lines.forEach(line => {
+            if (line.startsWith("#EXTINF")) {
+                const groupMatch = line.match(/group-title="([^"]+)"/);
+                const logoMatch = line.match(/tvg-logo="([^"]+)"/);
+                const titleMatch = line.match(/,([^\n]+)/);
+
+                const group = groupMatch ? groupMatch[1] : "Genel";
+                const logo = logoMatch ? logoMatch[1] : "";
+                const title = titleMatch ? titleMatch[1].trim() : "";
+
+                // İçerik başlığını temizle (gereksiz etiketleri kaldır)
+                const cleanTitle = title.replace(/tvg-logo="[^"]+"|group-title="[^"]+"/g, "").trim();
+
+                if (!categories.includes(group)) {
+                    categories.push(group);
+                    contents[group] = [];
+                }
+
+                currentGroup = group;
+                contents[currentGroup].push({ title: cleanTitle, logo });
+            } else if (line.trim() && currentGroup) {
+                contents[currentGroup][contents[currentGroup].length - 1].url = line.trim();
+            }
+        });
+    }
+
+    function renderContent() {
+        contentContainer.innerHTML = "";
+        categories.forEach(category => {
+            const categorySection = document.createElement("div");
+            categorySection.className = expandedCategory === category ? "category-section expanded" : "category-section";
+
+            const categoryHeader = document.createElement("div");
+            categoryHeader.className = "category-header";
+
+            const categoryTitle = document.createElement("div");
+            categoryTitle.className = "category-title";
+            categoryTitle.innerText = category;
+
+            const categoryToggle = document.createElement("div");
+            categoryToggle.className = "category-toggle";
+            categoryToggle.innerText = expandedCategory === category ? "🔼" : "🔽";
+            categoryToggle.onclick = () => toggleCategory(category);
+
+            categoryHeader.appendChild(categoryTitle);
+            categoryHeader.appendChild(categoryToggle);
+            categorySection.appendChild(categoryHeader);
+
+            const categoryContent = document.createElement("div");
+            categoryContent.className = "category-content";
+            if (expandedCategory === category) {
+                categoryContent.classList.add("expanded-content");
+            }
+            contents[category].forEach(content => {
+                const contentElement = document.createElement("div");
+                contentElement.className = "content-item";
+                contentElement.innerHTML = `
+                    <img src="${content.logo}" alt="${content.title}">
+                    <span class="title">${content.title}</span>
+                `;
+                if (content.title === currentContent) {
+                    contentElement.classList.add("active");
+                }
+                contentElement.onclick = () => openContent(content.url, contentElement, content.title);
+
+                categoryContent.appendChild(contentElement);
+            });
+
+            categorySection.appendChild(categoryContent);
+            contentContainer.appendChild(categorySection);
+        });
+    }
+
+    function toggleCategory(category) {
+        if (expandedCategory === category) {
+            expandedCategory = null; // Kategori zaten genişletilmişse kapat
+        } else {
+            expandedCategory = category; // Kategoriyi genişlet
+        }
+        renderContent(); // İçerikleri yeniden render et
+    }
+
+    function openContent(url, element, title) {
+        const modifiedUrl = `${url}|user-agent=googleusercontent`;
+        const intentUrl = `intent:${modifiedUrl}#Intent;type=video/*;package=co.wuffy.player;S.title=${title};end;`;
+        window.location.href = intentUrl;
+
+        document.querySelectorAll('.content-item').forEach(el => el.classList.remove("active"));
+        element.classList.add("active");
+
+        currentContent = title;
+        localStorage.setItem("selectedContent", title);
+    }
+
+    // Filtreleme işlemi - Tüm kategorilerdeki içerikler için yapılacak
+    function filterContent() {
+        const searchTerm = searchInput.value.toLowerCase();
+        if (searchTerm === "") {
+            // Arama kutusu boşsa, tüm içerikleri göster
+            renderContent();
+            return;
+        }
+
+        contentContainer.innerHTML = ""; // Konteyneri temizle
+
+        // Tüm kategorilerdeki içerikleri tarayarak eşleşenleri göster
+        categories.forEach(category => {
+            const filteredContents = contents[category].filter(content => content.title.toLowerCase().includes(searchTerm));
+            if (filteredContents.length > 0) {
+                const categorySection = document.createElement("div");
+                categorySection.className = "category-section";
+
+                const categoryHeader = document.createElement("div");
+                categoryHeader.className = "category-header";
+
+                const categoryTitle = document.createElement("div");
+                categoryTitle.className = "category-title";
+                categoryTitle.innerText = category;
+
+                const categoryToggle = document.createElement("div");
+                categoryToggle.className = "category-toggle";
+                categoryToggle.innerText = "🔽";
+                categoryToggle.onclick = () => toggleCategory(category);
+
+                categoryHeader.appendChild(categoryTitle);
+                categoryHeader.appendChild(categoryToggle);
+                categorySection.appendChild(categoryHeader);
+
+                const categoryContent = document.createElement("div");
+                categoryContent.className = "category-content";
+                filteredContents.forEach(content => {
+                    const contentElement = document.createElement("div");
+                    contentElement.className = "content-item";
+                    contentElement.innerHTML = `
+                        <img src="${content.logo}" alt="${content.title}">
+                        <span class="title">${content.title}</span>
+                    `;
+                    contentElement.onclick = () => openContent(content.url, contentElement, content.title);
+                    categoryContent.appendChild(contentElement);
+                });
+
+                categorySection.appendChild(categoryContent);
+                contentContainer.appendChild(categorySection);
+            }
+        });
+    }
+
+    // Arama kutusunu temizle
+    function clearSearch() {
+        searchInput.value = "";
+        filterContent(); // Tüm içerikleri göster
+    }
+
+    window.addEventListener("popstate", () => {
+        renderContent();
+    });
+
+    fetchM3UData();
+  </script>
+</body>
+</html>
